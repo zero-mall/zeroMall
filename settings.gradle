@@ -1,0 +1,4 @@
+rootProject.name = 'zeromall'
+include 'member-api'
+include 'product-api'
+
