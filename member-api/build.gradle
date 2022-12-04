@@ -1,3 +1,5 @@
 dependencies {
+    implementation(project(path: ':product-api', configuration: 'default'))
+    implementation(project(path: ':teamzero-domain', configuration: 'default'))
 
 }

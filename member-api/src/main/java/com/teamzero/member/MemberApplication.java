@@ -1,4 +1,4 @@
-package com.teamzero.product;
+package com.teamzero.member;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -10,8 +10,8 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @EnableJpaAuditing
 @EnableJpaRepositories
 @EnableFeignClients
-public class ProductApplication {
+public class MemberApplication {
     public static void main(String[] args) {
-        SpringApplication.run(ProductApplication.class, args);
+        SpringApplication.run(MemberApplication.class, args);
     }
 }
