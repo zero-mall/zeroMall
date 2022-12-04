@@ -22,7 +22,7 @@ public class MemberGradeEntity extends BaseEntity {
     private String name;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id")
+    @JoinColumn(name = "id")
     private MemberEntity memberEntity;
 
     private int rewardPointPct; // 포인트 적립 비율
