@@ -22,6 +22,11 @@ public class AdminController {
      * - 정책 : 계정을 삭제하지 않고, 회원 정지만 한다.
      *   ( 차후 서비스가 확장되면 일괄적으로 관리자 회원 계정 삭제 )
      */
+
+
+    /**
+     * 관리자 상태 변경
+     */
     @PutMapping("/admin/detail/update")
     public ResponseEntity<AdminInfo> updateAdminStatus(@RequestBody Modify modify){
         return ResponseEntity.ok(adminService.updateAdminStatus(modify));
