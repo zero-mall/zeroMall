@@ -1,10 +1,14 @@
 package com.teamzero.member.service;
 
+import com.teamzero.member.domain.model.AdminEntity;
 import com.teamzero.member.domain.model.MemberEntity;
 import com.teamzero.member.domain.model.MemberGradeEntity;
+import com.teamzero.member.domain.model.constants.AdminStatus;
 import com.teamzero.member.domain.model.constants.MemberStatus;
+import com.teamzero.member.domain.model.dto.AdminInfo;
 import com.teamzero.member.domain.model.dto.MemberInfo;
 import com.teamzero.member.domain.model.dto.Modify;
+import com.teamzero.member.domain.model.dto.SignUp;
 import com.teamzero.member.domain.repository.AdminRepository;
 import com.teamzero.member.domain.repository.MemberGradeRepository;
 import com.teamzero.member.domain.repository.MemberRepository;
@@ -19,9 +23,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
 
@@ -31,6 +37,8 @@ class AdminServiceTest {
     @Mock
     private MemberRepository memberRepository;
 
+    @Mock
+    private AdminRepository adminRepository;
     @Mock
     private MemberGradeRepository memberGradeRepository;
 
@@ -124,7 +132,55 @@ class AdminServiceTest {
 
     }
 
-     private Page<MemberEntity> getTestMemberPage(Pageable pageable) {
+    @Test
+    @DisplayName("관리자 회원 가입")
+    void adminRegister() {
+
+        // given
+        SignUp signUp = new SignUp();
+        signUp.setEmail("test@gmail.com");
+        signUp.setPassword("test1");
+
+        // when
+        AdminInfo adminInfo = adminService.adminRegister(signUp);
+
+        // then
+        Assertions.assertEquals("test@gmail.com", adminInfo.getEmail());
+        Assertions.assertEquals(MemberStatus.IN_USE, MemberStatus.valueOf(adminInfo.getStatus()));
+
+    }
+
+    @Test
+    @DisplayName("관리자 상태 변경")
+    void updateAdminStatus() {
+
+        // given
+        Modify modify = Modify.builder()
+                .memberId(1L)
+                .status(String.valueOf(AdminStatus.STOPPED))
+                .build();
+
+        AdminEntity admin = AdminEntity.builder()
+                .adminId(1L)
+                .email("test@gmail.com")
+                .adminStatus(AdminStatus.IN_USE)
+                .build();
+
+
+        given(adminRepository.findById(anyLong()))
+                .willReturn(Optional.of(admin));
+
+        // when
+        AdminInfo adminInfo = adminService.updateAdminStatus(modify);
+
+        // then
+        Assertions.assertEquals(1L, adminInfo.getAdminId());
+        Assertions.assertEquals("test@gmail.com", adminInfo.getEmail());
+        Assertions.assertEquals(AdminStatus.STOPPED, AdminStatus.valueOf(adminInfo.getStatus()));
+
+    }
+
+    private Page<MemberEntity> getTestMemberPage(Pageable pageable) {
 
         List<MemberEntity> list = new ArrayList();
 
