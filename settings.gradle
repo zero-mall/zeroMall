@@ -1,5 +1,5 @@
 rootProject.name = 'zeromall'
-include 'member-api'
+include 'user-api'
 include 'product-api'
 include 'teamzero-domain'
 
