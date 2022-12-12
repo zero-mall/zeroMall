@@ -19,11 +19,11 @@ public class UserApplication {
     }
 }
  ```
- (2) 해결 : (방법1이 잘 되지 않아, 방법2를 사용했다.)
+ (2) 해결 : (방법2 사용 후 다른 이슈로 에러 발생한 후 방법1로 변경)
  - 방법1 : JpaAuditing Config에 @EnableJpaAuditing을 따로 걸어두거나
  - 방법2 : WebMvc 테스트 클래스에 @MockBean(JpaMetamodelMappingContext.class)를 추가한다.
 
-#### 2. JPA Repository가 정상적올 DI 되지 않음
+#### 2. JPA Repository가 정상적으로 DI 되지 않음
 ```java
 ***************************
 APPLICATION FAILED TO START
@@ -42,7 +42,18 @@ Consider defining a bean of type 'com.teamzero.member.domain.repository.MemberRe
 Process finished with exit code 1
 
 ```
-(1) 원인 : 
+(1) 원인 : MSA에서 여러 개의 모듈들을 사용하면서, Entity와 Repository를 잘 인식하지 못한 걸로 보인다. 
+<br>
+rf. https://jinseobbae.github.io/jpa/2021/11/02/post-jpa-repository-di-error
+(2) 해결 : 아래와 같이 JpaConfig에 @EnableJpaRepositories와 @EntityScan을 넣어주었다.
+```java
+@Configuration
+@EnableJpaAuditing
+@EnableJpaRepositories(basePackages = {"com.teamzero.member.domain.repository"})
+@EntityScan(basePackages = {"com.teamzero.member.domain.model"})
+public class JpaConfig {
+}
+```
 
 ### 찬혁
 
