@@ -55,6 +55,32 @@ public class JpaConfig {
 }
 ```
 
+#### 3. Build.Gradle 순환 참조
+(1) 이슈 : dependency의 순환 참조
+```bash
+Circular dependency between the following tasks:
+:product-api:classes
+\--- :product-api:compileJava
+     +--- :product-api:jar
+     |    \--- :product-api:classes (*)
+     \--- :user-api:jar
+          \--- :user-api:classes
+               \--- :user-api:compileJava
+                    +--- :product-api:jar (*)
+                    \--- :user-api:jar (*)
+```
+(2) 원인 : 말그대로 product-api -> user-api -> product-api 를 가리키면서 서로 순환 참조하는 이슈가 발생했다.
+(3) 해결 : 코드를 열어보니, user-api 쪽 Build.gradle에 불일요한 코드가 있어 이 부분을 제거했고 이후 잘 동작하는 걸 확인했다.
+```java
+
+dependencies {
+    implementation(project(path: ':teamzero-domain', configuration: 'default'))
+    // implementation(project(path: ':product-api', configuration: 'default'))     // <<-- 제거
+    implementation 'org.springframework.security:spring-security-crypto:5.7.5'
+}
+
+```
+
 ### 찬혁
 
 ### 지수
