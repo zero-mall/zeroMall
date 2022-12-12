@@ -23,6 +23,27 @@ public class UserApplication {
  - 방법1 : JpaAuditing Config에 @EnableJpaAuditing을 따로 걸어두거나
  - 방법2 : WebMvc 테스트 클래스에 @MockBean(JpaMetamodelMappingContext.class)를 추가한다.
 
+#### 2. JPA Repository가 정상적올 DI 되지 않음
+```java
+***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+Parameter 0 of constructor in com.teamzero.member.application.SignInApplication required a bean of type 'com.teamzero.member.domain.repository.MemberRepository' that could not be found.
+
+
+Action:
+
+Consider defining a bean of type 'com.teamzero.member.domain.repository.MemberRepository' in your configuration.
+
+
+Process finished with exit code 1
+
+```
+(1) 원인 : 
+
 ### 찬혁
 
 ### 지수

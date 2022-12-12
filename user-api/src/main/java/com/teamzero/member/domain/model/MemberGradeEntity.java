@@ -19,6 +19,10 @@ public class MemberGradeEntity extends BaseEntity {
     @Column(name = "id")
     private Long id;
 
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn
+    private MemberEntity member;
+
     private String name;
 
     private int rewardPointPct; // 포인트 적립 비율

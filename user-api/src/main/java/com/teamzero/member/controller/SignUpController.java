@@ -1,6 +1,7 @@
 package com.teamzero.member.controller;
 
 import com.teamzero.member.domain.model.dto.SignUp;
+import com.teamzero.member.service.AdminService;
 import com.teamzero.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +13,8 @@ import org.springframework.web.bind.annotation.*;
 public class SignUpController {
 
     private final MemberService memberService;
+
+    private final AdminService adminService;
 
     /**
      * 일반 회원 가입
@@ -49,8 +52,7 @@ public class SignUpController {
      */
     @PostMapping("/admin")
     public ResponseEntity<?> adminRegister(@RequestBody SignUp signUp) {
-        //TODO 찬혁님, 여기에 작업 주시면 됩니다.
-        return null;
+        return ResponseEntity.ok(adminService.adminRegister(signUp));
     }
 
 }
