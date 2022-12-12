@@ -20,7 +20,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import static com.teamzero.member.exception.ErrorCode.MEMBER_NOT_FOUND;
 import static com.teamzero.member.exception.ErrorCode.MEMBER_SIGNUP_EMAIL_DUPLICATE;
 
@@ -61,7 +60,7 @@ public class AdminService {
      *   회원이 없는 경우, 회원 등급이 없는 경우, 실패 응답
      */
     @Transactional
-    public MemberInfo modifyMemberGradeOrStatus(Modify modify) {
+    public MemberInfo updateMemberGradeOrStatus(Modify modify) {
 
         MemberEntity member = memberRepository.findById(modify.getMemberId())
                 .orElseThrow(() -> new TeamZeroException(MEMBER_NOT_FOUND));

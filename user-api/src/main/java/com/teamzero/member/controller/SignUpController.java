@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 public class SignUpController {
 
     private final MemberService memberService;
+    private final AdminService adminService;
 
     private final AdminService adminService;
 
