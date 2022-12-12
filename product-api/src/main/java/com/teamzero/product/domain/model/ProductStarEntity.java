@@ -28,10 +28,10 @@ public class ProductStarEntity extends BaseEntity{
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long starId;
 
-//  @ManyToOne(fetch = FetchType.LAZY)
-//  @JoinColumn(name = "member_id")
-//  private MemberEntity writer;
-
+  // 별점 준 회원 아이디
+  private String writer;
+  
+  // 별점
   private int score;
 
 }

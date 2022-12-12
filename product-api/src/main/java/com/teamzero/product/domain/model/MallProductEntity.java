@@ -1,14 +1,12 @@
 package com.teamzero.product.domain.model;
 
-import java.util.List;
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -24,20 +22,22 @@ import org.hibernate.envers.AuditOverride;
 @NoArgsConstructor
 @Builder
 @AuditOverride(forClass = BaseEntity.class)
-@Table(name = "MALL_INFO")
-public class MallInfoEntity extends BaseEntity {
+@Table(name = "MALL_PRODUCT")
+public class MallProductEntity extends BaseEntity {
 
-  // 쇼핑몰 구분 인덱스
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "mall_id", nullable = false)
-  private Long mallId;
+  private Long id;
 
-  // 연결된 쇼핑몰 상품 상세 정보
-  @OneToMany(fetch = FetchType.LAZY)
+  // 연결된 쇼핑몰
+  @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn
-  private List<MallProductInfoEntity> mallProductInfo;
+  private MallEntity mall;
 
+  // 쇼핑물 상품 정보
   private String name;
+  private String imageUrl;
+  private String detailUrl;
+  private int price;
 
 }

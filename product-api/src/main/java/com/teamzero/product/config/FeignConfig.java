@@ -11,10 +11,10 @@ import org.springframework.context.annotation.Configuration;
 @EnableFeignClients
 public class FeignConfig {
 
-  @Value("naver.search.clientId")
+  @Value("${naver.search.clientId}")
   String clientId;
 
-  @Value("naver.search.clientSecret")
+  @Value("${naver.search.clientSecret}")
   String clientSecret;
 
   @Qualifier("naver_search")
