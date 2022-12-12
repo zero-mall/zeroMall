@@ -88,7 +88,7 @@ public class AdminService {
      */
     @Transactional
     public AdminInfo adminRegister(SignUp singUp) {
-        if (adminRepository.findByEmail(singUp.getEmail()).isPresent()) {
+        if (!adminRepository.existsByEmail(singUp.getEmail())) {
             throw new TeamZeroException(MEMBER_SIGNUP_EMAIL_DUPLICATE);
         }
         String encPassword = BCrypt.hashpw(singUp.getPassword(), BCrypt.gensalt());
