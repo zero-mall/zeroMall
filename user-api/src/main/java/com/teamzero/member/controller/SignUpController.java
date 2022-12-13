@@ -15,8 +15,6 @@ public class SignUpController {
     private final MemberService memberService;
     private final AdminService adminService;
 
-    private final AdminService adminService;
-
     /**
      * 일반 회원 가입
      */

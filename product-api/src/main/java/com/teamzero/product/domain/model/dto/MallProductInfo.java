@@ -1,6 +1,6 @@
 package com.teamzero.product.domain.model.dto;
 
-import com.teamzero.product.domain.model.MallProductInfoEntity;
+import com.teamzero.product.domain.model.MallProductEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -18,11 +18,11 @@ public class MallProductInfo {
   private Long mallProductId;
   private String mallProductName;
 
-  public static MallProductInfo fromEntity(MallProductInfoEntity mallProductInfo) {
+  public static MallProductInfo fromEntity(MallProductEntity mallProduct) {
     return MallProductInfo.builder()
-        .mallName(mallProductInfo.getMallInfo().getName())
-        .mallProductId(mallProductInfo.getId())
-        .mallProductName(mallProductInfo.getName())
+        .mallName(mallProduct.getMall().getName())
+        .mallProductId(mallProduct.getId())
+        .mallProductName(mallProduct.getName())
         .build();
   }
 

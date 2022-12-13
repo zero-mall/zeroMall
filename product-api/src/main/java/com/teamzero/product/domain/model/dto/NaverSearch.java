@@ -19,7 +19,7 @@ import org.springframework.data.domain.Pageable;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class NaverSearch {
+public class NaverSearch{
 
   // 검색어 (UTF-8)
   private String query;
@@ -38,7 +38,7 @@ public class NaverSearch {
     return NaverSearch.builder()
         .query(searchQuery)
         .display(pageable.getPageSize())
-        .start(pageable.getPageNumber())
+        .start(pageable.getPageNumber() + 1)
         .sort(sortType)
         .build();
   }

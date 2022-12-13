@@ -60,7 +60,7 @@ public class AdminService {
      *   회원이 없는 경우, 회원 등급이 없는 경우, 실패 응답
      */
     @Transactional
-    public MemberInfo updateMemberGradeOrStatus(Modify modify) {
+    public MemberInfo modifyMemberGradeOrStatus(Modify modify) {
 
         MemberEntity member = memberRepository.findById(modify.getMemberId())
                 .orElseThrow(() -> new TeamZeroException(MEMBER_NOT_FOUND));
