@@ -8,8 +8,7 @@ dependencies {
     implementation(project(path: ':user-api', configuration: 'default'))
     implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
     implementation 'com.google.code.gson:gson:2.10'
-
-    // redis
+    implementation group: 'org.jsoup', name: 'jsoup', version: '1.7.2'
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
     testImplementation('it.ozimov:embedded-redis:0.7.3'){
         exclude group: 'org.slf4j', module: 'slf4j-simple'

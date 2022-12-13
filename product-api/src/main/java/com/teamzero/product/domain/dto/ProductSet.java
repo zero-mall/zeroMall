@@ -1,4 +1,4 @@
-package com.teamzero.product.domain.model.dto;
+package com.teamzero.product.domain.dto;
 
 import com.teamzero.product.domain.model.ProductEntity;
 import java.util.HashSet;

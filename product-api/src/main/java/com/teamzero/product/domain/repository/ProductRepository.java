@@ -1,4 +1,4 @@
-package com.teamzero.product.domain.model.repository;
+package com.teamzero.product.domain.repository;
 
 import com.teamzero.product.domain.model.ProductEntity;
 import java.util.Optional;

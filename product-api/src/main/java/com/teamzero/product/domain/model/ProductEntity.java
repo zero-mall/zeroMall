@@ -1,6 +1,6 @@
 package com.teamzero.product.domain.model;
 
-import com.teamzero.product.domain.model.dto.NaverProduct;
+import com.teamzero.product.domain.dto.NaverProduct;
 import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;

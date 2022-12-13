@@ -1,4 +1,4 @@
-package com.teamzero.product.domain.model.dto;
+package com.teamzero.product.domain.dto;
 
 import com.teamzero.product.domain.model.MallProductEntity;
 import lombok.AllArgsConstructor;
@@ -12,14 +12,14 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class MallProductInfo {
+public class MallProduct {
 
   private String mallName;
   private Long mallProductId;
   private String mallProductName;
 
-  public static MallProductInfo fromEntity(MallProductEntity mallProduct) {
-    return MallProductInfo.builder()
+  public static MallProduct fromEntity(MallProductEntity mallProduct) {
+    return MallProduct.builder()
         .mallName(mallProduct.getMall().getName())
         .mallProductId(mallProduct.getId())
         .mallProductName(mallProduct.getName())

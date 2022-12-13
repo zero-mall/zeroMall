@@ -1,6 +1,6 @@
 package com.teamzero.product.client;
 
-import com.teamzero.product.domain.model.dto.NaverSearch;
+import com.teamzero.product.domain.dto.NaverSearch;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.cloud.openfeign.SpringQueryMap;

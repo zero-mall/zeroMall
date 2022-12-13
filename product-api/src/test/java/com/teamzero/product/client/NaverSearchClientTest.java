@@ -1,6 +1,6 @@
 package com.teamzero.product.client;
 
-import com.teamzero.product.domain.model.dto.NaverSearch;
+import com.teamzero.product.domain.dto.NaverSearch;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

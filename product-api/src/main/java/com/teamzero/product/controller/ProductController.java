@@ -4,7 +4,7 @@ import com.teamzero.member.exception.ErrorCode;
 import com.teamzero.member.exception.TeamZeroException;
 import com.teamzero.product.domain.model.ProductEntity;
 import com.teamzero.product.domain.model.constants.CacheKey;
-import com.teamzero.product.domain.model.dto.NaverProduct;
+import com.teamzero.product.domain.dto.NaverProduct;
 import com.teamzero.product.service.ProductService;
 import java.util.List;
 import java.util.Objects;

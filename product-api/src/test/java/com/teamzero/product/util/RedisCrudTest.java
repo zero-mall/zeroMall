@@ -2,7 +2,7 @@ package com.teamzero.product.util;
 
 import com.teamzero.product.domain.model.ProductEntity;
 import com.teamzero.product.domain.model.constants.CacheKey;
-import com.teamzero.product.domain.model.dto.ProductSet;
+import com.teamzero.product.domain.dto.ProductSet;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

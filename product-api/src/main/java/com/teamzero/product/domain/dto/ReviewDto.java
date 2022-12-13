@@ -56,7 +56,7 @@ public class ReviewDto {
                 .memberId(review.getMemberId())
                 .orderId(review.getOrderId())
                 .review(review.getReview())
-                .modifiedAt(review.getUpdatedAt())
+                .modifiedAt(review.getModifiedAt())
                 .build();
         }
     }

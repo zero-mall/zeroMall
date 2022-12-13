@@ -1,4 +1,4 @@
-package com.teamzero.product.domain.model.dto;
+package com.teamzero.product.domain.dto;
 
 import static com.teamzero.product.domain.model.constants.NaverSort.SIM;
 

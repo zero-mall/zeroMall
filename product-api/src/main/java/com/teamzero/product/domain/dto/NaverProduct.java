@@ -1,6 +1,5 @@
-package com.teamzero.product.domain.model.dto;
+package com.teamzero.product.domain.dto;
 
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
