@@ -80,7 +80,7 @@ public class ReviewService {
             .memberId(review.getMemberId())
             .productId(review.getProductId())
             .review(review.getReview())
-            .modifiedAt(review.getUpdatedAt())
+            .modifiedAt(review.getModifiedAt())
             .registeredAt(review.getRegisteredAt())
             .build();
         return readReview;

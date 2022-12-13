@@ -20,7 +20,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import static com.teamzero.member.exception.ErrorCode.MEMBER_NOT_FOUND;
 import static com.teamzero.member.exception.ErrorCode.MEMBER_SIGNUP_EMAIL_DUPLICATE;
 
@@ -42,7 +41,7 @@ public class AdminService {
     /**
      * 일반 회원 목록 조회
      */
-    public Page<MemberInfo> getMemberList(Pageable pageable) {
+    public Page<MemberInfo> getMemberList(Pageable pageable){
 
         return memberRepository.findAll(pageable).map(MemberInfo::fromEntity);
     }
@@ -58,10 +57,10 @@ public class AdminService {
     /**
      * 일반 회원 등급 및 상태 변경
      * - 입력한 값(회원id, 등급)에서,
-     * 회원이 없는 경우, 회원 등급이 없는 경우, 실패 응답
+     *   회원이 없는 경우, 회원 등급이 없는 경우, 실패 응답
      */
     @Transactional
-    public MemberInfo updateMemberGradeOrStatus(Modify modify) {
+    public MemberInfo modifyMemberGradeOrStatus(Modify modify) {
 
         MemberEntity member = memberRepository.findById(modify.getMemberId())
                 .orElseThrow(() -> new TeamZeroException(MEMBER_NOT_FOUND));
@@ -80,7 +79,6 @@ public class AdminService {
 
     }
 
-
     /**
      * Admin 회원가입
      * AdminStatus 는 계정 생성시 IN_USE를 default로
@@ -93,10 +91,10 @@ public class AdminService {
         }
         String encPassword = BCrypt.hashpw(singUp.getPassword(), BCrypt.gensalt());
         var admin = AdminEntity.builder()
-                .email(singUp.getEmail())
-                .password(encPassword)
-                .adminStatus(AdminStatus.IN_USE)
-                .build();
+            .email(singUp.getEmail())
+            .password(encPassword)
+            .adminStatus(AdminStatus.IN_USE)
+            .build();
 
         adminRepository.save(admin);
         return AdminInfo.fromEntity(admin);
@@ -106,10 +104,10 @@ public class AdminService {
      * 관리자 상태 변경
      */
     @Transactional
-    public AdminInfo updateAdminStatus(Modify modify) {
+    public AdminInfo modifyAdminStatus(Modify modify) {
 
         AdminEntity admin = adminRepository.findById(modify.getMemberId())
-                .orElseThrow(() -> new TeamZeroException(MEMBER_NOT_FOUND));
+            .orElseThrow(() -> new TeamZeroException(MEMBER_NOT_FOUND));
         if (!MemberStatus.hasStatus(modify.getStatus())) {
             new TeamZeroException(ErrorCode.MEMBER_STATUS_NOT_EXIST);
         }

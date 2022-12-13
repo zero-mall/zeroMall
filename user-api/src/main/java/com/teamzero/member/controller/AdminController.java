@@ -18,20 +18,6 @@ public class AdminController {
     private final AdminService adminService;
 
     /**
-     * 관리자 회원 정지
-     * - 정책 : 계정을 삭제하지 않고, 회원 정지만 한다.
-     *   ( 차후 서비스가 확장되면 일괄적으로 관리자 회원 계정 삭제 )
-     */
-
-
-    /**
-     * 관리자 상태 변경
-     */
-    @PutMapping("/admin/detail/update")
-    public ResponseEntity<AdminInfo> updateAdminStatus(@RequestBody Modify modify){
-        return ResponseEntity.ok(adminService.updateAdminStatus(modify));
-    }
-    /**
      * 일반 회원 목록 조회
      */
     @GetMapping("/member/list")
@@ -51,9 +37,19 @@ public class AdminController {
      * 일반 회원 등급 및 상태 변경
      * - 회원 등급 또는 상태 수정, 또는 둘 다 수정
      */
-    @PutMapping("/member/detail/update")
-    public ResponseEntity<MemberInfo> updateMemberGradeOrStatus(@RequestBody Modify modify){
-        return ResponseEntity.ok(adminService.updateMemberGradeOrStatus(modify));
+    @PutMapping("/member/detail/modify")
+    public ResponseEntity<MemberInfo> modifyMemberGradeOrStatus(@RequestBody Modify modify){
+        return ResponseEntity.ok(adminService.modifyMemberGradeOrStatus(modify));
+    }
+
+    /**
+     * 관리자 상태 변경
+     * - 관련 정책 : 관리 계정은 영구 삭제하지 않고 필요시 정지만 하도록 한다.
+     *   ( 차후 서비스가 확장되면 일괄적으로 관리자 회원 계정 삭제 )
+     */
+    @PutMapping("/admin/detail/modify")
+    public ResponseEntity<AdminInfo> modifyAdminStatus(@RequestBody Modify modify){
+        return ResponseEntity.ok(adminService.modifyAdminStatus(modify));
     }
 
 }

@@ -10,15 +10,15 @@ import lombok.*;
 @Builder
 public class AdminInfo {
 
-    private Long adminId;
-    private String email;
-    private String status;
+  private Long adminId;
+  private String email;
+  private String status;
 
-    public static AdminInfo fromEntity(AdminEntity admin) {
-        return AdminInfo.builder()
-                .adminId(admin.getAdminId())
-                .email(admin.getEmail())
-                .status(String.valueOf(admin.getAdminStatus()))
-                .build();
-    }
+  public static AdminInfo fromEntity(AdminEntity admin) {
+    return AdminInfo.builder()
+        .adminId(admin.getAdminId())
+        .email(admin.getEmail())
+        .status(String.valueOf(admin.getAdminStatus()))
+        .build();
+  }
 }

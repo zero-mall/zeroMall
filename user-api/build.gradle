@@ -1,5 +1,4 @@
 dependencies {
-    implementation(project(path: ':product-api', configuration: 'default'))
     implementation(project(path: ':teamzero-domain', configuration: 'default'))
-
+    implementation 'org.springframework.security:spring-security-crypto:5.7.5'
 }
