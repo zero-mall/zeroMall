@@ -82,19 +82,25 @@ dependencies {
 
 ```
 
+<br>
+
 ### 4. Jsoup으로 스크래핑 중 결과가 나타나지 않는 현상
 (1) 원인 :     
 ```bash
-- 사이트 내부에서 정적 페이지를 뿌리고 Ajax로 데이터를 뿌려주었다.
-- Jsoup은 Ajax를 통해 뿌려진 데이터는 읽지 못한다. 
+- 클라이언트 사이드 랜더링(CSR, Client-Side Rendering)에 의해 기존 검색 주소로는 Jsoup 크롤링 불가
+- CSR은 사이트에 요청이 있을 때, 서버는 데이터만 전달하고, 브라우저가 이 데이터를 렌더링을 통해 화면에 뿌려주는 방식이라고 한다.
+- [F12]를 통해 확인해보니, 실제로 사이트 내부에 여러 개의 Ajax 요청들이 있는 걸 확인했다.
+- Jsoup은 HTTP Request를 사용하는 라이브러리이기 때문에, Ajax로 요청하는 콘텐츠를 볼 수 없다.
 ```      
 (2) 해결 방법 : 
 ```bash
-- 해결1 : Feign이나 HttpUrlConnection을 통해 html 페이지를 먼저 받고 Jsoup으로 파싱 (X)     
+- 해결1 : 다른 라이브러리인 Solenium을 통해 크롤링을 하는 방법이 있다. 
+         > 하지만 이 방법은 모두가 Jsoup을 쓰고 공통의 인터페이스 메소드를 구현하는 
+           지금 상황에서 별로 좋은 방법은 아닌 것 같다.   
 - 해결2 : [F12]를 눌러 네트워크 로그를 통해 Ajax을 통해 불러오는 URL을 받아본다. 
+         > 조금 편법이긴 하지만 이 방법을 사용하기로 했다.
 ```
 (3) 참고 사이트 :              
-- Jsoup으로 숨겨진 HTML 추출 https://kr.coderbridge.com/questions/7c3d2665ee66421ebe728c1f9af409fa
-- Jsoup으로 페이징 로딩, ajax 통신 데이터 스프래핑 https://private-yeri.tistory.com/10
-
-https://search.tmon.co.kr/api/search/v4/deals?_=1670946124923&keyword=삼성전자 노트북 플러스2 NT550XDA-K14A&mainDealOnly=true&optionDealOnly=false&page=1&showFilter=true&size=60&sortType=POPULAR&thr=hs&useTypoCorrection=true
+- Jsoup으로 숨겨진 HTML 추출 https://kr.coderbridge.com/questions/7c3d2665ee66421ebe728c1f9af409fa      
+- Jsoup으로 페이징 로딩, ajax 통신 데이터 스프래핑 https://private-yeri.tistory.com/10       
+- Solenum 사용하기 https://heodolf.tistory.com/104

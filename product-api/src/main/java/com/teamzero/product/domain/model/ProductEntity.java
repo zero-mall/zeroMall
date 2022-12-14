@@ -1,6 +1,6 @@
 package com.teamzero.product.domain.model;
 
-import com.teamzero.product.domain.dto.NaverProduct;
+import com.teamzero.product.domain.dto.NaverSearch.Response.NaverProduct;
 import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -56,7 +56,8 @@ public class ProductEntity extends BaseEntity{
     private long likeCount;
 
     /**
-     * 네이버 상품 정보 중 기본 정보만 추가
+     * 네이버 상품
+     * 연결된 쇼핑몰 상품들을 제외한 정보만 저장
      */
     public static ProductEntity of (NaverProduct naverProduct) {
         return ProductEntity.builder()
