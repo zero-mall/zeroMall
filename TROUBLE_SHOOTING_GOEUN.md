@@ -1,9 +1,6 @@
 # Trouble Shooting Record
 
-## (각자 트러블 슈팅 내역을 아래에 적어주세요) <br> <br>          
-
-### 고은
-#### 1. @WebMvcTest 중 에러 발생 - JPA metamodel must not be empty!
+### 1. @WebMvcTest 중 에러 발생 - JPA metamodel must not be empty!
 ```bash
 Caused by: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'jpaAuditingHandler': Cannot resolve reference to bean 'jpaMappingContext' while setting constructor argument; nested exception is org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'jpaMappingContext': Invocation of init method failed; nested exception is java.lang.IllegalArgumentException: JPA metamodel must not be empty!
 ```
@@ -23,7 +20,9 @@ public class UserApplication {
  - 방법1 : JpaAuditing Config에 @EnableJpaAuditing을 따로 걸어두거나
  - 방법2 : WebMvc 테스트 클래스에 @MockBean(JpaMetamodelMappingContext.class)를 추가한다.
 
-#### 2. JPA Repository가 정상적으로 DI 되지 않음
+<br>
+
+### 2. JPA Repository가 정상적으로 DI 되지 않음
 ```java
 ***************************
 APPLICATION FAILED TO START
@@ -55,7 +54,9 @@ public class JpaConfig {
 }
 ```
 
-#### 3. Build.Gradle 순환 참조
+<br>
+
+### 3. Build.Gradle 순환 참조
 (1) 이슈 : dependency의 순환 참조
 ```bash
 Circular dependency between the following tasks:
@@ -81,6 +82,19 @@ dependencies {
 
 ```
 
-### 찬혁
+### 4. Jsoup으로 스크래핑 중 결과가 나타나지 않는 현상
+(1) 원인 :     
+```bash
+- 사이트 내부에서 정적 페이지를 뿌리고 Ajax로 데이터를 뿌려주었다.
+- Jsoup은 Ajax를 통해 뿌려진 데이터는 읽지 못한다. 
+```      
+(2) 해결 방법 : 
+```bash
+- 해결1 : Feign이나 HttpUrlConnection을 통해 html 페이지를 먼저 받고 Jsoup으로 파싱 (X)     
+- 해결2 : [F12]를 눌러 네트워크 로그를 통해 Ajax을 통해 불러오는 URL을 받아본다. 
+```
+(3) 참고 사이트 :              
+- Jsoup으로 숨겨진 HTML 추출 https://kr.coderbridge.com/questions/7c3d2665ee66421ebe728c1f9af409fa
+- Jsoup으로 페이징 로딩, ajax 통신 데이터 스프래핑 https://private-yeri.tistory.com/10
 
-### 지수
+https://search.tmon.co.kr/api/search/v4/deals?_=1670946124923&keyword=삼성전자 노트북 플러스2 NT550XDA-K14A&mainDealOnly=true&optionDealOnly=false&page=1&showFilter=true&size=60&sortType=POPULAR&thr=hs&useTypoCorrection=true
