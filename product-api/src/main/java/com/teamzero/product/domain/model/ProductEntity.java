@@ -17,13 +17,13 @@ public class ProductEntity extends BaseEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long productId;
+    private long productId;
 
     private String catId;
     private String productName;
     private double star;
     private long viewCount;
     private long likeCount;
-    private String shopProductId;
+    private long standPrice;
 
 }
