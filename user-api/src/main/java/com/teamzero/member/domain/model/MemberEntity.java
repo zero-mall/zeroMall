@@ -27,7 +27,7 @@ public class MemberEntity extends BaseEntity{
     private String password;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "id")
+    @JoinColumn
     private MemberGradeEntity memberGradeEntity;
 
     @Enumerated(value = EnumType.STRING)
@@ -40,6 +40,6 @@ public class MemberEntity extends BaseEntity{
 
     // 포인트 관련
     @Audited
-    private long points; // 보유 포인트
+    private long currentPoint;
 
 }

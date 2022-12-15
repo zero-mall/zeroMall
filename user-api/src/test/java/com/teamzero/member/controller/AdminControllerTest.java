@@ -6,8 +6,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 @WebMvcTest(AdminController.class)
 class AdminControllerTest {
 
@@ -28,6 +26,6 @@ class AdminControllerTest {
 
     @Test
     @DisplayName("일반 회원 등급 및 상태 변경")
-    void updateMemberGradeOrStatus() {
+    void modifyMemberGradeOrStatus() {
     }
 }

@@ -23,11 +23,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
 
@@ -39,6 +37,7 @@ class AdminServiceTest {
 
     @Mock
     private AdminRepository adminRepository;
+
     @Mock
     private MemberGradeRepository memberGradeRepository;
 
@@ -93,7 +92,7 @@ class AdminServiceTest {
 
     @Test
     @DisplayName("일반 회원 등급 및 상태 변경")
-    void updateMemberGradeOrStatus() {
+    void modifyMemberGradeOrStatus() {
 
         // given
         Modify modify = Modify.builder()
@@ -122,7 +121,7 @@ class AdminServiceTest {
                 .willReturn(Optional.of(memberGrade));
 
         // when
-        MemberInfo memberInfo = adminService.updateMemberGradeOrStatus(modify);
+        MemberInfo memberInfo = adminService.modifyMemberGradeOrStatus(modify);
 
         // then
         Assertions.assertEquals(1L, memberInfo.getMemberId());
@@ -152,26 +151,26 @@ class AdminServiceTest {
 
     @Test
     @DisplayName("관리자 상태 변경")
-    void updateAdminStatus() {
+    void modifyAdminStatus() {
 
         // given
         Modify modify = Modify.builder()
-                .memberId(1L)
-                .status(String.valueOf(AdminStatus.STOPPED))
-                .build();
+            .memberId(1L)
+            .status(String.valueOf(AdminStatus.STOPPED))
+            .build();
 
         AdminEntity admin = AdminEntity.builder()
-                .adminId(1L)
-                .email("test@gmail.com")
-                .adminStatus(AdminStatus.IN_USE)
-                .build();
+            .adminId(1L)
+            .email("test@gmail.com")
+            .adminStatus(AdminStatus.IN_USE)
+            .build();
 
 
         given(adminRepository.findById(anyLong()))
-                .willReturn(Optional.of(admin));
+            .willReturn(Optional.of(admin));
 
         // when
-        AdminInfo adminInfo = adminService.updateAdminStatus(modify);
+        AdminInfo adminInfo = adminService.modifyAdminStatus(modify);
 
         // then
         Assertions.assertEquals(1L, adminInfo.getAdminId());
@@ -179,6 +178,7 @@ class AdminServiceTest {
         Assertions.assertEquals(AdminStatus.STOPPED, AdminStatus.valueOf(adminInfo.getStatus()));
 
     }
+
 
     private Page<MemberEntity> getTestMemberPage(Pageable pageable) {
 

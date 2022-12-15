@@ -1,14 +1,17 @@
 package com.teamzero.member.controller;
 
 import com.teamzero.domain.JwtAuthenticationProvider;
-import com.teamzero.domain.domain.UserVo;
-import com.teamzero.member.domain.model.MemberEntity;
 import com.teamzero.member.domain.model.dto.MemberInfo;
 import com.teamzero.member.domain.model.dto.Modify;
 import com.teamzero.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
@@ -44,9 +47,9 @@ public class MemberController {
     @GetMapping("/info")
     public ResponseEntity<MemberInfo> getMemberInfo(@RequestHeader(name = "X-AUTH-TOKEN") String token){
 
-        UserVo vo = jwtAuthenticationProvider.getUserVo(token);
+        var vo = jwtAuthenticationProvider.getUserVo(token);
 
-        MemberEntity member = memberService.findByMemberIdAndEmail(vo.getMemberId(), vo.getEmail());
+        var member = memberService.findByMemberIdAndEmail(vo.getMemberId(), vo.getEmail());
 
         return ResponseEntity.ok(MemberInfo.fromEntity(member));
     }
