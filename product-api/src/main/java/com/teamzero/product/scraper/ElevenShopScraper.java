@@ -6,6 +6,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.teamzero.product.config.ScrapConfig;
 import com.teamzero.product.domain.dto.ElevenShopProductDto;
 import com.teamzero.product.domain.model.ProductEntity;
 import com.teamzero.product.domain.model.ProductOfMallEntity;
@@ -20,18 +21,19 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-public class ElevenShopScraper implements ProductScraperInterface{
+public class ElevenShopScraper extends ScrapConfig
+    implements ProductScraperInterface {
   static private final String SEARCH_URL =
       "https://search.11st.co.kr/Search.tmall?kwd=%s";
-  static private final double TOLERANCE = 0.05;
+
   static private final String MALL_ID = "01"; //mallId수정필요
 
   @Override
   public List<ProductOfMallEntity> getScrapProductList
       (ProductEntity product) {
     long price = product.getStandPrice();
-    long maxPrice = (long) (price + Math.floor(price * TOLERANCE));
-    long minPrice = (long) (price - Math.floor(price * TOLERANCE));
+    long maxPrice = (long) (price + Math.floor(price * super.TOLERANCE));
+    long minPrice = (long) (price - Math.floor(price * super.TOLERANCE));
 
     List<ProductOfMallEntity> productOfMallEntities = new ArrayList<>();
 
