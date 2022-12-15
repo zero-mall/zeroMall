@@ -4,16 +4,17 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
+
 import com.mysql.cj.util.StringUtils;
 import com.teamzero.product.client.NaverSearchClient;
+import com.teamzero.product.domain.dto.NaverSearch;
+import com.teamzero.product.domain.dto.ProductSearch;
+import com.teamzero.product.domain.dto.RedisProductSet;
 import com.teamzero.product.domain.model.ProductEntity;
 import com.teamzero.product.domain.model.constants.CacheKey;
-import com.teamzero.product.domain.dto.NaverProduct;
-import com.teamzero.product.domain.dto.ProductSet;
 import com.teamzero.product.domain.repository.ProductRepository;
 import com.teamzero.product.util.RedisCrud;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import org.junit.jupiter.api.Assertions;
@@ -23,7 +24,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 
 @ExtendWith(MockitoExtension.class)
@@ -76,14 +76,15 @@ class ProductServiceTest {
         .willReturn(ResponseEntity.ok(JSON_SAMPLE));
 
     // when
-    List<NaverProduct> products = productService.searchNaverProducts("컴퓨터", PageRequest.of(0, 1));
+    NaverSearch.Response response = productService.searchNaverProducts(new ProductSearch.Request("컴퓨터", 1, 10));
 
     // then
-    String title = "게이밍 조립<b>컴퓨터</b> 롤 서든어택 오버워치 배틀그라운드 배그 조립<b>PC</b> <b>컴퓨터</b>본체";
-    Assertions.assertEquals(title, products.get(0).getTitle());
-    Assertions.assertEquals("디지털/가전", products.get(0).getCategory1());
-    Assertions.assertEquals("PC", products.get(0).getCategory2());
-    Assertions.assertEquals("조립/베어본PC", products.get(0).getCategory3());
+    String title = "게이밍 조립컴퓨터 롤 서든어택 오버워치 배틀그라운드 배그 조립PC 컴퓨터본체";
+    Assertions.assertEquals(title, response.getContent().get(0).getTitle());
+    Assertions.assertEquals("디지털/가전", response.getContent().get(0).getCategory1());
+    Assertions.assertEquals("PC", response.getContent().get(0).getCategory2());
+    Assertions.assertEquals("조립/베어본PC", response.getContent().get(0).getCategory3());
+    Assertions.assertEquals(29669087L, response.getTotal());
   }
 
   @Test
@@ -103,7 +104,7 @@ class ProductServiceTest {
         .price(10000)
         .build();
 
-    ProductSet set = new ProductSet();
+    RedisProductSet set = new RedisProductSet();
     set.addProduct(product);
 
     given(redisCrud.getData(anyString(), any()))
@@ -184,7 +185,7 @@ class ProductServiceTest {
         .build();
 
     given(redisCrud.getData(anyString(), any()))
-        .willReturn(Optional.of(new ProductSet()));
+        .willReturn(Optional.of(new RedisProductSet()));
 
     given(redisCrud.saveData(anyString(), any()))
         .willReturn(true);
@@ -193,7 +194,7 @@ class ProductServiceTest {
     boolean result = productService.addProductToRedisSet(product);
 
     // then
-    Set<ProductEntity> set = redisCrud.getData(CacheKey.NAVER_PRODUCT, ProductSet.class).get().getProducts();
+    Set<ProductEntity> set = redisCrud.getData(CacheKey.NAVER_PRODUCT, RedisProductSet.class).get().getProducts();
     Assertions.assertEquals(true, result);
     Assertions.assertTrue(set.contains(product));
 

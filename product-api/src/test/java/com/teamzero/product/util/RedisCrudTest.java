@@ -2,7 +2,7 @@ package com.teamzero.product.util;
 
 import com.teamzero.product.domain.model.ProductEntity;
 import com.teamzero.product.domain.model.constants.CacheKey;
-import com.teamzero.product.domain.dto.ProductSet;
+import com.teamzero.product.domain.dto.RedisProductSet;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +33,7 @@ class RedisCrudTest {
   void test2(){
 
     // given
-    ProductSet set = new ProductSet();
+    RedisProductSet set = new RedisProductSet();
     ProductEntity product1 = ProductEntity.builder()
         .productId(1L)
         .catId("111111111")
@@ -59,7 +59,7 @@ class RedisCrudTest {
     redisCrud.saveData(CacheKey.NAVER_PRODUCT, set);
 
     // then
-    Optional<ProductSet> test = redisCrud.getData(CacheKey.NAVER_PRODUCT, ProductSet.class);
+    Optional<RedisProductSet> test = redisCrud.getData(CacheKey.NAVER_PRODUCT, RedisProductSet.class);
     System.out.println(test.isPresent());
     test.get().getProducts().forEach(System.out::println);
 

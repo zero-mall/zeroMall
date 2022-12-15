@@ -8,7 +8,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class ProductSet {
+public class RedisProductSet {
 
   private Set<ProductEntity> products;
 

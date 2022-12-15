@@ -1,6 +1,6 @@
 package com.teamzero.product.client;
 
-import com.teamzero.product.domain.dto.NaverSearch;
+import com.teamzero.product.domain.dto.NaverSearch.Request;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.cloud.openfeign.SpringQueryMap;
@@ -12,6 +12,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 public interface NaverSearchClient {
 
   @GetMapping
-  ResponseEntity<String> searchProducts(@SpringQueryMap NaverSearch naverSearch);
+  ResponseEntity<String> searchProducts(@SpringQueryMap Request naverSearch);
 
 }
