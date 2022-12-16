@@ -1,6 +1,5 @@
 package com.teamzero.product.domain.model;
 
-import com.teamzero.product.domain.dto.NaverSearch.Response.NaverProduct;
 import com.teamzero.product.domain.dto.ProductDetail;
 import java.util.List;
 import javax.persistence.Entity;
@@ -16,10 +15,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 import org.hibernate.envers.AuditOverride;
-
-import javax.persistence.*;
 
 @Entity
 @Getter
@@ -40,9 +36,9 @@ public class ProductEntity extends BaseEntity{
     private String catId;
 
     // 네이버 상품 정보
-    private Long naverId;
+    private String naverId;
     private String brand;
-    private String name;
+    private String productName;
     private String imageUrl;
     private int price;
 
@@ -68,7 +64,7 @@ public class ProductEntity extends BaseEntity{
             .catId(catId)
             .naverId(request.getNaverId())
             .brand(request.getBrand())
-            .name(request.getTitle())
+            .productName(request.getTitle())
             .imageUrl(request.getImageUrl())
             .price(request.getLPrice())
             .build();

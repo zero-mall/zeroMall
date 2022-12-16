@@ -1,7 +1,5 @@
 package com.teamzero.product.service;
 
-import static io.netty.util.internal.SystemPropertyUtil.contains;
-
 import com.teamzero.product.client.NaverSearchClient;
 import com.teamzero.product.client.RedisClient;
 import com.teamzero.product.domain.dto.NaverSearch.Request;
@@ -165,7 +163,7 @@ public class ProductService {
 
     // 소분류 조회 후 필요시 등록
     CategoryRegister cType = CategoryRegister.builder()
-        .catName(request.getCategory1())
+        .catName(request.getCategory3())
         .catType("ctype")
         .parentCatId(bTypeId)
         .build();

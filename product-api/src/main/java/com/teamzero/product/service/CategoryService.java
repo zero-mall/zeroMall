@@ -10,7 +10,6 @@ import com.teamzero.product.domain.model.CategoryEntity;
 import com.teamzero.product.domain.model.CategoryRegister;
 import com.teamzero.product.domain.model.constants.CategoryType;
 import com.teamzero.product.domain.repository.CategoryRepository;
-import com.teamzero.product.exception.ErrorCode;
 import com.teamzero.product.exception.TeamZeroException;
 import java.util.List;
 import java.util.Objects;
@@ -113,7 +112,7 @@ public class CategoryService {
       childId = maxCatId.substring(3,6);
     }else{
       parentId = maxCatId.substring(0,6);
-      childId = maxCatId.substring(6,3);
+      childId = maxCatId.substring(6);
     }
 
     if(childId.equals("zzz")){ //더이상 카운팅할 코드가 없을 때

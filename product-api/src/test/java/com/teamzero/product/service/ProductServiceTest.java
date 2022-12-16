@@ -1,7 +1,6 @@
 package com.teamzero.product.service;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 
@@ -98,7 +97,7 @@ class ProductServiceTest {
         .category1("디지털/가전")
         .category2("PC")
         .category3("조립/베어본PC")
-        .naverId(10076181031L)
+        .naverId("10076181031")
         .title("test")
         .brand("brand")
         .imageUrl("image")
@@ -108,12 +107,12 @@ class ProductServiceTest {
     given(redisClient.getData(any(LocalDate.class), any()))
         .willReturn(Optional.empty());
 
-    given(productRepository.findByNaverId(anyLong()))
+    given(productRepository.findByNaverId(anyString()))
         .willReturn(Optional.of(ProductEntity.builder()
             .productId(1L)
             .catId("111111111")
-            .naverId(10076181031L)
-            .name("test")
+            .naverId("10076181031")
+            .productName("test")
             .brand("test")
             .imageUrl("url")
             .price(10000)

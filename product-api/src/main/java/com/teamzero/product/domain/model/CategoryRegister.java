@@ -1,11 +1,15 @@
 package com.teamzero.product.domain.model;
 
 import com.teamzero.product.domain.model.constants.CategoryType;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
+@AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class CategoryRegister {
   private String catName;
   private String parentCatId;

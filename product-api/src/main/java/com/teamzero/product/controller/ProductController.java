@@ -24,7 +24,7 @@ public class ProductController {
    * 매개변수  : 검색어, 페이징 정보
    * 응답값   : 네이버 상품 검색 결과
    */
-  @GetMapping("/search")
+  @GetMapping("/api/search")
   public ResponseEntity<ProductSearch.Response> searchNaverProducts(@Valid ProductSearch.Request request) {
 
     // 1. 네이버 쇼핑 API에서 상품 검색
@@ -37,7 +37,7 @@ public class ProductController {
   /**
    * 상품 간략 정보 조회
    */
-  @GetMapping("/api/short")
+  @GetMapping("/short")
   public ResponseEntity<?> getProductShort(ProductDetail.Request request) {
 
     var response = productService.getProductShort(request);
