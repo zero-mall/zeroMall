@@ -15,7 +15,8 @@ public enum ErrorCode {
     CATEGORY_SUB_DATA_EXISTS("하위 카테고리가 존재합니다.", HttpStatus.BAD_REQUEST),
     CATEGORY_PARANTID_ERROR("부모 카테고리Id가 없습니다.", HttpStatus.BAD_REQUEST),
     REVIEW_ALREADY_EXISTS("리뷰를 이미 작성한 상품입니다.", HttpStatus.BAD_REQUEST),
-    REVIEW_DOES_NOT_EXISTS("존재하지 않는 리뷰입니다.", HttpStatus.BAD_REQUEST);
+    REVIEW_DOES_NOT_EXISTS("존재하지 않는 리뷰입니다.", HttpStatus.BAD_REQUEST),
+    MALLID_NOT_FOUND("쇼핑몰 아이디가 없습니다.", HttpStatus.INTERNAL_SERVER_ERROR);
 
     private final String message;
     private final HttpStatus httpStatus;

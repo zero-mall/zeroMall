@@ -8,8 +8,8 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.teamzero.product.config.ScrapConfig;
 import com.teamzero.product.domain.dto.ElevenShopProductDto;
+import com.teamzero.product.domain.model.MallProductEntity;
 import com.teamzero.product.domain.model.ProductEntity;
-import com.teamzero.product.domain.model.ProductOfMallEntity;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
@@ -26,20 +26,21 @@ public class ElevenShopScraper extends ScrapConfig
   static private final String SEARCH_URL =
       "https://search.11st.co.kr/Search.tmall?kwd=%s";
 
-  static private final String MALL_ID = "01"; //mallId수정필요
+  static private final long MALL_ID = 1L; //mallId수정필요
+
 
   @Override
-  public List<ProductOfMallEntity> getScrapProductList
+  public List<MallProductEntity> getScrapProductList
       (ProductEntity product) {
-    long price = product.getStandPrice();
+    long price = product.getPrice();
     long maxPrice = (long) (price + Math.floor(price * super.TOLERANCE));
     long minPrice = (long) (price - Math.floor(price * super.TOLERANCE));
 
-    List<ProductOfMallEntity> productOfMallEntities = new ArrayList<>();
+    List<MallProductEntity> mallProductEntities = new ArrayList<>();
 
     //Jsoup을 이용해서 11번가 조회 후 일반상품에 있는 데이터 가져오기
     String encodeParam =  URLEncoder.encode
-        (product.getProductName(), StandardCharsets.UTF_8);
+        (product.getName(), StandardCharsets.UTF_8);
 
     Connection connection =
         Jsoup.connect(String.format(SEARCH_URL,encodeParam));
@@ -47,7 +48,7 @@ public class ElevenShopScraper extends ScrapConfig
       Document document = connection.get();
       Elements parsingDivs =
           document.getElementsByAttributeValue
-              ("class","search_content react_app ");
+              ("class","l_search_content");
       //데이터가 없으면 null 반환
       if(parsingDivs.size() < 1){
         return null;
@@ -89,15 +90,15 @@ public class ElevenShopScraper extends ScrapConfig
           elevenShopProductDto.setProductId(product.getProductId());
           elevenShopProductDto.setImageUrl(imgUrl);
           elevenShopProductDto.setMallId(MALL_ID);
-          ProductOfMallEntity productOfMallEntity
+          MallProductEntity mallProductEntity
               = elevenShopProductDto.toProductOfMallEntity();
-          productOfMallEntities.add(productOfMallEntity);
+          mallProductEntities.add(mallProductEntity);
         }
       }
 
     } catch (IOException e) {
       throw new RuntimeException(e);
     }
-    return productOfMallEntities;
+    return mallProductEntities;
   }
 }

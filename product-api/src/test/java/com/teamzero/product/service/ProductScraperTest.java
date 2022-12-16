@@ -1,9 +1,11 @@
 package com.teamzero.product.service;
 
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import com.teamzero.product.domain.model.MallEntity;
+import com.teamzero.product.domain.model.MallProductEntity;
 import com.teamzero.product.domain.model.ProductEntity;
-import com.teamzero.product.domain.model.ProductOfMallEntity;
+import com.teamzero.product.domain.repository.MallRepository;
 import com.teamzero.product.scraper.ElevenShopScraper;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
@@ -20,21 +22,31 @@ public class ProductScraperTest {
   private ElevenShopScraper elevenShopScraper;
   @Mock
   private ProductEntity productEntity;
+  @Mock
+  private MallRepository mallRepository;
 
   @Test
   @DisplayName("11번가 상품정보 성공 테스트")
   void ElevenShopScraperTest(){
     //given
     ProductEntity product = ProductEntity.builder()
-        .productId(1)
-        .productName("아이닉 new i20")
-        .standPrice(263340)
+        .productId(1L)
+        .name("아이닉 new i20")
+        .price(263340)
         .build();
 
+    MallEntity mall = MallEntity.builder().mallId(1L)
+            .name("11번가")
+        .build();
+
+    mallRepository.save(mall);
+
+    var test = mallRepository.findAllBymallId(1L);
+
     //when
-    List<ProductOfMallEntity> product1 = elevenShopScraper.getScrapProductList(product);
+    List<MallProductEntity> product1 = elevenShopScraper.getScrapProductList(product);
     //then
-    for(ProductOfMallEntity item : product1){
+    for(MallProductEntity item : product1){
       System.out.println(item.toString());
     }
   }
@@ -44,15 +56,14 @@ public class ProductScraperTest {
   void ElevenShopScraperEmptyTest(){
     //given
     ProductEntity product = ProductEntity.builder()
-        .productId(1)
-        .productName("가나다라마바사아자")
-        .standPrice(1)
+        .productId(1L)
+        .name("가나다라마바사아자")
+        .price(1)
         .build();
-
     //when
-    List<ProductOfMallEntity> product1 = elevenShopScraper.getScrapProductList(product);
+    List<MallProductEntity> product1 = elevenShopScraper.getScrapProductList(product);
     //then
-    assertNull(product1);
+    assertEquals(product1.size(),0);
   }
 
 }
