@@ -19,13 +19,14 @@ import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.envers.AuditOverride;
 
+import javax.persistence.*;
+
 @Entity
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@ToString
 @AuditOverride(forClass = BaseEntity.class)
 @Table(name = "PRODUCT")
 public class ProductEntity extends BaseEntity{
@@ -51,11 +52,12 @@ public class ProductEntity extends BaseEntity{
     private List<MallProductEntity> mallProducts;
 
     // 별점
-    private int avgStar;
+    private double avgStar;
 
     // 좋아요, 조회수
     private long viewCount;
     private long likeCount;
+    private long standPrice;
 
     /**
      * 네이버 상품
