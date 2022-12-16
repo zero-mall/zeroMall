@@ -1,16 +1,8 @@
 package com.teamzero.product.scraper;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
+import com.teamzero.product.domain.model.MallProductEntity;
 import com.teamzero.product.domain.model.ProductEntity;
-import com.teamzero.product.domain.model.ProductOfMallEntity;
-import java.io.IOException;
-import java.net.URLEncoder;
 import java.util.List;
-import java.util.PriorityQueue;
-import org.jsoup.Jsoup;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -18,10 +10,10 @@ public class TmonProductScraper implements ProductScraperInterface {
 
   private static final String SEARCH_URL = "https://search.tmon.co.kr/api/search/v4/deals?_=1670946124923"
       + "&keyword=%s&page=1&size=10&minPrice=%d&maxPrice=%d";
-  private static final double TOLERANCE  = 0.05;
+
 
   @Override
-  public List<ProductOfMallEntity> getScrapProductList(ProductEntity product) throws IOException {
+  public List<MallProductEntity> getScrapProductList(ProductEntity product) throws IOException {
 
     // 1. 기준 상품에서 검색할 정보 가져오기
     String keyword = product.getProductName();
@@ -55,5 +47,4 @@ public class TmonProductScraper implements ProductScraperInterface {
 
     return null;
   }
-
 }

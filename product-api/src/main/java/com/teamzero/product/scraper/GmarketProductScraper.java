@@ -1,7 +1,7 @@
 package com.teamzero.product.scraper;
 
+import com.teamzero.product.domain.model.MallProductEntity;
 import com.teamzero.product.domain.model.ProductEntity;
-import com.teamzero.product.domain.model.ProductOfMallEntity;
 import java.util.List;
 import org.springframework.stereotype.Component;
 
@@ -13,7 +13,7 @@ public class GmarketProductScraper implements ProductScraperInterface {
 
 
     @Override
-    public List<ProductOfMallEntity> getScrapProductList(ProductEntity product) {
+    public List<MallProductEntity> getScrapProductList(ProductEntity product) {
         return null;
     }
 }

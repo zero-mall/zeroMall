@@ -26,3 +26,11 @@ Objects.isNull()이용하여 널체크 하였다.
 - 원인 : ProductOfMallEntity가 복합키 설정이 되어있지 않아 에러가 난다.
 
 - 해결 : ProductOfMallEntity의 복합키용 class를(ProductMallId) 생성 하여 해결
+
+#### 3.product-api 실행시 에러
+- Error
+  - org.springframework.beans.factory.BeanDefinitionStoreException: Failed to parse configuration class [com.teamzero.product.ProductApplication]; nested exception is java.io.FileNotFoundException: class path resource [com/teamzero/product/config/GsonConfig.class] cannot be opened because it does not exist
+    at org.springframework.context.annotation.ConfigurationClassParser.parse(ConfigurationClassParser.java:188) ~[spring-context-5.3.24.jar:5.3.24]
+    at org.springframework.context.annotation.Configu
+- 원인 : config class 삭제 후 컴파일될 때 기존 BEAN으로 등록 된 config를 찾지 못해 발생되는 에러같다.
+- 해결 : gradle에서 clean실행 후 정상해결
