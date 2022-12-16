@@ -1,13 +1,12 @@
 package com.teamzero.product.controller;
 
-import com.teamzero.product.domain.dto.ProductDetail;
-import com.teamzero.product.domain.dto.ProductSearch;
+import com.teamzero.product.domain.dto.product.ProductDetail;
+import com.teamzero.product.domain.dto.product.ProductSearch;
 import com.teamzero.product.service.ProductService;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 

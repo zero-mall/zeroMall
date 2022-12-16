@@ -1,6 +1,6 @@
 package com.teamzero.product.domain.model;
 
-import com.teamzero.product.domain.dto.ProductDetail;
+import com.teamzero.product.domain.dto.product.ProductDetail;
 import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -12,19 +12,17 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import org.hibernate.envers.AuditOverride;
 
 @Entity
-@Getter
-@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 @AuditOverride(forClass = BaseEntity.class)
 @Table(name = "PRODUCT")
+@Data
 public class ProductEntity extends BaseEntity{
 
     // 제로몰 상품 구분 인덱스

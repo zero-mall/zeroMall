@@ -1,19 +1,33 @@
 package com.teamzero.product.scraper;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.teamzero.product.config.ScrapConfig;
+import com.teamzero.product.domain.model.MallEntity;
 import com.teamzero.product.domain.model.MallProductEntity;
 import com.teamzero.product.domain.model.ProductEntity;
+import java.io.IOException;
+import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.List;
+import lombok.extern.slf4j.Slf4j;
+import org.jsoup.Jsoup;
 import org.springframework.stereotype.Component;
 
 @Component
-public class TmonProductScraper implements ProductScraperInterface {
+@Slf4j
+public class TmonProductScraper extends ScrapConfig implements ProductScraperInterface {
 
   private static final String SEARCH_URL = "https://search.tmon.co.kr/api/search/v4/deals?_=1670946124923"
       + "&keyword=%s&page=1&size=10&minPrice=%d&maxPrice=%d";
 
+  // TODO 협의 후 수정 필요
+  private static final MallEntity mall = MallEntity.builder().mallId(3L).name("티몬").build();
 
   @Override
-  public List<MallProductEntity> getScrapProductList(ProductEntity product) throws IOException {
+  public List<MallProductEntity> getScrapProductList(ProductEntity product) {
 
     // 1. 기준 상품에서 검색할 정보 가져오기
     String keyword = product.getProductName();
@@ -22,13 +36,23 @@ public class TmonProductScraper implements ProductScraperInterface {
     int maxPrice = (int) Math.ceil(price + (TOLERANCE * price));
 
     // 2. Jsoup으로 검색 결과 파싱
-    String jsonStr = Jsoup.connect(String.format(SEARCH_URL, URLEncoder.encode(keyword, "UTF-8"), minPrice, maxPrice))
-        .userAgent("Mozilla")
-        .ignoreContentType(true)
-        .execute().body();
+    String jsonStr = "";
 
-    // 낮은 가격순으로 저장
-    PriorityQueue<int[]> tmpQueue = new PriorityQueue<>((x, y) -> x[0] - y[0]);
+    try {
+
+      jsonStr = Jsoup.connect(String.format(SEARCH_URL, URLEncoder.encode(keyword, "UTF-8"), minPrice, maxPrice))
+          .userAgent("Mozilla")
+          .ignoreContentType(true)
+          .execute().body();
+
+    } catch (IOException e) {
+
+      log.warn(e.getMessage());
+      throw new RuntimeException(e);
+
+    }
+
+    List<MallProductEntity> mallProducts = new ArrayList<>();
 
     JsonObject data = JsonParser.parseString(jsonStr).getAsJsonObject().get("data").getAsJsonObject();
     JsonArray searchDeals = data.get("searchDeals").getAsJsonArray();
@@ -36,15 +60,31 @@ public class TmonProductScraper implements ProductScraperInterface {
     for (JsonElement ele : searchDeals) {
 
       JsonObject searchDealResponse = ele.getAsJsonObject().get("searchDealResponse").getAsJsonObject();
+      JsonObject extraDealInfo = ele.getAsJsonObject().get("extraDealInfo").getAsJsonObject();
       JsonObject dealInfo = searchDealResponse.getAsJsonObject().get("dealInfo").getAsJsonObject();
+      JsonObject searchInfo = searchDealResponse.getAsJsonObject().get("searchInfo").getAsJsonObject();
 
-      String titleName = dealInfo.get("titleName").getAsString();
-      String priceInfo = dealInfo.get("priceInfo").getAsJsonObject().get("price").getAsString();
+      String name          = dealInfo.get("titleName").getAsString();
+      String imageUrl      = dealInfo.get("imageInfo").getAsJsonObject().get("mobile3ColImageUrl").getAsString();
+      int    mallPrice     = dealInfo.get("priceInfo").getAsJsonObject().get("price").getAsInt();
+      String detailUrl     = extraDealInfo.get("detailUrl").getAsString();
+      String productMallId = searchInfo.get("id").getAsString();
 
-      System.out.println("titleName : " + titleName + ", priceInfo : " + priceInfo);
+      // 3. MallEntity로 데이터 패키징
+      // TODO 엔터티로 바로 가져갈지, DTO를 거칠지 의논 필요
+      mallProducts.add(MallProductEntity.builder()
+          .mall(mall)
+          .name(name)
+          .imageUrl(imageUrl)
+          .detailUrl(detailUrl)
+          .price(mallPrice)
+          .productId(product.getProductId())
+          .productMallId(productMallId)
+          .build());
 
     }
 
-    return null;
+    // 4. 리스트로 반환
+    return mallProducts;
   }
 }

@@ -2,12 +2,12 @@ package com.teamzero.product.service;
 
 import com.teamzero.product.client.NaverSearchClient;
 import com.teamzero.product.client.RedisClient;
-import com.teamzero.product.domain.dto.NaverSearch.Request;
-import com.teamzero.product.domain.dto.NaverSearch.Response;
-import com.teamzero.product.domain.dto.ProductDetail;
-import com.teamzero.product.domain.dto.ProductSearch;
+import com.teamzero.product.domain.dto.product.NaverSearch.Request;
+import com.teamzero.product.domain.dto.product.NaverSearch.Response;
+import com.teamzero.product.domain.dto.product.ProductDetail;
+import com.teamzero.product.domain.dto.product.ProductSearch;
 import com.teamzero.product.domain.model.CategoryEntity;
-import com.teamzero.product.domain.model.CategoryRegister;
+import com.teamzero.product.domain.dto.category.CategoryRegister;
 import com.teamzero.product.domain.model.ProductEntity;
 import com.teamzero.product.domain.repository.ProductRepository;
 import com.teamzero.product.redis.RedisNaverSearch;

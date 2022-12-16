@@ -3,8 +3,8 @@ package com.teamzero.product.service;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 
-import com.teamzero.product.domain.dto.ProductDetail;
-import com.teamzero.product.domain.model.CategoryRegister;
+import com.teamzero.product.domain.dto.product.ProductDetail;
+import com.teamzero.product.domain.dto.category.CategoryRegister;
 import com.teamzero.product.domain.repository.CategoryRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

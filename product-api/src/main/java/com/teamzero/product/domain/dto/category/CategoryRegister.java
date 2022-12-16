@@ -1,4 +1,4 @@
-package com.teamzero.product.domain.model;
+package com.teamzero.product.domain.dto.category;
 
 import com.teamzero.product.domain.model.constants.CategoryType;
 import lombok.AllArgsConstructor;

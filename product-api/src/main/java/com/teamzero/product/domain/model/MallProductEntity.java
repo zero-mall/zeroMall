@@ -10,21 +10,17 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
 import org.hibernate.envers.AuditOverride;
 
 @Entity
-@Getter
-@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 @AuditOverride(forClass = BaseEntity.class)
-@ToString
 @Table(name = "MALL_PRODUCT")
+@Data
 public class MallProductEntity extends BaseEntity {
 
   @Id

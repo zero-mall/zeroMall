@@ -1,11 +1,10 @@
-package com.teamzero.product.domain.dto;
+package com.teamzero.product.domain.dto.product;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.mysql.cj.util.StringUtils;
-import java.io.Serializable;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;

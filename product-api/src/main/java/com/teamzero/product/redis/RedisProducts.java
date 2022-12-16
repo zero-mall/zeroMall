@@ -1,6 +1,6 @@
 package com.teamzero.product.redis;
 
-import com.teamzero.product.domain.dto.ProductDetail;
+import com.teamzero.product.domain.dto.product.ProductDetail;
 import com.teamzero.product.domain.model.constants.CacheKey;
 import java.time.LocalDate;
 import java.util.HashMap;

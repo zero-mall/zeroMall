@@ -7,7 +7,7 @@ import static com.teamzero.product.exception.ErrorCode.CATEGORY_PARANTID_ERROR;
 import static com.teamzero.product.exception.ErrorCode.CATEGORY_SUB_DATA_EXISTS;
 
 import com.teamzero.product.domain.model.CategoryEntity;
-import com.teamzero.product.domain.model.CategoryRegister;
+import com.teamzero.product.domain.dto.category.CategoryRegister;
 import com.teamzero.product.domain.model.constants.CategoryType;
 import com.teamzero.product.domain.repository.CategoryRepository;
 import com.teamzero.product.exception.TeamZeroException;

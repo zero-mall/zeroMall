@@ -1,5 +1,6 @@
-package com.teamzero.product.domain.dto;
+package com.teamzero.product.domain.dto.product;
 
+import com.teamzero.product.domain.dto.mall.MallProduct;
 import com.teamzero.product.domain.model.ProductEntity;
 import java.util.List;
 import lombok.AllArgsConstructor;
