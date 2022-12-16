@@ -2,6 +2,7 @@ package com.teamzero.product.domain.dto;
 
 import com.teamzero.product.domain.dto.NaverSearch.Response.NaverProduct;
 import java.util.List;
+import javax.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -17,9 +18,10 @@ public class ProductSearch {
   @Builder
   public static class Request{
 
+    @NotBlank
     private String keyword;
-    private int pageNumber;
-    private int pageSize;
+    private int pageNumber = 1;
+    private int pageSize = 10;
 
   }
 

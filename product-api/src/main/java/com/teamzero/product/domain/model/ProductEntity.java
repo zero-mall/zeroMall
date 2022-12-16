@@ -1,6 +1,7 @@
 package com.teamzero.product.domain.model;
 
 import com.teamzero.product.domain.dto.NaverSearch.Response.NaverProduct;
+import com.teamzero.product.domain.dto.ProductDetail;
 import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -48,10 +49,11 @@ public class ProductEntity extends BaseEntity{
     @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn
     private List<MallProductEntity> mallProducts;
-    
-    // 별점, 리뷰, 좋아요, 조회수
-    // TODO 별점
-    // TODO 리뷰
+
+    // 별점
+    private int avgStar;
+
+    // 좋아요, 조회수
     private long viewCount;
     private long likeCount;
 
@@ -59,14 +61,14 @@ public class ProductEntity extends BaseEntity{
      * 네이버 상품
      * 연결된 쇼핑몰 상품들을 제외한 정보만 저장
      */
-    public static ProductEntity of (NaverProduct naverProduct) {
+    public static ProductEntity from(ProductDetail.Request request, String catId) {
         return ProductEntity.builder()
-            .naverId(naverProduct.getNaverId())
-            .brand(naverProduct.getBrand())
-            .name(naverProduct.getTitle())
-            .imageUrl(naverProduct.getImageUrl())
-            .price(naverProduct.getLPrice())
+            .catId(catId)
+            .naverId(request.getNaverId())
+            .brand(request.getBrand())
+            .name(request.getTitle())
+            .imageUrl(request.getImageUrl())
+            .price(request.getLPrice())
             .build();
     }
-
 }

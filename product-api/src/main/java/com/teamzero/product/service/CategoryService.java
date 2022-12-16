@@ -81,7 +81,8 @@ public class CategoryService {
   private String getMaxCatId(CategoryRegister request){
     //카테고리 타입 확인 후 대분류가 아니면 부모카테고리 확인
     if(Objects.equals(request.getCatTypeObject(), CategoryType.ATYPE)){
-      return  categoryRepository.maxByCatIdAtype();
+      String result = categoryRepository.maxByCatIdAtype();
+      return result == null? "000000000" : result;
     }else{//대분류가 아닌경우 부모카테고리Id가 있는지 체크
       if(!categoryRepository.existsByCatId(request.getParentCatId())){
         throw new TeamZeroException(CATEGORY_PARANTID_ERROR);
