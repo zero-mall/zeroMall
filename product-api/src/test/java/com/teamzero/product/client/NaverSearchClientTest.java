@@ -1,5 +1,6 @@
 package com.teamzero.product.client;
 
+import com.teamzero.product.client.NaverSearchClient;
 import com.teamzero.product.domain.dto.NaverSearch.Request;
 import com.teamzero.product.domain.dto.ProductSearch;
 import org.junit.jupiter.api.Test;

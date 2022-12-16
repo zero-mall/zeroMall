@@ -4,40 +4,36 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.teamzero.product.domain.model.ProductEntity;
-import com.teamzero.product.domain.model.ProductOfMallEntity;
 import java.io.IOException;
 import java.net.URLEncoder;
-import java.util.List;
-import java.util.PriorityQueue;
 import org.jsoup.Jsoup;
-import org.springframework.stereotype.Component;
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
 
-@Component
-public class TmonProductScraper implements ProductScraperInterface {
+@SpringBootTest
+class TmonScraperTest {
 
-  private static final String SEARCH_URL = "https://search.tmon.co.kr/api/search/v4/deals?_=1670946124923"
+  public static final String TMON_URL = "https://search.tmon.co.kr/api/search/v4/deals?_=1670946124923"
       + "&keyword=%s&page=1&size=10&minPrice=%d&maxPrice=%d";
+
   private static final double TOLERANCE  = 0.05;
 
-  @Override
-  public List<ProductOfMallEntity> getScrapProductList(ProductEntity product) throws IOException {
+  @Test
+  void searchProducts() throws IOException {
 
-    // 1. 기준 상품에서 검색할 정보 가져오기
-    String keyword = product.getProductName();
-    int price = product.getPrice();
+    // given
+    String keyword = "삼성전자 컴퓨터";
+    int price = 489_000;
     int minPrice = (int) Math.ceil(price - (TOLERANCE * price));
     int maxPrice = (int) Math.ceil(price + (TOLERANCE * price));
 
-    // 2. Jsoup으로 검색 결과 파싱
-    String jsonStr = Jsoup.connect(String.format(SEARCH_URL, URLEncoder.encode(keyword, "UTF-8"), minPrice, maxPrice))
+    // when
+    String jsonStr = Jsoup.connect(String.format(TMON_URL, URLEncoder.encode(keyword, "UTF-8"), minPrice, maxPrice))
         .userAgent("Mozilla")
         .ignoreContentType(true)
         .execute().body();
 
-    // 낮은 가격순으로 저장
-    PriorityQueue<int[]> tmpQueue = new PriorityQueue<>((x, y) -> x[0] - y[0]);
-
+    // then
     JsonObject data = JsonParser.parseString(jsonStr).getAsJsonObject().get("data").getAsJsonObject();
     JsonArray searchDeals = data.get("searchDeals").getAsJsonArray();
 
@@ -53,7 +49,6 @@ public class TmonProductScraper implements ProductScraperInterface {
 
     }
 
-    return null;
   }
 
 }
