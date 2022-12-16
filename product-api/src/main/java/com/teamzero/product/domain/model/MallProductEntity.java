@@ -13,6 +13,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import org.hibernate.envers.AuditOverride;
 
 @Entity
@@ -22,6 +23,7 @@ import org.hibernate.envers.AuditOverride;
 @NoArgsConstructor
 @Builder
 @AuditOverride(forClass = BaseEntity.class)
+@ToString
 @Table(name = "MALL_PRODUCT")
 public class MallProductEntity extends BaseEntity {
 
@@ -39,5 +41,10 @@ public class MallProductEntity extends BaseEntity {
   private String imageUrl;
   private String detailUrl;
   private int price;
+
+  //상품 관리 key
+  private long productId;
+  //쇼핑몰별 상품번호
+  private String productMallId;
 
 }
