@@ -104,3 +104,123 @@ dependencies {
 - Jsoup으로 숨겨진 HTML 추출 https://kr.coderbridge.com/questions/7c3d2665ee66421ebe728c1f9af409fa      
 - Jsoup으로 페이징 로딩, ajax 통신 데이터 스프래핑 https://private-yeri.tistory.com/10       
 - Solenum 사용하기 https://heodolf.tistory.com/104
+
+<br>
+
+### 5. Redis에 ResponseEntity 타입은 저장되지 않는 이슈
+(1) 오류 코드
+java.lang.IllegalArgumentException: DefaultSerializer requires a Serializable payload but received an object of type [org.springframework.http.ResponseEntity]
+
+(2) 원인
+- ResponseEntity는 Serializable을 구현하고 있지 않아, Redis에 serialize되어 저장되지 않는다.
+```java
+@GetMapping("/search")
+  @Cacheable(key = "#request.keyword", value = CacheKey.NAVER_SEARCH)
+  public ResponseEntity<ProductSearch.Response> searchNaverProducts(ProductSearch.Request request) {
+
+    // 1. 네이버 쇼핑 API에서 상품 검색
+    var naverResponse = productService.searchNaverProducts(request);
+
+    // 2. 네이버 응답 -> 제로콜 응답값으로 변환
+    return ResponseEntity.ok(ProductSearch.Response.of(naverResponse));
+  }
+```
+
+(3) 해결
+- 아래와 같은 방식으로 커스텀 ResponseEntity를 쓸 수도 있다. (출처 : 스택오버플로우)
+```java
+public CustomeResponseEntity extends ResponseEntity implements Serializable {
+
+    private static final long serialVersionUID = 7156526077883281625L;
+
+    public CustomResponseEntity(HttpStatus status) {
+        super(status);
+    }
+
+    public CustomResponseEntity(Object body, HttpStatus status) {
+        super(body, status);
+    }
+
+    public CustomResponseEntity(MultiValueMap headers, HttpStatus status) {
+        super(headers, status);
+    }
+
+    public CustomResponseEntity(Object body, MultiValueMap headers, HttpStatus status) {
+        super(body, headers, status);
+    }
+}
+```
+- 하지만 나의 경우, 팀원들 모두가 ResponseEntity를 사용하고 있기 때문에, Controller에서 사용한 @Cacheable을 없애고,
+  RedisTemplate을 써서 데이터를 저장하고 조회하기로 했다.
+```java
+@Service
+@RequiredArgsConstructor
+@Slf4j
+public class RedisClient {
+
+  private final Gson gson;
+
+  private final RedisTemplate redisTemplate;
+
+  /**
+   * 레디스에 데이터 저장
+   */
+  public <T> boolean addData(LocalDate key, T data) {
+    return addData(key.toString(), data);
+  }
+
+  public <T> boolean addData(String key, T data) {
+    try {
+      String value = gson.toJson(data);
+      redisTemplate.opsForValue().set(key, value);
+      return true;
+    } catch (Exception e) {
+      log.error(e.getMessage());
+      return false;
+    }
+  }
+}
+```
+```java
+// 서비스 클래스
+/**
+   * 네이버 상품 검색
+   */
+  public NaverSearch.Response searchNaverProducts(ProductSearch.Request request) {
+
+    try {
+
+      NaverSearch.Response response;
+      
+      // 1. 레디스에 검색 결과가 저장되어 있는지 확인
+      var redisNaverSearchOptional = redisClient.getData(request.getKeyword(), RedisNaverSearch.class);
+
+      if (redisNaverSearchOptional.isPresent()) {
+
+        // 1) 있으면 캐시 정보 반환
+        return redisNaverSearchOptional.get().getResponse();
+        
+      } else {
+
+        // 2) 없으면 네이버 api 통해 검색, 레디스에 저장
+        // 네이버 검색
+        String jsonBody = naverSearchClient.searchProducts(Request.of(request)).getBody();
+
+        // Json 파싱 & 상품명 문자열 변환
+        response = NaverSearch.Response.parseJson(jsonBody);
+
+        redisClient.addData(request.getKeyword(), response);
+
+      }
+      
+      return response;
+
+    } catch (Exception e) {
+
+      log.error(e.getMessage());
+
+      return null;
+
+    }
+  }
+```

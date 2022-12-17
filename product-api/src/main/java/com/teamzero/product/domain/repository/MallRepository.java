@@ -8,4 +8,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface MallRepository extends JpaRepository<MallEntity, Long> {
   Optional<MallEntity> findAllBymallId(Long mallId);
+
+  Optional<MallEntity> findByName(String name);
+
 }

@@ -7,7 +7,6 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.teamzero.product.config.ScrapConfig;
-import com.teamzero.product.domain.dto.ElevenShopProductDto;
 import com.teamzero.product.domain.model.MallProductEntity;
 import com.teamzero.product.domain.model.ProductEntity;
 import java.io.IOException;
@@ -20,9 +19,9 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import com.teamzero.product.domain.dto.mall.ElevenShopProductDto;
 
-public class ElevenShopScraper extends ScrapConfig
-    implements ProductScraperInterface {
+public class ElevenShopScraper extends ScrapConfig implements ProductScraperInterface {
   static private final String SEARCH_URL =
       "https://search.11st.co.kr/Search.tmall?kwd=%s";
 
@@ -30,8 +29,7 @@ public class ElevenShopScraper extends ScrapConfig
 
 
   @Override
-  public List<MallProductEntity> getScrapProductList
-      (ProductEntity product) {
+  public List<MallProductEntity> getScrapProductList(ProductEntity product) {
     long price = product.getPrice();
     long maxPrice = (long) (price + Math.floor(price * super.TOLERANCE));
     long minPrice = (long) (price - Math.floor(price * super.TOLERANCE));
@@ -40,7 +38,7 @@ public class ElevenShopScraper extends ScrapConfig
 
     //Jsoup을 이용해서 11번가 조회 후 일반상품에 있는 데이터 가져오기
     String encodeParam =  URLEncoder.encode
-        (product.getName(), StandardCharsets.UTF_8);
+        (product.getProductName(), StandardCharsets.UTF_8);
 
     Connection connection =
         Jsoup.connect(String.format(SEARCH_URL,encodeParam));

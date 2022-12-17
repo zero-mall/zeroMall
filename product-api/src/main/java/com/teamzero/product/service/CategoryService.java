@@ -7,10 +7,9 @@ import static com.teamzero.product.exception.ErrorCode.CATEGORY_PARANTID_ERROR;
 import static com.teamzero.product.exception.ErrorCode.CATEGORY_SUB_DATA_EXISTS;
 
 import com.teamzero.product.domain.model.CategoryEntity;
-import com.teamzero.product.domain.model.CategoryRegister;
+import com.teamzero.product.domain.dto.category.CategoryRegister;
 import com.teamzero.product.domain.model.constants.CategoryType;
 import com.teamzero.product.domain.repository.CategoryRepository;
-import com.teamzero.product.exception.ErrorCode;
 import com.teamzero.product.exception.TeamZeroException;
 import java.util.List;
 import java.util.Objects;
@@ -81,7 +80,8 @@ public class CategoryService {
   private String getMaxCatId(CategoryRegister request){
     //카테고리 타입 확인 후 대분류가 아니면 부모카테고리 확인
     if(Objects.equals(request.getCatTypeObject(), CategoryType.ATYPE)){
-      return  categoryRepository.maxByCatIdAtype();
+      String result = categoryRepository.maxByCatIdAtype();
+      return result == null? "000000000" : result;
     }else{//대분류가 아닌경우 부모카테고리Id가 있는지 체크
       if(!categoryRepository.existsByCatId(request.getParentCatId())){
         throw new TeamZeroException(CATEGORY_PARANTID_ERROR);
@@ -112,7 +112,7 @@ public class CategoryService {
       childId = maxCatId.substring(3,6);
     }else{
       parentId = maxCatId.substring(0,6);
-      childId = maxCatId.substring(6,3);
+      childId = maxCatId.substring(6);
     }
 
     if(childId.equals("zzz")){ //더이상 카운팅할 코드가 없을 때

@@ -32,16 +32,15 @@ public class MallEntity extends BaseEntity {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long mallId;
 
-  //jisu - 쇼핑몰 테이블에 다른 정보는 필요없어보입니다.
   // 연결된 네이버 상품 정보
-//  @ManyToOne(fetch = FetchType.LAZY)
-//  @JoinColumn
-//  private ProductEntity product;
-//
-//  // 연결된 쇼핑몰 상품 목록
-//  @OneToMany(fetch = FetchType.LAZY)
-//  @JoinColumn
-//  private List<MallProductEntity> mallProducts;
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn
+  private ProductEntity product;
+
+  // 연결된 쇼핑몰 상품 목록
+  @OneToMany(fetch = FetchType.LAZY)
+  @JoinColumn
+  private List<MallProductEntity> mallProducts;
 
   private String name;
 

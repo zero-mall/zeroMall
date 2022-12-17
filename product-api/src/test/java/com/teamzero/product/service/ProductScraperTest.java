@@ -31,7 +31,7 @@ public class ProductScraperTest {
     //given
     ProductEntity product = ProductEntity.builder()
         .productId(1L)
-        .name("아이닉 new i20")
+        .productName("아이닉 new i20")
         .price(263340)
         .build();
 
@@ -57,7 +57,7 @@ public class ProductScraperTest {
     //given
     ProductEntity product = ProductEntity.builder()
         .productId(1L)
-        .name("가나다라마바사아자")
+        .productName("가나다라마바사아자")
         .price(1)
         .build();
     //when

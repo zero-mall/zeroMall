@@ -1,6 +1,6 @@
 package com.teamzero.product.domain.model;
 
-import com.teamzero.product.domain.dto.NaverSearch.Response.NaverProduct;
+import com.teamzero.product.domain.dto.product.ProductDetail;
 import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -12,21 +12,17 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
 import org.hibernate.envers.AuditOverride;
 
 @Entity
-@Getter
-@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@ToString
 @AuditOverride(forClass = BaseEntity.class)
 @Table(name = "PRODUCT")
+@Data
 public class ProductEntity extends BaseEntity{
 
     // 제로몰 상품 구분 인덱스
@@ -38,9 +34,9 @@ public class ProductEntity extends BaseEntity{
     private String catId;
 
     // 네이버 상품 정보
-    private Long naverId;
+    private String naverId;
     private String brand;
-    private String name;
+    private String productName;
     private String imageUrl;
     private int price;
 
@@ -48,25 +44,27 @@ public class ProductEntity extends BaseEntity{
     @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn
     private List<MallProductEntity> mallProducts;
-    
-    // 별점, 리뷰, 좋아요, 조회수
-    // TODO 별점
-    // TODO 리뷰
+
+    // 별점
+    private double avgStar;
+
+    // 좋아요, 조회수
     private long viewCount;
     private long likeCount;
+    private long standPrice;
 
     /**
      * 네이버 상품
      * 연결된 쇼핑몰 상품들을 제외한 정보만 저장
      */
-    public static ProductEntity of (NaverProduct naverProduct) {
+    public static ProductEntity from(ProductDetail.Request request, String catId) {
         return ProductEntity.builder()
-            .naverId(naverProduct.getNaverId())
-            .brand(naverProduct.getBrand())
-            .name(naverProduct.getTitle())
-            .imageUrl(naverProduct.getImageUrl())
-            .price(naverProduct.getLPrice())
+            .catId(catId)
+            .naverId(request.getNaverId())
+            .brand(request.getBrand())
+            .productName(request.getTitle())
+            .imageUrl(request.getImageUrl())
+            .price(request.getLPrice())
             .build();
     }
-
 }

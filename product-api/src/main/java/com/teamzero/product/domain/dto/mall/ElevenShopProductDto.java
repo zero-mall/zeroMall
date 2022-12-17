@@ -1,4 +1,4 @@
-package com.teamzero.product.domain.dto;
+package com.teamzero.product.domain.dto.mall;
 
 import com.teamzero.product.domain.model.MallEntity;
 import com.teamzero.product.domain.model.MallProductEntity;
