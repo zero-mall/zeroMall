@@ -16,7 +16,8 @@ public enum ErrorCode {
     MEMBER_GRADE_NOT_FOUND("해당 회원 등급은 존재하지 않습니다.", HttpStatus.BAD_REQUEST), 
     MEMBER_STATUS_NOT_EXIST("해당 회원 상태는 존재하지 않습니다.", HttpStatus.BAD_REQUEST),
     PRODUCT_DATA_NOT_FOUND("검색 결과 데이터가 없습니다.", HttpStatus.BAD_REQUEST),
-    PRODUCT_NOT_FOUND("해당 상품이 존재하지 않습니다.", HttpStatus.BAD_REQUEST);
+    PRODUCT_NOT_FOUND("해당 상품이 존재하지 않습니다.", HttpStatus.BAD_REQUEST),
+    TOKEN_NOT_VALID("토큰이 유효하지 않습니다.", HttpStatus.BAD_REQUEST);
 
     private final String message;
     private final HttpStatus httpStatus;
