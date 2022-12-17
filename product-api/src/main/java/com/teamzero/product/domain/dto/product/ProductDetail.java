@@ -1,6 +1,6 @@
 package com.teamzero.product.domain.dto.product;
 
-import com.teamzero.product.domain.dto.mall.MallProduct;
+import com.teamzero.product.domain.model.MallEntity;
 import com.teamzero.product.domain.model.ProductEntity;
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -44,7 +44,7 @@ public class ProductDetail {
     private String name;
     private String imageUrl;
     private int price;
-    private List<MallProduct> mallProducts;
+    private List<MallEntity> mallProducts;
     private double avgStar;
     private long viewCount;
     private long likeCount;
@@ -58,7 +58,6 @@ public class ProductDetail {
           .name(product.getProductName())
           .imageUrl(product.getImageUrl())
           .price(product.getPrice())
-          .avgStar(product.getAvgStar())
           .viewCount(product.getViewCount())
           .likeCount(product.getLikeCount())
           .build();

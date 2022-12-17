@@ -2,12 +2,12 @@ package com.teamzero.product.service;
 
 import com.teamzero.product.client.NaverSearchClient;
 import com.teamzero.product.client.RedisClient;
+import com.teamzero.product.domain.dto.category.CategoryRegister;
 import com.teamzero.product.domain.dto.product.NaverSearch.Request;
 import com.teamzero.product.domain.dto.product.NaverSearch.Response;
 import com.teamzero.product.domain.dto.product.ProductDetail;
 import com.teamzero.product.domain.dto.product.ProductSearch;
 import com.teamzero.product.domain.model.CategoryEntity;
-import com.teamzero.product.domain.dto.category.CategoryRegister;
 import com.teamzero.product.domain.model.ProductEntity;
 import com.teamzero.product.domain.repository.ProductRepository;
 import com.teamzero.product.redis.RedisNaverSearch;
@@ -82,8 +82,9 @@ public class ProductService {
 
   /**
    * 상품 간략 정보 조회
-   * - 상품이 있는 경우, 해당 상품 반환
-   * - 상품이 없는 경우, DB에 저장 후 반환
+   * - 관련 정책 : 접속자가 네이버 상품 검색 결과 목록에서 상품을 선택할 때,
+   *             한 번도 조회되지 않았던 상품이면 상품의 간략정보를 DB와 레디스에 저장하고,
+   *             한 번 이상 조회된 상품이면 레디스에서 상품의 간략정보를 전달한다.
    */
   @Transactional
   public ProductDetail.Response getProductShort(ProductDetail.Request request) {

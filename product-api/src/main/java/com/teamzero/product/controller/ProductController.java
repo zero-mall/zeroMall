@@ -35,6 +35,9 @@ public class ProductController {
 
   /**
    * 상품 간략 정보 조회
+   * - 관련 정책 : 접속자가 네이버 상품 검색 결과 목록에서 상품을 선택할 때,
+   *             한 번도 조회되지 않았던 상품이면 상품의 간략정보을 DB와 레디스에 저장하고,
+   *             한 번 이상 조회된 상품이면 레디스에서 상품의 간략정보를 전달한다.
    */
   @GetMapping("/short")
   public ResponseEntity<?> getProductShort(ProductDetail.Request request) {
