@@ -152,75 +152,24 @@ public CustomeResponseEntity extends ResponseEntity implements Serializable {
 ```
 - 하지만 나의 경우, 팀원들 모두가 ResponseEntity를 사용하고 있기 때문에, Controller에서 사용한 @Cacheable을 없애고,
   RedisTemplate을 써서 데이터를 저장하고 조회하기로 했다.
-```java
-@Service
-@RequiredArgsConstructor
-@Slf4j
-public class RedisClient {
 
-  private final Gson gson;
+<br>
 
-  private final RedisTemplate redisTemplate;
-
-  /**
-   * 레디스에 데이터 저장
-   */
-  public <T> boolean addData(LocalDate key, T data) {
-    return addData(key.toString(), data);
-  }
-
-  public <T> boolean addData(String key, T data) {
-    try {
-      String value = gson.toJson(data);
-      redisTemplate.opsForValue().set(key, value);
-      return true;
-    } catch (Exception e) {
-      log.error(e.getMessage());
-      return false;
-    }
-  }
-}
+### 7. MSA에서 다른 api의 서비스 클래스를 읽어오지 못함 
+```bash
+Parameter 0 of constructor in com.teamzero.product.service.StarService required a bean of type 'com.teamzero.member.service.MemberService' that could not be found.
 ```
+(1) 원인 : user-api의 MemberService 클래스 bean이 없어서 나타나는 오류 
+(2) 해결 방법 : @ComponentScan을 통해서 member 패키지를 포함시키면 member에 설정한 bean을 가져올 수 있는데, 그렇게 하니 product-api에서 사용중인 다른 bean들과 충돌이 일어났다.
+(3) 대안 : @EnableJpaRepositories와 @EntityScan의 패키지 설정을 통해 MemberService를 가져오지 않고, MemberRepository를 가져왔다.
 ```java
-// 서비스 클래스
-/**
-   * 네이버 상품 검색
-   */
-  public NaverSearch.Response searchNaverProducts(ProductSearch.Request request) {
-
-    try {
-
-      NaverSearch.Response response;
-      
-      // 1. 레디스에 검색 결과가 저장되어 있는지 확인
-      var redisNaverSearchOptional = redisClient.getData(request.getKeyword(), RedisNaverSearch.class);
-
-      if (redisNaverSearchOptional.isPresent()) {
-
-        // 1) 있으면 캐시 정보 반환
-        return redisNaverSearchOptional.get().getResponse();
-        
-      } else {
-
-        // 2) 없으면 네이버 api 통해 검색, 레디스에 저장
-        // 네이버 검색
-        String jsonBody = naverSearchClient.searchProducts(Request.of(request)).getBody();
-
-        // Json 파싱 & 상품명 문자열 변환
-        response = NaverSearch.Response.parseJson(jsonBody);
-
-        redisClient.addData(request.getKeyword(), response);
-
-      }
-      
-      return response;
-
-    } catch (Exception e) {
-
-      log.error(e.getMessage());
-
-      return null;
-
+@SpringBootApplication
+@EnableFeignClients
+@EnableJpaRepositories(basePackages = {"com.teamzero.product.domain.repository", "com.teamzero.member.domain.repository"})
+@EntityScan(basePackages = {"com.teamzero.product.domain.model", "com.teamzero.member.domain.model"})
+public class ProductApplication {
+    public static void main(String[] args) {
+        SpringApplication.run(ProductApplication.class, args);
     }
-  }
+}
 ```
