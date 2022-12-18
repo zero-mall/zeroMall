@@ -45,9 +45,6 @@ public class ProductEntity extends BaseEntity{
     @JoinColumn
     private List<MallProductEntity> mallProducts;
 
-    // 별점
-    private double avgStar;
-
     // 좋아요, 조회수
     private long viewCount;
     private long likeCount;

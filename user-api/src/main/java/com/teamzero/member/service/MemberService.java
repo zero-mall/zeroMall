@@ -1,11 +1,20 @@
 package com.teamzero.member.service;
 
+import static com.teamzero.member.exception.ErrorCode.MEMBER_EMAIL_AUTH_NOT_FOUND;
+import static com.teamzero.member.exception.ErrorCode.MEMBER_NOT_FOUND;
+import static com.teamzero.member.exception.ErrorCode.MEMBER_SIGNUP_EMAIL_DUPLICATE;
+import static com.teamzero.member.exception.ErrorCode.MEMBER_SIGNUP_SEND_AUTH_EMAIL_FAIL;
+import static com.teamzero.member.exception.ErrorCode.TOKEN_NOT_VALID;
+
 import com.teamzero.member.domain.model.MemberEntity;
 import com.teamzero.member.domain.model.constants.MemberStatus;
 import com.teamzero.member.domain.model.dto.Modify;
 import com.teamzero.member.domain.model.dto.SignUp;
 import com.teamzero.member.domain.repository.MemberRepository;
 import com.teamzero.member.exception.TeamZeroException;
+import java.util.Optional;
+import java.util.UUID;
+import javax.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -13,10 +22,6 @@ import org.springframework.mail.javamail.MimeMessagePreparator;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import javax.mail.internet.MimeMessage;
-import java.util.Optional;
-import java.util.UUID;
-import static com.teamzero.member.exception.ErrorCode.*;
 
 @Service
 @RequiredArgsConstructor
@@ -162,6 +167,11 @@ public class MemberService {
         return memberEntity;
     }
 
+
+    /**
+     * 회원 존재 여부 조회
+     * - 매개변수 : memberId
+     */
     public boolean isMemberExist(Long memberId) {
         Optional<MemberEntity> optionalMember = memberRepository.findById(memberId);
         if (optionalMember.isPresent()) {

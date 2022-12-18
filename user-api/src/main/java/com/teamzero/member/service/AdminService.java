@@ -1,5 +1,8 @@
 package com.teamzero.member.service;
 
+import static com.teamzero.member.exception.ErrorCode.MEMBER_NOT_FOUND;
+import static com.teamzero.member.exception.ErrorCode.MEMBER_SIGNUP_EMAIL_DUPLICATE;
+
 import com.teamzero.member.domain.model.AdminEntity;
 import com.teamzero.member.domain.model.MemberEntity;
 import com.teamzero.member.domain.model.MemberGradeEntity;
@@ -14,14 +17,13 @@ import com.teamzero.member.domain.repository.MemberGradeRepository;
 import com.teamzero.member.domain.repository.MemberRepository;
 import com.teamzero.member.exception.ErrorCode;
 import com.teamzero.member.exception.TeamZeroException;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import static com.teamzero.member.exception.ErrorCode.MEMBER_NOT_FOUND;
-import static com.teamzero.member.exception.ErrorCode.MEMBER_SIGNUP_EMAIL_DUPLICATE;
 
 @Service
 @RequiredArgsConstructor
@@ -32,6 +34,14 @@ public class AdminService {
     private final MemberRepository memberRepository;
 
     private final MemberGradeRepository memberGradeRepository;
+
+
+    /**
+     * 관리자 조회
+     */
+    public Optional<AdminEntity> findByEmail(String email) {
+        return adminRepository.findByEmail(email);
+    }
 
     public void findByAdminIdAndEmail(Long adminId, String email) {
         adminRepository.findByAdminIdAndEmail(adminId, email)
@@ -116,4 +126,5 @@ public class AdminService {
         return AdminInfo.fromEntity(admin);
 
     }
+
 }
