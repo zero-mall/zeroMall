@@ -1,6 +1,6 @@
 package com.teamzero.product.controller;
 
-import com.teamzero.product.domain.model.CategoryRegister;
+import com.teamzero.product.domain.dto.category.CategoryRegister;
 import com.teamzero.product.service.CategoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

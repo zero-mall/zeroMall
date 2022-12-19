@@ -189,7 +189,6 @@ class AdminServiceTest {
                     .memberId(i + 1L)
                     .email(String.format("test%d@gmail.com", i + 1))
                     .nickname("테스트")
-                    .memberGradeEntity(new MemberGradeEntity(i + 1L, "BASIC", 0))
                     .build();
             list.add(member);
         }
@@ -199,7 +198,6 @@ class AdminServiceTest {
                     .memberId(i + 1L)
                     .email(String.format("test%d@gmail.com", i + 1))
                     .nickname("테스트")
-                    .memberGradeEntity(new MemberGradeEntity(i + 1L, "STANDARD", 2))
                     .build();
             list.add(member);
         }
@@ -209,7 +207,6 @@ class AdminServiceTest {
                     .memberId(i + 1L)
                     .email(String.format("test%d@gmail.com", i + 1))
                     .nickname("테스트")
-                    .memberGradeEntity(new MemberGradeEntity(i + 1L, "PREMIUM", 3))
                     .build();
             list.add(member);
         }

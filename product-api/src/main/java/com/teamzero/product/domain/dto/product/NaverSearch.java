@@ -1,4 +1,4 @@
-package com.teamzero.product.domain.dto;
+package com.teamzero.product.domain.dto.product;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -77,7 +77,7 @@ public class NaverSearch{
       private String category3; // 소분류
 
       // 기본 정보
-      private Long naverId;
+      private String naverId;
       private String title;
       private String brand;
       private String imageUrl;
@@ -100,7 +100,7 @@ public class NaverSearch{
                 .category1(item.get("category1").getAsString())
                 .category2(item.get("category2").getAsString())
                 .category3(item.get("category3").getAsString())
-                .naverId(Long.parseLong(item.get("productId").getAsString()))
+                .naverId(item.get("productId").getAsString())
                 .title(changeProductTitle(item.get("title").getAsString()))
                 .brand(item.get("brand").getAsString())
                 .imageUrl(item.get("image").getAsString())

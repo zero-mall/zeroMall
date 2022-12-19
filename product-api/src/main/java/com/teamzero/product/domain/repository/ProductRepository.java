@@ -6,9 +6,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ProductRepository extends JpaRepository<ProductEntity, Long> {
 
+  Optional<ProductEntity> findByNaverId(String naverId);
+
   boolean existsByProductId(Long productId);
 
-  Optional<ProductEntity> findByProductId(Long firstProductId);
-
-  Optional<ProductEntity> findByNaverId(Long naverId);
 }

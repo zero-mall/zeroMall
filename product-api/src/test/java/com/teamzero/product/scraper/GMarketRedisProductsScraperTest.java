@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class GMarketProductScraperTest {
+class GMarketRedisProductsScraperTest {
 
     private static final String GMARKET_URL = "https://browse.gmarket.co.kr/search?keyword=";
     private static final String AKMALL_URL = "https://www.akmall.com/search/Search2.do?search=";

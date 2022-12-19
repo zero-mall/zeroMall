@@ -18,4 +18,6 @@ public interface MemberRepository extends JpaRepository<MemberEntity, Long> {
 
     Page<MemberEntity> findAll(Pageable pageable);
 
+    boolean existsByEmail(String email);
+
 }
