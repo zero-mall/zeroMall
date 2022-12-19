@@ -1,4 +1,4 @@
-package com.teamzero.product.service;
+package com.teamzero.product.scraper;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -6,7 +6,6 @@ import com.teamzero.product.domain.model.MallEntity;
 import com.teamzero.product.domain.model.MallProductEntity;
 import com.teamzero.product.domain.model.ProductEntity;
 import com.teamzero.product.domain.repository.MallRepository;
-import com.teamzero.product.scraper.ElevenShopScraper;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -16,10 +15,10 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
-public class ProductScraperTest {
+public class ElevenShopProductScraperTest {
 
   @InjectMocks
-  private ElevenShopScraper elevenShopScraper;
+  private ElevenProductScraper elevenShopScraper;
   @Mock
   private ProductEntity productEntity;
   @Mock

@@ -21,7 +21,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-public class ElevenShopScraper extends ScrapConfig
+public class ElevenProductScraper extends ScrapConfig
     implements ProductScraperInterface {
   static private final String SEARCH_URL =
       "https://search.11st.co.kr/Search.tmall?kwd=%s";
@@ -81,6 +81,8 @@ public class ElevenShopScraper extends ScrapConfig
         String imgUrl = getLastObject.get("imageUrl").getAsString();
         JsonElement ele = parser.parse
             (getLastObject.get("logDataBody").getAsString());
+
+        //Json데이터를 가져오기위한 Dto
         ElevenShopProductDto elevenShopProductDto
             = gson.fromJson(ele,ElevenShopProductDto.class);
         long currentPrice =
