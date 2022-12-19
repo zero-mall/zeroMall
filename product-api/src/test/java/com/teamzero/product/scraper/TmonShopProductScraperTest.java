@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class TmonProductScraperTest {
+class TmonShopProductScraperTest {
 
   public static final String TMON_URL = "https://search.tmon.co.kr/api/search/v4/deals?_=1670946124923"
       + "&keyword=%s&page=1&size=10&minPrice=%d&maxPrice=%d";
@@ -28,29 +28,38 @@ class TmonProductScraperTest {
     int maxPrice = (int) Math.ceil(price + (TOLERANCE * price));
 
     // when
-    String jsonStr = Jsoup.connect(String.format(TMON_URL, URLEncoder.encode(keyword, "UTF-8"), minPrice, maxPrice))
+    String jsonStr = Jsoup.connect(String.format(TMON_URL,
+            URLEncoder.encode(keyword, "UTF-8"), minPrice, maxPrice))
         .userAgent("Mozilla")
         .ignoreContentType(true)
         .execute().body();
 
     // then
-    JsonObject data = JsonParser.parseString(jsonStr).getAsJsonObject().get("data").getAsJsonObject();
+    JsonObject data = JsonParser.parseString(jsonStr)
+        .getAsJsonObject().get("data")
+        .getAsJsonObject();
     JsonArray searchDeals = data.get("searchDeals").getAsJsonArray();
 
     for (JsonElement ele : searchDeals) {
 
-      JsonObject searchDealResponse = ele.getAsJsonObject().get("searchDealResponse").getAsJsonObject();
-      JsonObject extraDealInfo = ele.getAsJsonObject().get("extraDealInfo").getAsJsonObject();
-      JsonObject dealInfo = searchDealResponse.getAsJsonObject().get("dealInfo").getAsJsonObject();
-      JsonObject searchInfo = searchDealResponse.getAsJsonObject().get("searchInfo").getAsJsonObject();
+      JsonObject searchDealResponse = ele.getAsJsonObject()
+          .get("searchDealResponse").getAsJsonObject();
+      JsonObject extraDealInfo = ele.getAsJsonObject()
+          .get("extraDealInfo").getAsJsonObject();
+      JsonObject dealInfo = searchDealResponse.getAsJsonObject()
+          .get("dealInfo").getAsJsonObject();
+      JsonObject searchInfo = searchDealResponse.getAsJsonObject()
+          .get("searchInfo").getAsJsonObject();
 
-      String name          = dealInfo.get("titleName").getAsString();
-      String imageUrl      = dealInfo.get("imageInfo").getAsJsonObject().get("mobile3ColImageUrl").getAsString();
-      int    mallPrice     = dealInfo.get("priceInfo").getAsJsonObject().get("price").getAsInt();
-      String detailUrl     = extraDealInfo.get("detailUrl").getAsString();
+      String name  = dealInfo.get("titleName").getAsString();
+      String imageUrl = dealInfo.get("imageInfo").getAsJsonObject()
+          .get("mobile3ColImageUrl").getAsString();
+      int mallPrice = dealInfo.get("priceInfo").getAsJsonObject().get("price").getAsInt();
+      String detailUrl = extraDealInfo.get("detailUrl").getAsString();
       String productMallId = searchInfo.get("id").getAsString();
 
-      System.out.printf("name : %s, imageUrl : %s, detailUrl : %s, mallPrice: %d, productMallId : %s\n",
+      System.out.printf("name : %s, imageUrl : %s, detailUrl : %s, "
+              + "mallPrice: %d, productMallId : %s\n",
           name, imageUrl, detailUrl, mallPrice, productMallId);
 
     }

@@ -173,3 +173,13 @@ public class ProductApplication {
     }
 }
 ```
+
+<br>
+
+### 8. java.net.MalformedURLException: Illegal character in URL
+(1) 원인 : URL문자열을 복사해 오면서 아래와 같이 개행문자가 들어가서 난 오류였다.
+```java
+private static final String SEARCH_URL = "https://search.wemakeprice.com/api/wmpsearch/api/v3.0/wmp-search/search.json\"\n"
+      + "      + \"?searchType=DEFAULT&search_cate=top&keyword=%s&isRec=1&_service=5&_type=3&price=%d~%d";
+```
+(2) 해결 : "\n" 와 같은 문자를 제거해주었다.

@@ -7,6 +7,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.teamzero.product.config.ScrapConfig;
+import com.teamzero.product.domain.dto.mall.ElevenShopProductDto;
 import com.teamzero.product.domain.model.MallProductEntity;
 import com.teamzero.product.domain.model.ProductEntity;
 import java.io.IOException;
@@ -19,9 +20,9 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import com.teamzero.product.domain.dto.mall.ElevenShopProductDto;
 
-public class ElevenShopScraper extends ScrapConfig implements ProductScraperInterface {
+public class ElevenScraper extends ScrapConfig
+    implements ProductScraperInterface {
   static private final String SEARCH_URL =
       "https://search.11st.co.kr/Search.tmall?kwd=%s";
 
@@ -29,7 +30,8 @@ public class ElevenShopScraper extends ScrapConfig implements ProductScraperInte
 
 
   @Override
-  public List<MallProductEntity> getScrapProductList(ProductEntity product) {
+  public List<MallProductEntity> getScrapProductList
+      (ProductEntity product) {
     long price = product.getPrice();
     long maxPrice = (long) (price + Math.floor(price * super.TOLERANCE));
     long minPrice = (long) (price - Math.floor(price * super.TOLERANCE));
@@ -79,6 +81,8 @@ public class ElevenShopScraper extends ScrapConfig implements ProductScraperInte
         String imgUrl = getLastObject.get("imageUrl").getAsString();
         JsonElement ele = parser.parse
             (getLastObject.get("logDataBody").getAsString());
+
+        //Json데이터를 가져오기위한 Dto
         ElevenShopProductDto elevenShopProductDto
             = gson.fromJson(ele,ElevenShopProductDto.class);
         long currentPrice =
