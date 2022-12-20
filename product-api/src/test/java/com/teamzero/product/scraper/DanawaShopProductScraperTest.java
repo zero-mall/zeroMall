@@ -16,6 +16,7 @@ public class DanawaShopProductScraperTest {
   @InjectMocks
   private DanawaScraper danawaScraper;
 
+
   @Test
   @DisplayName("다나와 상품정보 성공 테스트")
   void ShopScraperTest(){
@@ -45,6 +46,7 @@ public class DanawaShopProductScraperTest {
         .build();
     //when
     List<MallProductEntity> product1 = danawaScraper.getScrapProductList(product);
+
     //then
     assertEquals(product1.size(),0);
   }
