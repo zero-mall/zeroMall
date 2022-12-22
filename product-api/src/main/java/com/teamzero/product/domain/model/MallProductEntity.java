@@ -28,9 +28,7 @@ public class MallProductEntity extends BaseEntity {
   private Long id;
 
   // 연결된 쇼핑몰
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn
-  private MallEntity mall;
+  private Long mallId;
 
   // 쇼핑물 상품 정보
   private String name;

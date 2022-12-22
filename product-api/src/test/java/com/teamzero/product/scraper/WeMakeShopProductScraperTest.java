@@ -14,7 +14,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 class WeMakeShopProductScraperTest {
 
   public static final String WMP_URL = "https://search.wemakeprice.com/api/wmpsearch/api/v3.0/wmp-search/search.json"
-      + "?searchType=DEFAULT&search_cate=top&keyword=%s&isRec=1&_service=5&_type=3&price=%d~%d";
+      + "?searchType=DEFAULT&search_cate=top&keyword=%s&isRec=1&_service=5&_type=4&price=%d~%d&perPage=10&page=1";
 
   private static final double TOLERANCE  = 0.05;
 
