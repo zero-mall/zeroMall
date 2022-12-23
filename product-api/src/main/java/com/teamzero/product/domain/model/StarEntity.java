@@ -17,7 +17,7 @@ import org.hibernate.envers.AuditOverride;
 @NoArgsConstructor
 @Builder
 @AuditOverride(forClass = BaseEntity.class)
-@Table(name = "STAR", uniqueConstraints = { @UniqueConstraint(columnNames = {"member_email", "product_id"})})
+@Table(name = "STAR")
 @Data
 public class StarEntity extends BaseEntity{
 

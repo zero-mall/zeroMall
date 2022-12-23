@@ -127,6 +127,7 @@ public class NaverSearch{
     /**
      * 상품명 문자열 변환
      * : 대괄호, '<b>', '</b>'제거, 중복 문자열 제거
+     * : (22.12.10) "2Pac 투팍 - All Eyez on Me" 와 같이 '-' 있는 경우 제거
      */
     public static String changeProductTitle(String originalTitle){
 
@@ -143,7 +144,7 @@ public class NaverSearch{
           sb.append(newS);
         }
       }
-      return sb.toString();
+      return sb.toString().replaceAll("-", "");
     }
 
   }

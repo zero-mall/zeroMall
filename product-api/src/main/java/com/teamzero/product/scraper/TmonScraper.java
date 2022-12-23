@@ -8,22 +8,18 @@ import com.teamzero.product.config.ScrapConfig;
 import com.teamzero.product.domain.model.MallProductEntity;
 import com.teamzero.product.domain.model.ProductEntity;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
-import org.springframework.stereotype.Component;
 
-@Component
 @Slf4j
 public class TmonScraper extends ScrapConfig implements ProductScraperInterface {
 
-  private static final String SEARCH_URL = "https://search.tmon.co.kr/api/search/v4/deals?_=1670946124923"
+  private static final String SEARCH_URL
+      = "https://search.tmon.co.kr/api/search/v4/deals?_=1670946124923"
       + "&keyword=%s&page=1&size=10&minPrice=%d&maxPrice=%d";
 
   private static final long MALL_ID = 3L;
@@ -88,6 +84,7 @@ public class TmonScraper extends ScrapConfig implements ProductScraperInterface 
 
         // 3. MallEntity로 데이터 패키징
         mallProducts.add(MallProductEntity.builder()
+            .mallId(MALL_ID)
             .name(name)
             .imageUrl(imageUrl)
             .detailUrl(detailUrl)
@@ -105,9 +102,6 @@ public class TmonScraper extends ScrapConfig implements ProductScraperInterface 
 
     }
 
-    // 4. 저렴한 가격순으로 정렬하여 반환
-    return mallProducts.stream()
-        .sorted(Comparator.comparingInt(MallProductEntity::getPrice))
-        .collect(Collectors.toList());
+    return mallProducts;
   }
 }

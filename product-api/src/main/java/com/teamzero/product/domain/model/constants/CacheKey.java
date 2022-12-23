@@ -4,5 +4,5 @@ public class CacheKey {
 
   public static final String NAVER_PRODUCT = "naver_product";
   public static final String NAVER_SEARCH = "naver_search";
-  public static final String STAR = "star";
+
 }

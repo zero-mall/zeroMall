@@ -8,25 +8,22 @@ import com.teamzero.product.config.ScrapConfig;
 import com.teamzero.product.domain.model.MallProductEntity;
 import com.teamzero.product.domain.model.ProductEntity;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
-import org.springframework.stereotype.Component;
 
-@Component
 @Slf4j
 public class WeMakeScraper extends ScrapConfig implements ProductScraperInterface {
 
-  private static final String SEARCH_URL = "https://search.wemakeprice.com/api/wmpsearch/api/v3.0/wmp-search/search.json"
-      + "?searchType=DEFAULT&search_cate=top&keyword=%s&isRec=1&_service=5&_type=3&price=%d~%d";
+  public static final String SEARCH_URL
+      = "https://search.wemakeprice.com/api/wmpsearch/api/v3.0/wmp-search/search.json"
+      + "?searchType=DEFAULT&search_cate=top&keyword=%s&isRec=1&_service=5&_type=4"
+      + "&price=%d~%d&perPage=10&page=1";
 
-  private static final double TOLERANCE  = 0.05;
+  private static final long MALL_ID = 6L;
 
   @Override
   public List<MallProductEntity> getScrapProductList(ProductEntity product) {
@@ -82,6 +79,7 @@ public class WeMakeScraper extends ScrapConfig implements ProductScraperInterfac
 
         // 3. MallEntity로 데이터 패키징
         mallProducts.add(MallProductEntity.builder()
+            .mallId(MALL_ID)
             .name(name)
             .imageUrl(imageUrl)
             .detailUrl(detailUrl)
@@ -100,9 +98,6 @@ public class WeMakeScraper extends ScrapConfig implements ProductScraperInterfac
 
     }
 
-    // 4. 저렴한 가격순으로 정렬하여 반환
-    return mallProducts.stream()
-        .sorted(Comparator.comparingInt(MallProductEntity::getPrice))
-        .collect(Collectors.toList());
+    return mallProducts;
   }
 }
