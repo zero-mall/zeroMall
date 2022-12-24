@@ -26,9 +26,6 @@ public class ElevenScraper extends ScrapConfig
   static private final String SEARCH_URL =
       "https://search.11st.co.kr/Search.tmall?kwd=%s";
 
-  static private final long MALL_ID = 1L; //mallId수정필요
-
-
   @Override
   public List<MallProductEntity> getScrapProductList
       (ProductEntity product) {
@@ -91,10 +88,13 @@ public class ElevenScraper extends ScrapConfig
         if( currentPrice >= minPrice && currentPrice <= maxPrice){
           elevenShopProductDto.setProductId(product.getProductId());
           elevenShopProductDto.setImageUrl(imgUrl);
-          elevenShopProductDto.setMallId(MALL_ID);
+          elevenShopProductDto.setMallId(ELEVENSHOP_MALLID);
           MallProductEntity mallProductEntity
               = elevenShopProductDto.toProductOfMallEntity();
           mallProductEntities.add(mallProductEntity);
+          if(mallProductEntities.size() == 10){
+            break;
+          }
         }
       }
 
