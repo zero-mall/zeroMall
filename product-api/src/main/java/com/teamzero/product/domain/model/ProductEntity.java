@@ -62,6 +62,12 @@ public class ProductEntity extends BaseEntity{
             .productName(request.getTitle())
             .imageUrl(request.getImageUrl())
             .price(request.getLPrice())
+            .viewCount(0)
+            .likeCount(0)
             .build();
+    }
+
+    public void increaseView() {
+        this.setViewCount(this.getViewCount() + 1);
     }
 }
