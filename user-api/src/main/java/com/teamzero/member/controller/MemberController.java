@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -35,9 +36,9 @@ public class MemberController {
      * 회원 탈퇴
      */
     @PutMapping("/withdraw")
-    public ResponseEntity<?> withdrawMember(@RequestBody Modify member) {
-        var withdrawResult = memberService.withdrawMember(member);
-        return ResponseEntity.ok(withdrawResult);
+    public boolean withdrawMember(@RequestParam String email) {
+
+        return memberService.withdrawMember(email);
     }
 
     /**
