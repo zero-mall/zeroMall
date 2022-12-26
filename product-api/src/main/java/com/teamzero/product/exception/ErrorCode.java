@@ -28,7 +28,12 @@ public enum ErrorCode {
 
     // 별점 관련 에러 코드
     STAR_MEMBER_NOT_FOUND("해당 회원이 존재하지 않습니다.", HttpStatus.BAD_REQUEST),
-    STAR_SCORE_RANGE_NOT_VALID("별점은 1점 ~ 5점 사이로만 등록 가능합니다.", HttpStatus.BAD_REQUEST);
+    STAR_SCORE_RANGE_NOT_VALID("별점은 1점 ~ 5점 사이로만 등록 가능합니다.", HttpStatus.BAD_REQUEST),
+
+    // 좋아요 관련 에러 코드
+    LIKE_MEMBER_NOT_FOUND("해당 회원이 존재하지 않습니다.", HttpStatus.BAD_REQUEST),
+    LIKE_ALREADY_LIKED("이미 좋아요를 누른 상품입니다.", HttpStatus.BAD_REQUEST),
+    LIKE_ALREADY_UNLIKED("이미 좋아요를 취소한 상품입니다.", HttpStatus.BAD_REQUEST);
 
     private final String message;
     private final HttpStatus httpStatus;

@@ -42,4 +42,8 @@ public class MemberEntity extends BaseEntity{
     @Audited
     private long currentPoint;
 
+    // 구독 관련
+    private boolean subscribeYn;
+    private LocalDateTime subscribedAt;
+
 }

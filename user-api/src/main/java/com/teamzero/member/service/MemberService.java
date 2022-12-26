@@ -68,6 +68,8 @@ public class MemberService {
                 .memberStatus(MemberStatus.NO_AUTH)
                 .emailAuthKey(emailAuthKey)
                 .emailAuthYn(false)
+            //구독여부 초기값 추가하였습니다.
+                .subscribeYn(false)
                 .build();
 
         memberRepository.save(member);
@@ -152,19 +154,19 @@ public class MemberService {
      * 회원 탈퇴
      */
     @Transactional
-    public MemberEntity withdrawMember(Modify member) {
+    public boolean withdrawMember(String email) {
 
-        if (!isMemberExist(member.getMemberId())) {
+        if (memberRepository.findByEmail(email).isEmpty()) {
             throw new TeamZeroException(MEMBER_NOT_FOUND);
         }
 
-        MemberEntity memberEntity = memberRepository.findById(member.getMemberId()).get();
+        MemberEntity memberEntity = memberRepository.findByEmail(email).get();
 
         memberEntity.setMemberStatus(MemberStatus.WITHDRAW);
 
         memberRepository.save(memberEntity);
 
-        return memberEntity;
+        return true;
     }
 
 
