@@ -1,24 +1,32 @@
 package com.teamzero.product.service;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 import com.mysql.cj.util.StringUtils;
 import com.teamzero.product.client.NaverSearchClient;
 import com.teamzero.product.client.RedisClient;
 import com.teamzero.product.domain.dto.product.ProductDetail;
 import com.teamzero.product.domain.dto.product.ProductSearch;
+import com.teamzero.product.domain.model.CategoryEntity;
 import com.teamzero.product.domain.model.ProductEntity;
 import com.teamzero.product.domain.repository.ProductRepository;
+import com.teamzero.product.redis.RedisProducts;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -35,6 +43,12 @@ class ProductServiceTest {
 
   @Mock
   private RedisClient redisClient;
+
+  @Mock
+  private ViewService viewService;
+
+  @Mock
+  private CategoryService categoryService;
 
   @InjectMocks
   private ProductService productService;
@@ -104,6 +118,64 @@ class ProductServiceTest {
         .lPrice(15000)
         .build();
 
+    ProductDetail.Response response = ProductDetail.Response.builder()
+        .productId(1L)
+        .catId("123456789")
+        .naverId("10076181031")
+        .brand("brand")
+        .name("test")
+        .imageUrl("image")
+        .price(15000)
+        .viewCount(0)
+        .build();
+
+    RedisProducts redisProducts = new RedisProducts();
+    redisProducts.getProductMap().put("10076181031", response);
+
+    given(redisClient.getData(any(LocalDate.class), any()))
+        .willReturn(Optional.of(redisProducts));
+
+    given(redisClient.addData(any(LocalDate.class), any()))
+        .willReturn(true);
+
+    given(viewService.increaseView(anyLong()))
+        .willReturn(ProductDetail.Response.builder()
+            .productId(1L)
+            .catId("123456789")
+            .naverId("10076181031")
+            .brand("brand")
+            .name("test")
+            .imageUrl("image")
+            .price(15000)
+            .viewCount(1)
+            .build());
+
+    // when
+    var result = productService.getProductShort(request);
+
+    // then
+    Assertions.assertEquals("10076181031", result.getNaverId());
+    Assertions.assertEquals("test", result.getName());
+    Assertions.assertEquals(1, result.getViewCount());
+
+  }
+
+  @Test
+  @DisplayName("상품 간략 정보 조회 : 레디스에 데이터가 없는 경우")
+  void getProductShort_noDataInRedis() {
+
+    // given
+    ProductDetail.Request request = ProductDetail.Request.builder()
+        .category1("디지털/가전")
+        .category2("PC")
+        .category3("조립/베어본PC")
+        .naverId("10076181031")
+        .title("test")
+        .brand("brand")
+        .imageUrl("image")
+        .lPrice(15000)
+        .build();
+
     given(redisClient.getData(any(LocalDate.class), any()))
         .willReturn(Optional.empty());
 
@@ -115,17 +187,103 @@ class ProductServiceTest {
             .productName("test")
             .brand("test")
             .imageUrl("url")
+            .viewCount(5)
             .price(10000)
             .build()));
 
     given(redisClient.addData(any(LocalDate.class), any()))
         .willReturn(true);
 
+    given(viewService.increaseView(anyLong()))
+        .willReturn(ProductDetail.Response.builder()
+            .productId(1L)
+            .catId("123456789")
+            .naverId("10076181031")
+            .brand("brand")
+            .name("test")
+            .imageUrl("image")
+            .price(15000)
+            .viewCount(6)
+            .build());
+
     // when
     var result = productService.getProductShort(request);
 
     // then
+    Assertions.assertEquals("10076181031", result.getNaverId());
     Assertions.assertEquals("test", result.getName());
+    Assertions.assertEquals(6, result.getViewCount());
+
+  }
+
+  @Test
+  @DisplayName("상품 간략 정보 조회 : DB에 데이터가 없는 경우")
+  void getProductShort_noDataInDB() {
+
+    // given
+    ProductDetail.Request request = ProductDetail.Request.builder()
+        .category1("디지털/가전")
+        .category2("PC")
+        .category3("조립/베어본PC")
+        .naverId("10076181031")
+        .title("test")
+        .brand("brand")
+        .imageUrl("image")
+        .lPrice(15000)
+        .build();
+
+    given(redisClient.getData(any(LocalDate.class), any()))
+        .willReturn(Optional.empty());
+
+    given(productRepository.findByNaverId(anyString()))
+        .willReturn(Optional.empty());
+
+    given(redisClient.addData(any(LocalDate.class), any()))
+        .willReturn(true);
+
+    List<CategoryEntity> categories = new ArrayList<>();
+    categories.add(new CategoryEntity("123456788", "카테고리2"));
+    categories.add(new CategoryEntity("123456787", "카테고리1"));
+
+    given(categoryService.categoryFind(any()))
+        .willReturn(categories);
+
+    given(categoryService.categoryRegister(any()))
+        .willReturn(CategoryEntity.builder().catId("123456789").build());
+
+    given(productRepository.save(any()))
+        .willReturn(ProductEntity.builder()
+            .productId(1L)
+            .catId("123456789")
+            .naverId("10076181031")
+            .brand("brand")
+            .imageUrl("image")
+            .price(15000)
+            .viewCount(0)
+            .build());
+
+    given(viewService.increaseView(anyLong()))
+        .willReturn(ProductDetail.Response.builder()
+            .productId(1L)
+            .catId("123456789")
+            .naverId("10076181031")
+            .brand("brand")
+            .name("test")
+            .imageUrl("image")
+            .price(15000)
+            .viewCount(1)
+            .build());
+
+    // when
+    var result = productService.getProductShort(request);
+
+    ArgumentCaptor<ProductEntity> captor = ArgumentCaptor.forClass(ProductEntity.class);
+
+    // then
+    verify(productRepository, times(1)).save(captor.capture());
+    Assertions.assertEquals("10076181031", result.getNaverId());
+    Assertions.assertEquals("test", result.getName());
+    Assertions.assertEquals(1, result.getViewCount());
 
   }
 

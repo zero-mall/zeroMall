@@ -35,7 +35,6 @@ public class StarController {
    *             (이때, 회원이 이미 해당 상품에 별점을 등록한 경우라면 별점 정보를 수정한다.)
    */
   @PostMapping("/create")
-  @Cacheable(key = "#request.productId", value = CacheKey.STAR)
   public ResponseEntity<Star.Response> createStar(@RequestHeader(name = "Authentication") String token,
                                                   @RequestBody Star.Request request) {
 
