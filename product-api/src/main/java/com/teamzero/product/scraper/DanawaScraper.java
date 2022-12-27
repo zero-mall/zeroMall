@@ -58,10 +58,10 @@ public class DanawaScraper
         mallProductEntities.get(idx).setImageUrl(imgUrl);
         //공통값 넣기
         mallProductEntities.get(idx).setProductId(product.getProductId());
-        mallProductEntities.get(idx++).setMall(MallEntity.builder()
-                .mallId(this.MALL_ID)
-                .name("다나와")
-            .build());
+//        mallProductEntities.get(idx++).setMall(MallEntity.builder()
+//                .mallId(this.MALL_ID)
+//                .name("다나와")
+//            .build());
       }
 
       idx = 0;
@@ -103,4 +103,10 @@ public class DanawaScraper
     }
     return mallProductEntities;
   }
+
+  @Override
+  public String getMallName() {
+    return "danawa";
+  }
+
 }
