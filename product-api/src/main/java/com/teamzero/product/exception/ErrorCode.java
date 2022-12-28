@@ -18,9 +18,11 @@ public enum ErrorCode {
     // 상품 관련 에러 코드
     PRODUCT_NOT_FOUND("해당이 존재하지 않습니다.", HttpStatus.NOT_FOUND),
     PRODUCT_PRICE_INFO_NOT_EXIST("해당 상품의 가격정보를 조회할 수 없습니다.", HttpStatus.NOT_FOUND),
+    PRODUCT_REDIS_SAVE_FAIL("레디스에 데이터 저장을 실패했습니다.", HttpStatus.BAD_REQUEST),
 
     // 쇼핑몰 관련 에러 코드
     MALLID_NOT_FOUND("쇼핑몰 아이디가 없습니다.", HttpStatus.INTERNAL_SERVER_ERROR),
+    MALL_NOT_FOUND("해당 쇼핑몰 데이터가 존재하지 않습니다", HttpStatus.INTERNAL_SERVER_ERROR),
 
     // 리뷰 관련 에러 코드
     REVIEW_ALREADY_EXISTS("리뷰를 이미 작성한 상품입니다.", HttpStatus.BAD_REQUEST),
@@ -33,8 +35,7 @@ public enum ErrorCode {
     // 좋아요 관련 에러 코드
     LIKE_MEMBER_NOT_FOUND("해당 회원이 존재하지 않습니다.", HttpStatus.BAD_REQUEST),
     LIKE_ALREADY_LIKED("이미 좋아요를 누른 상품입니다.", HttpStatus.BAD_REQUEST),
-    LIKE_ALREADY_UNLIKED("이미 좋아요를 취소한 상품입니다.", HttpStatus.BAD_REQUEST),
-    PRODUCT_REDIS_SAVE_FAIL("레디스에 데이터 저장을 실패했습니다.", HttpStatus.BAD_REQUEST);
+    LIKE_ALREADY_UNLIKED("이미 좋아요를 취소한 상품입니다.", HttpStatus.BAD_REQUEST);
 
     private final String message;
     private final HttpStatus httpStatus;

@@ -103,4 +103,10 @@ public class ElevenScraper extends ScrapConfig
     }
     return mallProductEntities;
   }
+
+  @Override
+  public String getMallName() {
+    return "11st";
+  }
+
 }

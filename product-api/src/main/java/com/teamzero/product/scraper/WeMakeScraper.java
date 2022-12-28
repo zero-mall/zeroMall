@@ -16,14 +16,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
 
 @Slf4j
-public class WeMakeScraper extends ScrapConfig implements ProductScraperInterface {
+public class WeMakeScraper extends ScrapConfig implements ProductScraperInterface{
 
   public static final String SEARCH_URL
       = "https://search.wemakeprice.com/api/wmpsearch/api/v3.0/wmp-search/search.json"
       + "?searchType=DEFAULT&search_cate=top&keyword=%s&isRec=1&_service=5&_type=4"
       + "&price=%d~%d&perPage=10&page=1";
-
-  private static final long MALL_ID = 6L;
 
   @Override
   public List<MallProductEntity> getScrapProductList(ProductEntity product) {
@@ -79,7 +77,6 @@ public class WeMakeScraper extends ScrapConfig implements ProductScraperInterfac
 
         // 3. MallEntity로 데이터 패키징
         mallProducts.add(MallProductEntity.builder()
-            .mallId(MALL_ID)
             .name(name)
             .imageUrl(imageUrl)
             .detailUrl(detailUrl)
@@ -100,4 +97,10 @@ public class WeMakeScraper extends ScrapConfig implements ProductScraperInterfac
 
     return mallProducts;
   }
+
+  @Override
+  public String getMallName() {
+    return "wemakeprice";
+  }
+
 }

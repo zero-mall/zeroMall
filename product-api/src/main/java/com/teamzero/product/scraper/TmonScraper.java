@@ -16,13 +16,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
 
 @Slf4j
-public class TmonScraper extends ScrapConfig implements ProductScraperInterface {
+public class TmonScraper extends ScrapConfig implements ProductScraperInterface{
 
   private static final String SEARCH_URL
       = "https://search.tmon.co.kr/api/search/v4/deals?_=1670946124923"
       + "&keyword=%s&page=1&size=10&minPrice=%d&maxPrice=%d";
-
-  private static final long MALL_ID = 3L;
 
   @Override
   public List<MallProductEntity> getScrapProductList(ProductEntity product) {
@@ -84,7 +82,6 @@ public class TmonScraper extends ScrapConfig implements ProductScraperInterface 
 
         // 3. MallEntity로 데이터 패키징
         mallProducts.add(MallProductEntity.builder()
-            .mallId(MALL_ID)
             .name(name)
             .imageUrl(imageUrl)
             .detailUrl(detailUrl)
@@ -104,4 +101,10 @@ public class TmonScraper extends ScrapConfig implements ProductScraperInterface 
 
     return mallProducts;
   }
+
+  @Override
+  public String getMallName() {
+    return "tmon";
+  }
+
 }
