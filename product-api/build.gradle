@@ -11,6 +11,7 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.10'
     implementation group: 'org.jsoup', name: 'jsoup', version: '1.15.3'
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+    implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.2.0'
     testImplementation('it.ozimov:embedded-redis:0.7.3'){
         exclude group: 'org.slf4j', module: 'slf4j-simple'
     }

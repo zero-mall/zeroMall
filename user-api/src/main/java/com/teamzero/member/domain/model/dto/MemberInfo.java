@@ -12,6 +12,7 @@ public class MemberInfo {
 
     private Long   memberId;
     private String email;
+    private int age;
     private String nickname;
     private String grade;
     private String status;
@@ -20,6 +21,7 @@ public class MemberInfo {
         return MemberInfo.builder()
                 .memberId(member.getMemberId())
                 .email(member.getEmail())
+                .age(member.getAge())
                 .nickname(member.getNickname())
                 .grade(member.getMemberGradeEntity().getName())
                 .status(String.valueOf(member.getMemberStatus()))

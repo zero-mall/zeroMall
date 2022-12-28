@@ -64,6 +64,7 @@ public class MemberService {
         var member = MemberEntity.builder()
                 .email(request.getEmail())
                 .nickname(request.getNickname())
+                .age(request.getAge())
                 .password(encPassword)
                 .memberStatus(MemberStatus.NO_AUTH)
                 .emailAuthKey(emailAuthKey)
@@ -145,6 +146,7 @@ public class MemberService {
 
         String encPassword = this.createEncPassword(member.getPassword());
         memberEntity.setNickname(member.getNickname());
+        memberEntity.setAge(member.getAge());
         memberEntity.setPassword(encPassword);
 
         return memberEntity;

@@ -23,6 +23,7 @@ public class MemberEntity extends BaseEntity{
     private Long memberId;
 
     private String email;
+    private int age;
     private String nickname;
     private String password;
 
