@@ -56,7 +56,7 @@ public class DanawaScraper
         mallProductEntities.get(idx).setImageUrl(imgUrl);
         //공통값 넣기
         mallProductEntities.get(idx).setProductId(product.getProductId());
-        mallProductEntities.get(idx++).setMallId(DANAWA_MALLID);
+        mallProductEntities.get(idx++).setMallName(getMallName());
       }
 
       idx = 0;
@@ -90,7 +90,6 @@ public class DanawaScraper
         String productId =
             value.select("input").get(1).attr("value");
         mallProductEntities.get(idx).setPrice(productPrice);
-        mallProductEntities.get(idx).setMallId(DANAWA_MALLID);
         mallProductEntities.get(idx++).setProductMallId(productId);
       }
 

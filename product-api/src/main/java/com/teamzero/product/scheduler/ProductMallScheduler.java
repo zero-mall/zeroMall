@@ -215,8 +215,8 @@ public class ProductMallScheduler {
   private void registerMallProduct(List<MallProductEntity> productEntities){
     for(MallProductEntity item : productEntities){
       Optional<MallProductEntity> mallProductEntityOptional =
-          mallProductRepository.findAllByProductMallIdAndMallId
-              (item.getProductMallId(), item.getMallId());
+          mallProductRepository.findAllByProductMallIdAndMallName
+              (item.getProductMallId(), item.getMallName());
 
       MallProductEntity mallProductEntity;
       /**
@@ -261,16 +261,13 @@ public class ProductMallScheduler {
       List<Response> responseList = new ArrayList<>();
 
       for(MallProductEntity mallProductEntity : mallProductList){
-        MallEntity mallEntity =
-            mallRepository.findAllBymallId(mallProductEntity.getMallId())
-                .orElseThrow(() -> new TeamZeroException(MALLID_NOT_FOUND));
 
         MallProductSearch.Response response = Response.builder()
             .name(mallProductEntity.getName())
             .imageUrl(mallProductEntity.getImageUrl())
             .detailUrl(mallProductEntity.getDetailUrl())
             .price(mallProductEntity.getPrice())
-            .mallName(mallEntity.getName())
+            .mallName(mallProductEntity.getMallName())
             .build();
 
         responseList.add(response);
