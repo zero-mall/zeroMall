@@ -16,6 +16,6 @@ public class RedisMallProduct {
   @Id
   private String id;
 
-  private HashMap<String, List<Response>> productMap = new HashMap<>();
+  private HashMap<Long, List<Response>> productMap = new HashMap<>();
 
 }
