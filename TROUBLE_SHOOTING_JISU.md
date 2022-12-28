@@ -34,3 +34,9 @@ Objects.isNull()이용하여 널체크 하였다.
     at org.springframework.context.annotation.Configu
 - 원인 : config class 삭제 후 컴파일될 때 기존 BEAN으로 등록 된 config를 찾지 못해 발생되는 에러같다.
 - 해결 : gradle에서 clean실행 후 정상해결
+
+#### 4.github pull, fetch 에러
+- Error
+  - POST git-upload-pack (341 bytes) POST git-upload-pack (961 bytes) remote: Total 180 (delta 63), reused 143 (delta 38), pack-reused 0 bad object refs/heads/feat/product-scheduler 2 https://github.com/zero-mall/zeroMall.git did not send all necessary objects
+  - 원인 : 예전에 작업하던 브랜치를 삭제하고 다시 브랜치생성하여 작업을 하는 도중에 뭔가 꼬인것같다.
+  - 해결 : rm .git/refs/heads/feat/product-scheduler 2 으로 삭제 후 pull, fetch 진행
