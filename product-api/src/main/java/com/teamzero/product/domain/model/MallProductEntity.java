@@ -1,5 +1,6 @@
 package com.teamzero.product.domain.model;
 
+import java.time.LocalDate;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -13,6 +14,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.envers.AuditOverride;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 @Entity
 @AllArgsConstructor
@@ -40,5 +42,6 @@ public class MallProductEntity extends BaseEntity {
   private long productId;
   //쇼핑몰별 상품번호
   private String productMallId;
-
+  private int maxPrice;
+  private LocalDate priceUpdateDt;
 }

@@ -21,13 +21,13 @@ public class ElevenShopProductDto {
 
   public MallProductEntity toProductOfMallEntity(){
     return MallProductEntity.builder()
-        .productId(this.productId)
-        .name(this.content_name)
-        .imageUrl(this.imageUrl)
-        .detailUrl(this.link_url)
-        .price(Integer.parseInt(this.last_discount_price))
-        .productMallId(this.product_no)
-        .mall(MallEntity.builder().mallId(this.mallId).name("11번가").build()) //수정필요
+        .productId(productId)
+        .name(content_name)
+        .imageUrl(imageUrl)
+        .detailUrl(link_url)
+        .price(Integer.parseInt(last_discount_price))
+        .productMallId(product_no)
+        .mallId(mallId) //수정필요
         .build();
   }
 }
