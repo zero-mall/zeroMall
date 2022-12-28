@@ -48,7 +48,6 @@ public class ProductEntity extends BaseEntity{
     // 좋아요, 조회수
     private long viewCount;
     private long likeCount;
-    private long standPrice;
 
     /**
      * 네이버 상품
