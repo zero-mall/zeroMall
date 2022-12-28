@@ -1,6 +1,7 @@
 package com.teamzero.product.scraper;
 
 import com.teamzero.product.config.ScrapConfig;
+import com.teamzero.product.domain.model.MallEntity;
 import com.teamzero.product.domain.model.MallProductEntity;
 import com.teamzero.product.domain.model.ProductEntity;
 import java.io.IOException;
@@ -106,4 +107,10 @@ public class DanawaScraper
 
     return mallProductEntities;
   }
+
+  @Override
+  public String getMallName() {
+    return "danawa";
+  }
+
 }

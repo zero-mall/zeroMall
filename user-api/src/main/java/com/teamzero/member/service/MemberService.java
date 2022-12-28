@@ -64,10 +64,13 @@ public class MemberService {
         var member = MemberEntity.builder()
                 .email(request.getEmail())
                 .nickname(request.getNickname())
+                .age(request.getAge())
                 .password(encPassword)
                 .memberStatus(MemberStatus.NO_AUTH)
                 .emailAuthKey(emailAuthKey)
                 .emailAuthYn(false)
+            //구독여부 초기값 추가하였습니다.
+                .subscribeYn(false)
                 .build();
 
         memberRepository.save(member);
@@ -143,6 +146,7 @@ public class MemberService {
 
         String encPassword = this.createEncPassword(member.getPassword());
         memberEntity.setNickname(member.getNickname());
+        memberEntity.setAge(member.getAge());
         memberEntity.setPassword(encPassword);
 
         return memberEntity;
@@ -152,19 +156,19 @@ public class MemberService {
      * 회원 탈퇴
      */
     @Transactional
-    public MemberEntity withdrawMember(Modify member) {
+    public boolean withdrawMember(String email) {
 
-        if (!isMemberExist(member.getMemberId())) {
+        if (memberRepository.findByEmail(email).isEmpty()) {
             throw new TeamZeroException(MEMBER_NOT_FOUND);
         }
 
-        MemberEntity memberEntity = memberRepository.findById(member.getMemberId()).get();
+        MemberEntity memberEntity = memberRepository.findByEmail(email).get();
 
         memberEntity.setMemberStatus(MemberStatus.WITHDRAW);
 
         memberRepository.save(memberEntity);
 
-        return memberEntity;
+        return true;
     }
 
 

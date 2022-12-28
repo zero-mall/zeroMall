@@ -23,6 +23,7 @@ public class MemberEntity extends BaseEntity{
     private Long memberId;
 
     private String email;
+    private int age;
     private String nickname;
     private String password;
 
@@ -41,5 +42,9 @@ public class MemberEntity extends BaseEntity{
     // 포인트 관련
     @Audited
     private long currentPoint;
+
+    // 구독 관련
+    private boolean subscribeYn;
+    private LocalDateTime subscribedAt;
 
 }

@@ -30,7 +30,7 @@ public class MallProductEntity extends BaseEntity {
   private Long id;
 
   // 연결된 쇼핑몰
-  private Long mallId;
+  private String mallName;
 
   // 쇼핑물 상품 정보
   private String name;

@@ -48,7 +48,6 @@ public class ProductEntity extends BaseEntity{
     // 좋아요, 조회수
     private long viewCount;
     private long likeCount;
-    private long standPrice;
 
     /**
      * 네이버 상품
@@ -62,6 +61,12 @@ public class ProductEntity extends BaseEntity{
             .productName(request.getTitle())
             .imageUrl(request.getImageUrl())
             .price(request.getLPrice())
+            .viewCount(0)
+            .likeCount(0)
             .build();
+    }
+
+    public void increaseView() {
+        this.setViewCount(this.getViewCount() + 1);
     }
 }

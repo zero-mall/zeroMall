@@ -1,5 +1,6 @@
 package com.teamzero.product.service;
 
+import static com.teamzero.product.exception.ErrorCode.PRODUCT_REDIS_SAVE_FAIL;
 import com.teamzero.product.client.NaverSearchClient;
 import com.teamzero.product.client.RedisClient;
 import com.teamzero.product.domain.dto.category.CategoryRegister;
@@ -10,6 +11,8 @@ import com.teamzero.product.domain.dto.product.ProductSearch;
 import com.teamzero.product.domain.model.CategoryEntity;
 import com.teamzero.product.domain.model.ProductEntity;
 import com.teamzero.product.domain.repository.ProductRepository;
+import com.teamzero.product.exception.ErrorCode;
+import com.teamzero.product.exception.TeamZeroException;
 import com.teamzero.product.redis.RedisNaverSearch;
 import com.teamzero.product.redis.RedisProducts;
 import java.time.LocalDate;
@@ -17,13 +20,11 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-@Slf4j
 public class ProductService {
 
   private final NaverSearchClient naverSearchClient;
@@ -31,6 +32,8 @@ public class ProductService {
   private final ProductRepository productRepository;
 
   private final CategoryService categoryService;
+
+  private final ViewService viewService;
 
   private final RedisClient redisClient;
 
@@ -73,8 +76,6 @@ public class ProductService {
 
     } catch (Exception e) {
 
-      log.error(e.getMessage());
-
       return null;
 
     }
@@ -86,60 +87,104 @@ public class ProductService {
    *             한 번도 조회되지 않았던 상품이면 상품의 간략정보를 DB와 레디스에 저장하고,
    *             한 번 이상 조회된 상품이면 레디스에서 상품의 간략정보를 전달한다.
    */
-  @Transactional
   public ProductDetail.Response getProductShort(ProductDetail.Request request) {
 
-    // 1. 레디스에서 상품을 조회
-    Optional<RedisProducts> optionalRedisProducts = redisClient.getData(LocalDate.now(), RedisProducts.class);
-
-    RedisProducts redisProducts;
-
-    if (optionalRedisProducts.isPresent()) {
-
-      redisProducts = optionalRedisProducts.get();
-
-      // 레디스에 상품이 있으면 해당 상품 정보 반환
-      if (redisProducts.getProductMap().containsKey(request.getNaverId())) {
-        return redisProducts.getProductMap().get(request.getNaverId());
-      }
-
-    } else {
-      redisProducts = new RedisProducts();
-    }
-
-    // 2. 레디스에 없으면 DB에서 상품을 조회
-    Optional<ProductEntity> optionalProduct = productRepository.findByNaverId(request.getNaverId());
-
-    // 3. DB에 없으면 DB에 상품을 저장하고 DTO 타입으로 변경
     ProductDetail.Response response;
 
-    if (optionalProduct.isPresent()) {
-      response = ProductDetail.Response.fromEntity(optionalProduct.get());
-    } else {
-      // 카테고리 생성
-      String cTypeCatId = registerCategories(request);
+    // 1. 레디스에서 오늘자 상품 데이터 조회
+    RedisProducts redisProducts = findProductBucketFromRedis(LocalDate.now());
 
-      // DB에 저장
-      response = ProductDetail.Response.fromEntity(productRepository.save(ProductEntity.from(request, cTypeCatId)));
+    // 레디스에 상품이 있으면
+    if (Objects.nonNull(redisProducts) &&
+        redisProducts.getProductMap().containsKey(request.getNaverId())) {
+
+      // 해당 상품 정보 반환
+      response = redisProducts.getProductMap().get(request.getNaverId());
+
+    }
+    // 레디스에 상품이 없으면
+    else {
+
+      // 2. DB에서 상품을 조회
+      Optional<ProductEntity> optionalProduct
+          = productRepository.findByNaverId(request.getNaverId());
+
+      // DB에 상품이 있으면
+      if (optionalProduct.isPresent()) {
+        // 해당 상품 정보 반환
+        response = ProductDetail.Response.fromEntity(optionalProduct.get());
+      }
+      // DB에 상품이 없으면
+      else {
+
+        // 카테고리 생성
+        String cTypeCatId = registerCategories(request);
+
+        // DB에 상품 간략 정보를 저장
+        response = ProductDetail.Response
+            .fromEntity(productRepository.save(ProductEntity.from(request, cTypeCatId)));
+      }
+
     }
 
-    // 4. 레디스에 저장
-    redisProducts.getProductMap().put(response.getNaverId(), response);
+    // 3. 조회수 1 증가 & 레디스에 저장
+    response = viewService.increaseView(response.getProductId());
 
-    boolean result = redisClient.addData(LocalDate.now(), redisProducts);
-
-    if (!result) {
-      log.warn(response.getNaverId() + "데이터가 레디스에 정상적으로 저장되지 않았습니다.");
+    if (Objects.nonNull(response)) {
+      saveProductToRedis(redisProducts, response);
     }
 
     return response;
   }
 
   /**
+   * 전체 상품 갯수 조회
+   */
+  public long countAllProduct() {
+    return productRepository.count();
+  }
+
+  /**
+   * 레디스에서 오늘자 상품 맵 조회
+   */
+  private RedisProducts findProductBucketFromRedis(LocalDate today){
+
+    Optional<RedisProducts> optionalRedisProducts
+        = redisClient.getData(today, RedisProducts.class);
+
+    if (optionalRedisProducts.isEmpty()) {
+      return null;
+    }
+
+    return optionalRedisProducts.get();
+
+  }
+
+  /**
+   * 레디스에 상품 저장
+   */
+  private void saveProductToRedis(RedisProducts redisProducts,
+      ProductDetail.Response response){
+
+    if (Objects.isNull(redisProducts)) {
+      redisProducts = new RedisProducts();
+    }
+
+    redisProducts.getProductMap().put(response.getNaverId(), response);
+
+    boolean result = redisClient.addData(LocalDate.now(), redisProducts);
+
+    if (!result) {
+      throw new TeamZeroException(PRODUCT_REDIS_SAVE_FAIL);
+    }
+
+  }
+
+
+  /**
    * 카테고리 조회 후 저장
    * - 속한 분류에 카테고리명이 없는 경우, 신규 저장
    */
-  @Transactional
   public String registerCategories(ProductDetail.Request request) {
 
     String aTypeId = "";
@@ -176,6 +221,10 @@ public class ProductService {
   private String getCatId(CategoryRegister request) {
 
     List<CategoryEntity> categories = categoryService.categoryFind(request);
+
+    if (Objects.isNull(categories) || categories.size() == 0) {
+      throw new TeamZeroException(ErrorCode.CATEGORY_PARAMETER_ERROR);
+    }
 
     Optional<CategoryEntity> cat = categories.stream()
         .filter(c -> c.getCatName().equals(request.getCatName()))

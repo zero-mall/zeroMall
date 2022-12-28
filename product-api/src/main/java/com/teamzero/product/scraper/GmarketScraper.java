@@ -89,4 +89,10 @@ public class GmarketScraper extends ScrapConfig implements
         }
         return mallProductEntities;
     }
+
+    @Override
+    public String getMallName() {
+        return "gmarket";
+    }
+
 }

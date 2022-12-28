@@ -86,4 +86,10 @@ public class AkmallScraper extends ScrapConfig implements
         }
         return mallProductEntities;
     }
+
+    @Override
+    public String getMallName() {
+        return "akmall";
+    }
+
 }
