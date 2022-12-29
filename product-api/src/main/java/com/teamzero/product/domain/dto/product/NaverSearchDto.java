@@ -20,7 +20,7 @@ import lombok.extern.slf4j.Slf4j;
  * 네이버 상품 조회 api document
  * https://developers.naver.com/docs/serviceapi/search/shopping/shopping.md
  */
-public class NaverSearch{
+public class NaverSearchDto {
 
   @Getter
   @Setter
@@ -88,7 +88,7 @@ public class NaverSearch{
     /**
      * Json 파싱 & 상품명 문자열 변환
      */
-    public static NaverSearch.Response parseJson(String jsonBody) {
+    public static NaverSearchDto.Response parseJson(String jsonBody) {
 
       try {
         JsonObject main = (JsonObject) JsonParser.parseString(jsonBody);

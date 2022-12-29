@@ -3,9 +3,9 @@ package com.teamzero.product.service;
 import static com.teamzero.product.exception.ErrorCode.PRODUCT_REDIS_SAVE_FAIL;
 import com.teamzero.product.client.NaverSearchClient;
 import com.teamzero.product.client.RedisClient;
-import com.teamzero.product.domain.dto.category.CategoryRegister;
-import com.teamzero.product.domain.dto.product.NaverSearch.Request;
-import com.teamzero.product.domain.dto.product.NaverSearch.Response;
+import com.teamzero.product.domain.dto.category.CategoryRegisterDto;
+import com.teamzero.product.domain.dto.product.NaverSearchDto.Request;
+import com.teamzero.product.domain.dto.product.NaverSearchDto.Response;
 import com.teamzero.product.domain.dto.product.ProductDetail;
 import com.teamzero.product.domain.dto.product.ProductSearch;
 import com.teamzero.product.domain.model.CategoryEntity;
@@ -21,7 +21,6 @@ import java.util.Objects;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -191,7 +190,7 @@ public class ProductService {
     String bTypeId = "";
 
     // 대분류 조회 후 필요시 등록
-    CategoryRegister aType = CategoryRegister.builder()
+    CategoryRegisterDto aType = CategoryRegisterDto.builder()
         .catName(request.getCategory1())
         .catType("atype")
         .build();
@@ -199,7 +198,7 @@ public class ProductService {
     aTypeId = getCatId(aType);
 
     // 중분류 조회 후 필요시 등록
-    CategoryRegister bType = CategoryRegister.builder()
+    CategoryRegisterDto bType = CategoryRegisterDto.builder()
         .catName(request.getCategory2())
         .catType("btype")
         .parentCatId(aTypeId)
@@ -208,7 +207,7 @@ public class ProductService {
     bTypeId = getCatId(bType);
 
     // 소분류 조회 후 필요시 등록
-    CategoryRegister cType = CategoryRegister.builder()
+    CategoryRegisterDto cType = CategoryRegisterDto.builder()
         .catName(request.getCategory3())
         .catType("ctype")
         .parentCatId(bTypeId)
@@ -218,7 +217,7 @@ public class ProductService {
 
   }
 
-  private String getCatId(CategoryRegister request) {
+  private String getCatId(CategoryRegisterDto request) {
 
     List<CategoryEntity> categories = categoryService.categoryFind(request);
 

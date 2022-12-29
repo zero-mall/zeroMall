@@ -4,7 +4,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 
 import com.teamzero.product.domain.dto.product.ProductDetail;
-import com.teamzero.product.domain.dto.category.CategoryRegister;
+import com.teamzero.product.domain.dto.category.CategoryRegisterDto;
 import com.teamzero.product.domain.repository.CategoryRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -42,7 +42,7 @@ public class CategoryServiceTest {
 
     // when
     var result = categoryService.categoryRegister(
-        CategoryRegister.builder().catName(request.getCategory1()).catType("atype").build()
+        CategoryRegisterDto.builder().catName(request.getCategory1()).catType("atype").build()
     );
 
     // then

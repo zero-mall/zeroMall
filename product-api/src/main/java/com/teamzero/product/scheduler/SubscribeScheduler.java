@@ -20,8 +20,7 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class SubscribeScheduler {
 
-  @Autowired
-  private SubScribersMapper subScribersMapper;
+  private final SubScribersMapper subScribersMapper;
 
   private final RedisClient redisClient;
 

@@ -1,6 +1,6 @@
 package com.teamzero.product.controller;
 
-import com.teamzero.product.domain.dto.category.CategoryRegister;
+import com.teamzero.product.domain.dto.category.CategoryRegisterDto;
 import com.teamzero.product.service.CategoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +20,7 @@ public class CategoryController {
    * @return
    */
   @PostMapping("/register")
-  public ResponseEntity<?> categoryRegister(@RequestBody CategoryRegister request){
+  public ResponseEntity<?> categoryRegister(@RequestBody CategoryRegisterDto request){
 
     return ResponseEntity.ok(categoryService.categoryRegister(request));
   }
@@ -30,7 +30,7 @@ public class CategoryController {
    * 1. 카테고리Id, 카테고리명, 카테고리 타입으로 조회 가능
    */
   @PostMapping("/find")
-  public ResponseEntity<?> categoryFind(@RequestBody CategoryRegister request){
+  public ResponseEntity<?> categoryFind(@RequestBody CategoryRegisterDto request){
 
     return ResponseEntity.ok(categoryService.categoryFind(request));
   }
@@ -49,7 +49,7 @@ public class CategoryController {
    * 2. 하위카테고리가 있을경우 오류응답
    */
   @PostMapping("/delete")
-  public ResponseEntity<?> categoryDelete(@RequestBody CategoryRegister request){
+  public ResponseEntity<?> categoryDelete(@RequestBody CategoryRegisterDto request){
 
     return ResponseEntity.ok(categoryService.categoryDelete(request));
   }
@@ -58,7 +58,7 @@ public class CategoryController {
    * 1.카테고리 코드로 수정 가능
    */
   @PostMapping("/modify")
-  public ResponseEntity<?> categoryModify(@RequestBody CategoryRegister request){
+  public ResponseEntity<?> categoryModify(@RequestBody CategoryRegisterDto request){
 
     return ResponseEntity.ok(categoryService.categoryModify(request));
   }

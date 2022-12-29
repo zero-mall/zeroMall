@@ -7,7 +7,7 @@ import static com.teamzero.product.exception.ErrorCode.CATEGORY_PARANTID_ERROR;
 import static com.teamzero.product.exception.ErrorCode.CATEGORY_SUB_DATA_EXISTS;
 
 import com.teamzero.product.domain.model.CategoryEntity;
-import com.teamzero.product.domain.dto.category.CategoryRegister;
+import com.teamzero.product.domain.dto.category.CategoryRegisterDto;
 import com.teamzero.product.domain.model.constants.CategoryType;
 import com.teamzero.product.domain.repository.CategoryRepository;
 import com.teamzero.product.exception.TeamZeroException;
@@ -28,7 +28,7 @@ public class CategoryService {
    * 3. 신규 카테고리ID 체번
    * 4. 카테고리 등록
    */
-  public CategoryEntity categoryRegister(CategoryRegister request){
+  public CategoryEntity categoryRegister(CategoryRegisterDto request){
     //카테고리 타입 문자열을 카테고리타입형태로 변경
     request.toCatTypeObject();
 
@@ -59,7 +59,7 @@ public class CategoryService {
   /**
    * 파라미터 체크
    */
-  private boolean isCheckCategoryParam(CategoryRegister request){
+  private boolean isCheckCategoryParam(CategoryRegisterDto request){
     if(request.getCatName().isEmpty()){
       return false;
     }
@@ -77,7 +77,7 @@ public class CategoryService {
   /**
    * max카테고리id 가져오기
    */
-  private String getMaxCatId(CategoryRegister request){
+  private String getMaxCatId(CategoryRegisterDto request){
     //카테고리 타입 확인 후 대분류가 아니면 부모카테고리 확인
     if(Objects.equals(request.getCatTypeObject(), CategoryType.ATYPE)){
       String result = categoryRepository.maxByCatIdAtype();
@@ -183,7 +183,7 @@ public class CategoryService {
    * @param request
    * @return
    */
-  public List<CategoryEntity> categoryFind(CategoryRegister request) {
+  public List<CategoryEntity> categoryFind(CategoryRegisterDto request) {
     request.toCatTypeObject();
     String categoryTypeCode;
     //카테고리 타입이 들어왔는데 값이 잘못된 경우
@@ -257,7 +257,7 @@ public class CategoryService {
    * @param request
    * @return
    */
-  public String categoryDelete(CategoryRegister request) {
+  public String categoryDelete(CategoryRegisterDto request) {
     request.toCatTypeObject();
 
     if(Objects.isNull(request.getCatTypeObject())){
@@ -294,7 +294,7 @@ public class CategoryService {
    * @param request
    * @return
    */
-  public CategoryEntity categoryModify(CategoryRegister request) {
+  public CategoryEntity categoryModify(CategoryRegisterDto request) {
 
     CategoryEntity category =
         categoryRepository.findByCatId(request.getCurrentCatId())

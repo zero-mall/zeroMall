@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class CategoryRegister {
+public class CategoryRegisterDto {
   private String catName;
   private String parentCatId;
   private String catType;
