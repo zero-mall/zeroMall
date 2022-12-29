@@ -69,4 +69,9 @@ public class RedisClient {
     }
   }
 
+  //Redis의 데이터 삭제
+  public void delete(String key){
+      redisTemplate.delete(key);
+  }
+
 }

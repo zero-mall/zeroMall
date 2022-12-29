@@ -21,15 +21,13 @@ public class DanawaScraper
 
   static private final String SEARCH_URL =
       "https://search.danawa.com/dsearch.php?"
-          + "query=%s&minPrice=%d&maxPrice=%d&sort=saveDESC";
-
-  static private final long MALL_ID = 5L; //mallId수정필요
+          + "query=%s&minPrice=%d&maxPrice=%d&sort=priceASC";
   @Override
   public List<MallProductEntity> getScrapProductList(ProductEntity product) {
 
     long price = product.getPrice();
-    long maxPrice = (long) (price + Math.floor(price * super.TOLERANCE));
-    long minPrice = (long) (price - Math.floor(price * super.TOLERANCE));
+    long maxPrice = (long) (price + Math.floor(price * TOLERANCE));
+    long minPrice = (long) (price - Math.floor(price * TOLERANCE));
 
     List<MallProductEntity> mallProductEntities = new ArrayList<>();
 
@@ -46,7 +44,7 @@ public class DanawaScraper
           ("class","product_list");
 
       //mallProductEntities에 값을 넣기위한 index
-      int idx=0;
+      int idx = 0;
       //썸네일이미지
       for (Element value : elements.select("div.thumb_image img")) {
         String imgUrl = value.attr("src");
@@ -58,10 +56,7 @@ public class DanawaScraper
         mallProductEntities.get(idx).setImageUrl(imgUrl);
         //공통값 넣기
         mallProductEntities.get(idx).setProductId(product.getProductId());
-//        mallProductEntities.get(idx++).setMall(MallEntity.builder()
-//                .mallId(this.MALL_ID)
-//                .name("다나와")
-//            .build());
+        mallProductEntities.get(idx++).setMallName(getMallName());
       }
 
       idx = 0;
@@ -101,6 +96,14 @@ public class DanawaScraper
     } catch (IOException e) {
       throw new RuntimeException(e);
     }
+    if(mallProductEntities.size() > 10){
+      List<MallProductEntity> resultList = new ArrayList<>();
+      for (int i = 0; i < 10; i++) {
+        resultList.add(i, mallProductEntities.get(i));
+      }
+      return resultList;
+    }
+
     return mallProductEntities;
   }
 

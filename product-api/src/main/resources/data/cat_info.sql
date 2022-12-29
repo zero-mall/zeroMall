@@ -93,6 +93,7 @@ insert into cat_info(cat_id, cat_name) values ('001008005','목도리') on dupli
 insert into cat_info(cat_id, cat_name) values ('001008006','선그라스/안경테') on duplicate key update cat_id = values(cat_id);
 insert into cat_info(cat_id, cat_name) values ('001008007','헤어액세서리') on duplicate key update cat_id = values(cat_id);
 insert into cat_info(cat_id, cat_name) values ('001008008','패션소품') on duplicate key update cat_id = values(cat_id);
+
 insert into cat_info(cat_id, cat_name) values ('001008009','스카프') on duplicate key update cat_id = values(cat_id);
 insert into cat_info(cat_id, cat_name) values ('001008010','손수건') on duplicate key update cat_id = values(cat_id);
 insert into cat_info(cat_id, cat_name) values ('001008011','우산') on duplicate key update cat_id = values(cat_id);
@@ -256,6 +257,7 @@ insert into cat_info(cat_id, cat_name) values ('003006001','여성향수') on du
 insert into cat_info(cat_id, cat_name) values ('003006002','남성향수') on duplicate key update cat_id = values(cat_id);
 insert into cat_info(cat_id, cat_name) values ('003006003','남녀공용향수') on duplicate key update cat_id = values(cat_id);
 insert into cat_info(cat_id, cat_name) values ('003006004','향수세트') on duplicate key update cat_id = values(cat_id);
+
 insert into cat_info(cat_id, cat_name) values ('003007000','핸드케어') on duplicate key update cat_id = values(cat_id);
 insert into cat_info(cat_id, cat_name) values ('003007001','핸드크림') on duplicate key update cat_id = values(cat_id);
 insert into cat_info(cat_id, cat_name) values ('003007002','핸드워시') on duplicate key update cat_id = values(cat_id);
@@ -502,7 +504,6 @@ insert into cat_info(cat_id, cat_name) values ('007006005','믹서기/블렌더'
 insert into cat_info(cat_id, cat_name) values ('007006006','위생관리') on duplicate key update cat_id = values(cat_id);
 insert into cat_info(cat_id, cat_name) values ('007006007','밥솥') on duplicate key update cat_id = values(cat_id);
 insert into cat_info(cat_id, cat_name) values ('007006008','가스레인지') on duplicate key update cat_id = values(cat_id);
-
 
 
 

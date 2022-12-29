@@ -11,6 +11,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.envers.AuditOverride;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 @Entity
 @Getter
@@ -27,5 +28,5 @@ public class MallEntity extends BaseEntity {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long mallId;
   private String name;
-
+  private boolean schedulerYn;
 }
