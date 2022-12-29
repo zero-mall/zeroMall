@@ -27,7 +27,7 @@ public class AkmallProductDto {
         .detailUrl(link_url)
         .price(Integer.parseInt(last_discount_price))
         .productMallId(product_no)
-        .mall(MallEntity.builder().mallId(mallId).name("AK몰").build())
+        //.mall(MallEntity.builder().mallId(mallId).name("AK몰").build())
         .build();
   }
 }

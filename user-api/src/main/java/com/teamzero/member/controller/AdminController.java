@@ -33,8 +33,9 @@ public class AdminController {
      * 일반 회원 목록 조회
      */
     @GetMapping("/member/list")
-    public ResponseEntity<Page<MemberInfo>> getMemberList(@RequestHeader(name = "Authentication") String token,
-                                                          @RequestBody PageRequest pageRequest){
+    public ResponseEntity<Page<MemberInfo>> getMemberList(
+        @RequestHeader(name = "Authentication") String token,
+        @RequestBody PageRequest pageRequest){
 
         validateToken(token);
 
@@ -45,8 +46,9 @@ public class AdminController {
      * 일반 회원 상세 조회
      */
     @GetMapping("/member/detail/{id}")
-    public ResponseEntity<MemberInfo> getMemberDetail(@RequestHeader(name = "Authentication") String token,
-                                                      @PathVariable Long id){
+    public ResponseEntity<MemberInfo> getMemberDetail(
+        @RequestHeader(name = "Authentication") String token,
+        @PathVariable Long id){
 
         validateToken(token);
 
@@ -58,8 +60,9 @@ public class AdminController {
      * - 회원 등급 또는 상태 수정, 또는 둘 다 수정
      */
     @PutMapping("/member/detail/modify")
-    public ResponseEntity<MemberInfo> modifyMemberGradeOrStatus(@RequestHeader(name = "Authentication") String token,
-                                                                @RequestBody Modify modify){
+    public ResponseEntity<MemberInfo> modifyMemberGradeOrStatus(
+        @RequestHeader(name = "Authentication") String token,
+        @RequestBody Modify modify){
 
         validateToken(token);
 
@@ -72,8 +75,9 @@ public class AdminController {
      *   ( 차후 서비스가 확장되면 일괄적으로 관리자 회원 계정 삭제 )
      */
     @PutMapping("/admin/detail/modify")
-    public ResponseEntity<AdminInfo> modifyAdminStatus(@RequestHeader(name = "Authentication") String token,
-                                                       @RequestBody Modify modify){
+    public ResponseEntity<AdminInfo> modifyAdminStatus(
+        @RequestHeader(name = "Authentication") String token,
+        @RequestBody Modify modify){
 
         validateToken(token);
 
@@ -87,7 +91,8 @@ public class AdminController {
         }
 
         // 토큰의 요청자 이메일이 관리자인지 확인
-        if (!adminService.findByEmail(jwtAuthenticationProvider.getUserVo(token).getEmail()).isPresent()) {
+        if (!adminService.existByEmail(
+            jwtAuthenticationProvider.getUserVo(token).getEmail())) {
             throw new TeamZeroException(TOKEN_NOT_VALID);
         }
     }

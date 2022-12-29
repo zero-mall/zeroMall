@@ -1,12 +1,12 @@
 package com.teamzero.product.mapper;
 
-import com.teamzero.product.domain.model.ProductEntity;
+import com.teamzero.product.domain.dto.recommend.RecommendDto;
 import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
 public interface AgeGroupPreferProductMapper {
 
-  List<ProductEntity> getAgeGroupPreferProducts(int myAgeGroup);
+  List<RecommendDto> getAgeGroupPreferProducts(int myAgeGroup);
 
 }

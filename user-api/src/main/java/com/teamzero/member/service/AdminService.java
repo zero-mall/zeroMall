@@ -39,8 +39,8 @@ public class AdminService {
     /**
      * 관리자 조회
      */
-    public Optional<AdminEntity> findByEmail(String email) {
-        return adminRepository.findByEmail(email);
+    public boolean existByEmail(String email) {
+        return adminRepository.existsByEmail(email);
     }
 
     public void findByAdminIdAndEmail(Long adminId, String email) {

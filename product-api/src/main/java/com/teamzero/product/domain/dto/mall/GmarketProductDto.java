@@ -27,7 +27,6 @@ public class GmarketProductDto {
         .detailUrl(link_url)
         .price(Integer.parseInt(last_discount_price))
         .productMallId(product_no)
-        .mall(MallEntity.builder().mallId(mallId).name("G마켓").build())
         .build();
   }
 }

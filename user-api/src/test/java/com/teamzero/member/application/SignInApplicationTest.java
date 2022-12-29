@@ -41,7 +41,7 @@ class SignInApplicationTest {
     private final String TEST_PASSWORD = "123456";
 
     @Test
-    @DisplayName("memberSingInFail : 해당 이메일이 없습니다.")
+    @DisplayName("memberSingInFail : 아이디가 없는 경우")
     void memberSignInFail_memberNotFound() {
 
         // given
@@ -58,7 +58,7 @@ class SignInApplicationTest {
     }
 
     @Test
-    @DisplayName("memberSingInFail : 비밀번호가 일치하지 않습니다.")
+    @DisplayName("memberSingInFail : 비밀번호가 일치하지 않는 경우")
     void memberSignInFail_memberPasswordUnMatch() {
 
         // given
@@ -77,7 +77,7 @@ class SignInApplicationTest {
                 () -> signInApplication.memberSignInToken(new SignIn(TEST_EMAIL, TEST_PASSWORD)));
 
         // then
-        Assertions.assertEquals(ErrorCode.MEMBER_PASSWORD_UNMATCH, exception.getErrorCode());
+        Assertions.assertEquals(ErrorCode.MEMBER_SIGNIN_NOT_POSSIBLE, exception.getErrorCode());
 
     }
 
@@ -91,7 +91,6 @@ class SignInApplicationTest {
                 .nickname("홍길동")
                 .email(TEST_EMAIL)
                 .password(BCrypt.hashpw(TEST_PASSWORD, BCrypt.gensalt()))
-                .memberGradeEntity(new MemberGradeEntity(1L, "BASIC", 2))
                 .build();
 
         String token = Jwts.builder()

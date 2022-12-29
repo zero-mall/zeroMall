@@ -27,7 +27,6 @@ public class ElevenShopProductDto {
         .detailUrl(link_url)
         .price(Integer.parseInt(last_discount_price))
         .productMallId(product_no)
-        .mallId(mallId) //수정필요
         .build();
   }
 }

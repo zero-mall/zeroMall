@@ -3,9 +3,14 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.teamzero.product.mapper.AgeGroupPreferProductMapper">
-  <select id="getAgeGroupPreferProducts" resultType="com.teamzero.product.domain.model.ProductEntity">
+  <select id="getAgeGroupPreferProducts"
+    resultType="com.teamzero.product.domain.dto.recommend.RecommendDto">
     select
-      p.*
+      t.age_group,
+      p.product_id,
+      p.product_name,
+      p.image_url,
+      p.price
     from (<include refid = "selectAboveThreeStarsWithinAgeGroup"/>) t
     left join product p on t.product_id = p.product_id
     order by like_count desc, view_count desc
