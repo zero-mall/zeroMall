@@ -3,9 +3,10 @@ package com.teamzero.product.scheduler;
 import com.teamzero.product.client.RedisClient;
 import com.teamzero.product.domain.dto.recommend.SubscriberDto;
 import com.teamzero.product.domain.model.constants.CacheKey;
-import com.teamzero.product.domain.repository.ProductRepository;
 import com.teamzero.product.mapper.SubScribersMapper;
 import com.teamzero.product.recommend.AgeGroupPreferProductRec;
+import com.teamzero.product.recommend.LikeAndStarProductRec;
+import com.teamzero.product.recommend.LowestPriceProductRec;
 import com.teamzero.product.util.MailSender;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -22,13 +23,14 @@ public class SubscribeScheduler {
   @Autowired
   private SubScribersMapper subScribersMapper;
 
-  private final ProductRepository productRepository;
-
   private final RedisClient redisClient;
 
   private final MailSender mailSender;
 
   private final AgeGroupPreferProductRec ageGroupPreferProductRec;
+  private final LowestPriceProductRec lowestPriceProductRec;
+  private final LikeAndStarProductRec likeAndStarProductRec;
+
 
   /**
    * 매일 오전 2시에 구독자에게 메일 전송
@@ -53,8 +55,9 @@ public class SubscribeScheduler {
       ageGroupPreferProductRec.setUserAge(subscriber.getAge());
 
       String text = mailSender.getSubcribeHTML(
-          mailSender.getAgeGroupPreferHTMLContent(ageGroupPreferProductRec.recommendProducts()),
-         "", ""
+         mailSender.getAgeGroupPreferHTMLContent(ageGroupPreferProductRec.recommendProducts()),
+         mailSender.getLowestPriceProductHTMLContent(lowestPriceProductRec.recommendProducts()),
+         mailSender.getLikeAndStarHTMLContent(likeAndStarProductRec.recommendProducts())
       );
 
       mailSender.sendMail(subscriber.getEmail(), subject, text);

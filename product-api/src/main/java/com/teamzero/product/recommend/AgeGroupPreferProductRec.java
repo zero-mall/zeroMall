@@ -1,18 +1,10 @@
 package com.teamzero.product.recommend;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import com.teamzero.product.domain.dto.recommend.RecommendDto;
 import com.teamzero.product.mapper.AgeGroupPreferProductMapper;
-import io.jsonwebtoken.lang.Collections;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -20,8 +12,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class AgeGroupPreferProductRec implements ProductRecInterface {
 
-  @Autowired
-  private AgeGroupPreferProductMapper ageGroupPreferProductMapper;
+  private final AgeGroupPreferProductMapper ageGroupPreferProductMapper;
 
   private int userAgeGroup;
 

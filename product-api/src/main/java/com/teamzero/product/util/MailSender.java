@@ -136,17 +136,70 @@ public class MailSender {
 
   public String getLowestPriceProductHTMLContent(List<RecommendDto> recommendDtos){
 
+    StringBuilder sb = new StringBuilder();
 
+    sb.append("<ul class = \"product-list\">");
 
-    return null;
+    for (int i = 0; i < recommendDtos.size(); i++) {
+
+      sb.append(
+          String.format(
+              "<li css = \"margin-right:0\"> "
+                  + "  <div class = \"product\"> "
+                  + "    <span class = \"tag best-tag\">BEST%d</span> "
+                  + "    <span class = \"tag perc-tag\">%d%%▼</span>"
+                  + "    <img src = \"%s\"> "
+                  + "    <div>\n"
+                  + "      <p class = \"product-name\">%s</p> "
+                  + "      <p class = \"product-price\">%d <span class = \"max-price\">%d</span></p> "
+                  + "    </div> "
+                  + "  </div> "
+              + "</li>",
+              i + 1, recommendDtos.get(i).getPerc(),
+              recommendDtos.get(i).getImageUrl(),
+              recommendDtos.get(i).getProductName(),
+              recommendDtos.get(i).getPrice(), recommendDtos.get(i).getMaxPrice()
+          )
+      );
+
+    }
+
+    sb.append("</ul>\n");
+
+    return sb.toString();
 
   }
 
   public String getLikeAndStarHTMLContent(List<RecommendDto> recommendDtos){
 
+    StringBuilder sb = new StringBuilder();
 
+    sb.append("<ul class = \"product-list\">");
 
-    return null;
+    for (int i = 0; i < recommendDtos.size(); i++) {
+
+      sb.append(
+          String.format(
+              "<li css = \"margin-right:0\"> "
+                  + "  <div class = \"product\"> "
+                  + "    <span class = \"tag best-tag\">BEST%d</span> "
+                  + "    <img src = \"%s\"> "
+                  + "    <div>\n"
+                  + "      <p class = \"product-name\">%s</p> "
+                  + "      <p class = \"product-price\">%d</p> "
+                  + "    </div> "
+                  + "  </div> "
+                  + "</li>",
+              i + 1, recommendDtos.get(i).getImageUrl(),
+              recommendDtos.get(i).getProductName(), recommendDtos.get(i).getPrice()
+          )
+      );
+
+    }
+
+    sb.append("</ul>\n");
+
+    return sb.toString();
   }
 
 }

@@ -1,6 +1,6 @@
 package com.teamzero.product.recommend;
 
-import com.teamzero.product.domain.dto.product.RecommendDto;
+import com.teamzero.product.domain.dto.recommend.RecommendDto;
 import com.teamzero.product.domain.model.MallProductEntity;
 import com.teamzero.product.domain.model.ProductEntity;
 import com.teamzero.product.domain.repository.MallProductRepository;
@@ -14,9 +14,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
-@Service
+@Component
 @RequiredArgsConstructor
 public class LowestPriceProductRec implements ProductRecInterface {
 
