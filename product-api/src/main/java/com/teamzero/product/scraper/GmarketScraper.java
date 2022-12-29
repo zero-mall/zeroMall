@@ -69,6 +69,7 @@ public class GmarketScraper extends ScrapConfig implements
                 .attr("data-montelena-goodscode");
             mallProductEntity = MallProductEntity.builder()
                 .productMallId(mallProductId)
+                .mallName(getMallName())
                 .productId(product.getProductId())
                 .name(productName.next().text())
                 .price(Integer.parseInt(productPrice.next().text()

@@ -65,6 +65,7 @@ public class AkmallScraper extends ScrapConfig implements
                 // HTML상에서 상품번호를 따로 제공하지 않아서 상품 주소에서 가져오도록 헀습니다.
                 .productMallId(productURL.replaceAll("[^0-9]", ""))
                 .productId(product.getProductId())
+                .mallName(getMallName())
                 .name(productName.next().text())
                 .price(Integer.parseInt(productPrice.next().text()
                     // ',' 들어갈 시 오류발생하여 replace
