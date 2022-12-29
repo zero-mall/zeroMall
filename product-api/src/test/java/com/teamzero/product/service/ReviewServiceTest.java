@@ -1,6 +1,8 @@
 package com.teamzero.product.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 
 import com.teamzero.product.domain.dto.ReviewDto;
@@ -28,19 +30,22 @@ class ReviewServiceTest {
     @DisplayName("리뷰 작성")
     void createReview() {
         //given
+        Long memberId = 1L;
         ReviewDto.CreateReview review = ReviewDto.CreateReview.builder()
-            .memberId(1L)
             .productId(1L)
             .orderId(1L)
             .review("상품이 정말 좋습니다.")
             .build();
 
+        given(reviewRepository.existsByOrderIdAndMemberIdAndProductId(anyLong(),
+            anyLong(), anyLong()))
+            .willReturn(false);
         //when
-        ReviewDto.CreateReview createReview = reviewService.createReview(review);
+        ReviewDto.CreateReview createReview = reviewService.createReview(review,
+            memberId);
 
         //then
         assertEquals(review.getOrderId(), createReview.getOrderId());
-        assertEquals(review.getMemberId(), createReview.getMemberId());
         assertEquals(review.getProductId(), createReview.getProductId());
         assertEquals(review.getReview(), createReview.getReview());
 
@@ -50,13 +55,14 @@ class ReviewServiceTest {
     @DisplayName("리뷰 수정")
     void modifyReview() {
         // given
+        Long memberId = 1L;
         ReviewDto.ModifyReview modifyReview = ReviewDto.ModifyReview.builder()
             .productId(1L)
-            .memberId(1L)
             .orderId(1L)
             .review("상품이 정말 개좋습니다.")
             .build();
-        given(reviewRepository.existsByOrderIdAndMemberIdAndProductId(1L, 1L, 1L))
+        given(
+            reviewRepository.existsByOrderIdAndMemberIdAndProductId(1L, 1L, 1L))
             .willReturn(true);
         given(reviewRepository.findByOrderIdAndMemberIdAndProductId(1L, 1L, 1L))
             .willReturn(ReviewEntity.builder()
@@ -66,11 +72,12 @@ class ReviewServiceTest {
                 .review("상품이 정말 좋습니다.").build());
 
         //when
-        ReviewDto.ModifyReview modifiedReview = reviewService.modifyReview(modifyReview);
+        ReviewDto.ModifyReview modifiedReview = reviewService.modifyReview(
+            modifyReview,memberId);
 
         //then
-        assertEquals(modifyReview.getMemberId(), modifiedReview.getMemberId());
-        assertEquals(modifyReview.getProductId(), modifiedReview.getProductId());
+        assertEquals(modifyReview.getProductId(),
+            modifiedReview.getProductId());
         assertEquals(modifyReview.getReview(), modifiedReview.getReview());
 
     }
@@ -103,7 +110,8 @@ class ReviewServiceTest {
     @DisplayName("리뷰 삭제")
     void deleteReview() {
         // given
-        given(reviewRepository.existsByOrderIdAndMemberIdAndProductId(1L, 1L, 1L))
+        given(
+            reviewRepository.existsByOrderIdAndMemberIdAndProductId(1L, 1L, 1L))
             .willReturn(true);
         given(reviewRepository.findByOrderIdAndMemberIdAndProductId(1L, 1L, 1L))
             .willReturn(ReviewEntity.builder()

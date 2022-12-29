@@ -20,7 +20,6 @@ public class ReviewDto {
     public static class CreateReview {
 
         private Long productId;
-        private Long memberId;
         private Long orderId;
         private String review;
         private LocalDateTime registeredAt;
@@ -28,7 +27,6 @@ public class ReviewDto {
         public static ReviewDto.CreateReview fromEntity(ReviewEntity review) {
             return CreateReview.builder()
                 .productId(review.getProductId())
-                .memberId(review.getMemberId())
                 .orderId(review.getOrderId())
                 .review(review.getReview())
                 .registeredAt(review.getRegisteredAt())
@@ -45,7 +43,6 @@ public class ReviewDto {
     public static class ModifyReview {
 
         private Long productId;
-        private Long memberId;
         private Long orderId;
         private String review;
         private LocalDateTime modifiedAt;
@@ -53,7 +50,6 @@ public class ReviewDto {
         public static ReviewDto.ModifyReview fromEntity(ReviewEntity review) {
             return ReviewDto.ModifyReview.builder()
                 .productId(review.getProductId())
-                .memberId(review.getMemberId())
                 .orderId(review.getOrderId())
                 .review(review.getReview())
                 .modifiedAt(review.getModifiedAt())

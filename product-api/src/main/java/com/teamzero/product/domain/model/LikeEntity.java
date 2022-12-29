@@ -16,7 +16,7 @@ import org.hibernate.envers.AuditOverride;
 @NoArgsConstructor
 @Builder
 @AuditOverride(forClass = BaseEntity.class)
-@Table(name = "LIKE")
+@Table(name = "LIKES")
 @Data
 public class LikeEntity extends BaseEntity {
 
