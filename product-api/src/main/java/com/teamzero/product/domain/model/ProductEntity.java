@@ -1,6 +1,7 @@
 package com.teamzero.product.domain.model;
 
 import com.teamzero.product.domain.dto.product.ProductDetail;
+import java.time.LocalDate;
 import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -40,14 +41,13 @@ public class ProductEntity extends BaseEntity{
     private String imageUrl;
     private int price;
 
-    // 연결된 쇼핑몰 상품 목록
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn
-    private List<MallProductEntity> mallProducts;
-
     // 좋아요, 조회수
     private long viewCount;
     private long likeCount;
+    
+    // 현재까지 최저가 중 가장 높은 금액
+    private int maxPrice;
+    private LocalDate priceUpdateDt;
 
     /**
      * 네이버 상품

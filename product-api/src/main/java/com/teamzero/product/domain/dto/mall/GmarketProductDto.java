@@ -2,15 +2,15 @@ package com.teamzero.product.domain.dto.mall;
 
 import com.teamzero.product.domain.model.MallEntity;
 import com.teamzero.product.domain.model.MallProductEntity;
-import com.teamzero.product.domain.repository.MallRepository;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 
 @Data
+@Builder
 @AllArgsConstructor
-public class ElevenShopProductDto {
+public class GmarketProductDto {
 
-  private final MallRepository mallRepository;
   private long productId;
   private String product_no;
   private String link_url;
@@ -19,7 +19,7 @@ public class ElevenShopProductDto {
   private long mallId;
   private String imageUrl;
 
-  public MallProductEntity toProductOfMallEntity(){
+  public MallProductEntity toMallEntity(){
     return MallProductEntity.builder()
         .productId(productId)
         .name(content_name)
@@ -27,7 +27,6 @@ public class ElevenShopProductDto {
         .detailUrl(link_url)
         .price(Integer.parseInt(last_discount_price))
         .productMallId(product_no)
-        .mallName(mallName) //수정필요
         .build();
   }
 }

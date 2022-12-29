@@ -1,12 +1,11 @@
 package com.teamzero.product.recommend;
 
-import com.teamzero.product.domain.dto.product.RecommendDto;
+import com.teamzero.product.domain.dto.recommend.RecommendDto;
 import com.teamzero.product.domain.model.MallProductEntity;
 import com.teamzero.product.domain.model.ProductEntity;
 import com.teamzero.product.domain.repository.MallProductRepository;
 import com.teamzero.product.domain.repository.ProductRepository;
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -15,9 +14,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
-@Service
+@Component
 @RequiredArgsConstructor
 public class LowestPriceProductRec implements ProductRecInterface {
 
@@ -25,25 +24,18 @@ public class LowestPriceProductRec implements ProductRecInterface {
     private final MallProductRepository mallProductRepository;
 
     /**
-     * 한달 이내 최대 낙폭의 상품 상위 5개 반환
-     *
+     * 모든상품을 돌면서 한달 이내 최대 낙폭의 상품 상위 5개 반환
      * @return
      */
     @Override
     public List<RecommendDto> recommendProducts() {
 
 
+        List<ProductEntity> productEntities = productRepository.findAll();
         HashMap<Long, Double> productMap = new HashMap<>();
         List<RecommendDto> recommendList = new ArrayList<>();
 
-        // 한달이내에 등록, 수정된 상품만 불러오기
-        LocalDateTime monthAgo = LocalDateTime.now().minusMonths(1);
-        List<ProductEntity> productEntities =
-            productRepository.findAllByRegisteredAtAfterOrModifiedAtAfter(
-                monthAgo, monthAgo
-            );
-
-        // 상품의 갯수만큼 돌면서 퍼센트 계산
+        // 모든 상품의 갯수만큼 돌면서 퍼센트 계산
         for (int i = 0; i < productEntities.size(); i++) {
 
             long productId = productEntities.get(i).getProductId();
@@ -78,6 +70,20 @@ public class LowestPriceProductRec implements ProductRecInterface {
 
     }
 
+    // 오늘 기준으로 한달 이내의 maxPrice인지 확인하는 메서드
+    public boolean dateCompare(String modifiedAt) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
+        Calendar now = Calendar.getInstance();
+        now.add(Calendar.MONTH, -1);
+        String monthAgo = dateFormat.format(now.getTime());
+        int compare = monthAgo.compareTo(modifiedAt);
+        if (compare <= 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     public RecommendDto currentPricePercentage(Long productId) {
 
         List<MallProductEntity> mallProductEntities =
@@ -91,12 +97,15 @@ public class LowestPriceProductRec implements ProductRecInterface {
             int price = mallProductEntities.get(i).getPrice();
             int maxPrice = mallProductEntities.get(i).getMaxPrice();
 
+            String priceUpdateDt = DateTimeFormatter.ofPattern("yyyyMMdd")
+                .format(mallProductEntities.get(i).getPriceUpdateDt());
+
             //퍼센테이지 구하는 공식
             double perc =
                 (double) price / (double) maxPrice * 100.0 - 100.0;
 
-            // 0퍼센트 혹은 -100%인 경우를 제외하고 put
-            if (perc < 0 && perc > -100) {
+            // 0퍼센트 혹은 -100%인 경우를 제외하고 maxPrice 날짜가 한달 이내일 경우에만 put
+            if (perc < 0 && perc > -100 && dateCompare(priceUpdateDt)) {
                 productMap.put(mallProductId, perc);
             }
         }

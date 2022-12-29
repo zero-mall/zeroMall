@@ -1,5 +1,6 @@
 package com.teamzero.product.domain.model;
 
+import com.teamzero.product.domain.model.constants.MallStatus;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;

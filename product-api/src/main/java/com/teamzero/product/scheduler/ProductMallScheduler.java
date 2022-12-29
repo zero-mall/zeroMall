@@ -206,8 +206,6 @@ public class ProductMallScheduler {
     log.info(logPrefix + "End");
   }
 
-
-
   /**
    * 1. 스크래핑된 상품몰별 상품List Parameter로 가져오기
    * 2. 몰상품id로 기존 데이터 있는지 체크하여 없으면 새로 등록, 있으면 데이터 업데이트
