@@ -1,15 +1,12 @@
 package com.teamzero.product.recommend;
 
-import com.teamzero.product.domain.dto.product.RecommendDto;
+import com.teamzero.product.domain.dto.recommend.RecommendDto;
 import com.teamzero.product.domain.model.MallProductEntity;
 import com.teamzero.product.domain.model.ProductEntity;
 import com.teamzero.product.domain.repository.MallProductRepository;
 import com.teamzero.product.domain.repository.ProductRepository;
-import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;

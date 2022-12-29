@@ -1,10 +1,10 @@
 package com.teamzero.product.recommend;
 
-import com.teamzero.product.domain.model.ProductEntity;
+import com.teamzero.product.domain.dto.recommend.RecommendDto;
 import java.util.List;
 
 public interface ProductRecInterface {
 
-  List<ProductEntity> recommendProducts();
+  List<RecommendDto> recommendProducts();
 
 }

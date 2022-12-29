@@ -4,7 +4,9 @@ import com.teamzero.product.domain.dto.recommend.RecommendDto;
 import com.teamzero.product.mapper.LikeAndStarProductMapper;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 
+@Component
 @RequiredArgsConstructor
 public class LikeAndStarProductRec implements ProductRecInterface{
 
