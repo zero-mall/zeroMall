@@ -88,7 +88,7 @@ public class ElevenScraper extends ScrapConfig
         if( currentPrice >= minPrice && currentPrice <= maxPrice){
           elevenShopProductDto.setProductId(product.getProductId());
           elevenShopProductDto.setImageUrl(imgUrl);
-          elevenShopProductDto.setMallName(getMallName());
+          //elevenShopProductDto.setMallName(getMallName());
           MallProductEntity mallProductEntity
               = elevenShopProductDto.toProductOfMallEntity();
           mallProductEntities.add(mallProductEntity);
