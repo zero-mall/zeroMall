@@ -1,6 +1,7 @@
 package com.teamzero.product.domain.repository;
 
 import com.teamzero.product.domain.model.ProductEntity;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -17,5 +18,9 @@ public interface ProductRepository extends JpaRepository<ProductEntity, Long> {
 
   @Query("select avg(p.viewCount) from ProductEntity p")
   double getTotalAvgViewCount();
+
+  List<ProductEntity> findAllByRegisteredAtAfterOrModifiedAtAfter(
+        LocalDateTime monthAgo, LocalDateTime monthAgo2);
+
 
 }
