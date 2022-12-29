@@ -1,5 +1,6 @@
-package com.teamzero.product.service;
+package com.teamzero.product.recommend;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 
@@ -43,14 +44,19 @@ class LowestPriceProductRecTest {
                 .maxPrice(100000)
                 .build());
         // given
-        given(productRepository.findAll())
-            .willReturn(getProductList());
-        given(mallProductRepository.findById(anyLong())).willReturn(mallProduct);
-        given(mallProductRepository.findAllByProductId(anyLong())).willReturn(getMallProductList());
+
+        given(mallProductRepository.findById(anyLong())).willReturn(
+            mallProduct);
+        given(mallProductRepository.findAllByProductId(anyLong())).willReturn(
+            getMallProductList());
+        given(
+            productRepository.findAllByRegisteredAtAfterOrModifiedAtAfter(any(),
+                any())).willReturn(getProductList());
         System.out.println(lowestPriceProductRec.recommendProducts());
 
 
     }
+
     private List<MallProductEntity> getMallProductList() {
 
         List<MallProductEntity> mallProductEntities = new ArrayList();
@@ -87,6 +93,7 @@ class LowestPriceProductRecTest {
         }
         return mallProductEntities;
     }
+
     private List<ProductEntity> getProductList() {
 
         List<ProductEntity> productEntities = new ArrayList();
