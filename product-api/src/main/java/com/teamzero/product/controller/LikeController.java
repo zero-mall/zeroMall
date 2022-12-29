@@ -3,6 +3,7 @@ package com.teamzero.product.controller;
 import com.teamzero.product.service.LikeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -10,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/member/like")
+@RequestMapping("/member/likes")
 public class LikeController {
 
     private final LikeService likeService;
@@ -19,7 +20,7 @@ public class LikeController {
     /**
      * 좋아요 등록
      */
-    @GetMapping
+    @PostMapping("/add")
     public boolean addLike(@RequestParam String email,
         @RequestParam Long productId) {
 
@@ -30,7 +31,7 @@ public class LikeController {
     /**
      * 좋아요 조회
      */
-    @GetMapping
+    @PostMapping("/view")
     public Long getLikes(
         @RequestParam Long productId) {
 
@@ -41,7 +42,7 @@ public class LikeController {
     /**
      * 좋아요 취소
      */
-    @PutMapping
+    @PostMapping("/cancel")
     public boolean cancelLike(@RequestParam String email,
         @RequestParam Long productId) {
         return likeService.cancelLike(email, productId);
