@@ -45,7 +45,7 @@ class SubscribeServiceTest {
             .memberStatus(MemberStatus.IN_USE)
             .build();
 
-        given(memberRepository.findByEmail(email))
+        given(memberRepository.findAllByEmail(email))
             .willReturn(Optional.of(member));
 
         // when
@@ -79,7 +79,7 @@ class SubscribeServiceTest {
             .build();
         String grade = "PREMIUM";
 
-        given(memberRepository.findByEmail(member.getEmail()))
+        given(memberRepository.findAllByEmail(member.getEmail()))
             .willReturn(Optional.of(member));
         given(memberGradeRepository.findById(anyLong()))
             .willReturn(Optional.of(memberGrade));
@@ -114,7 +114,7 @@ class SubscribeServiceTest {
             .rewardPointPct(1)
             .build();
 
-        given(memberRepository.findByEmail(member.getEmail()))
+        given(memberRepository.findAllByEmail(member.getEmail()))
             .willReturn(Optional.of(member));
 
         // when

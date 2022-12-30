@@ -29,7 +29,7 @@ public class SignInApplication {
     public String memberSignInToken(SignInDto signIn) {
 
         // 로그인 가능 여부 (아이디, 비밀번호와 일치하는 계정 확인)
-        MemberEntity member = memberRepository.findByEmail(signIn.getEmail())
+        MemberEntity member = memberRepository.findAllByEmail(signIn.getEmail())
             .orElseThrow(() -> new TeamZeroException(MEMBER_NOT_FOUND));
 
         if (!checkEncPassword(signIn.getPassword(), member.getPassword())) {

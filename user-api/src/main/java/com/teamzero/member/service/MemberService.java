@@ -47,7 +47,7 @@ public class MemberService {
     @Transactional
     public boolean withdraw(String email) {
 
-        MemberEntity memberEntity = memberRepository.findByEmail(email)
+        MemberEntity memberEntity = memberRepository.findAllByEmail(email)
             .orElseThrow(() -> new TeamZeroException(MEMBER_NOT_FOUND));
 
         memberEntity.setMemberStatus(MemberStatus.WITHDRAW);

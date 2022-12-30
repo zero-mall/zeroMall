@@ -72,7 +72,7 @@ public class SignUpApplication {
    * 중복데이터가 없으면 true반환
    */
   public boolean exsitsByEmail(String email) {
-    if(memberRepository.exsitsByEmail(email)){
+    if(memberRepository.existsByEmail(email)){
       throw new TeamZeroException(MEMBER_SIGNUP_EMAIL_DUPLICATE);
     }
     return true;
@@ -84,10 +84,10 @@ public class SignUpApplication {
    * 2. 정상 데이터 맞으면 인증여부 true로 변경
    */
   public SignUpDto.Response memberEmailAuthCheck(String email, String emailAuthKey) {
-    MemberEntity member = memberRepository.findByEmail(email).orElseThrow(()
+    MemberEntity member = memberRepository.findAllByEmail(email).orElseThrow(()
         -> new TeamZeroException(MEMBER_NOT_FOUND));
 
-    if (!memberRepository.exsitsByEmailAndEmailAuthKey(email, emailAuthKey)) {
+    if (!memberRepository.existsByEmailAndEmailAuthKey(email, emailAuthKey)) {
       throw new TeamZeroException(MEMBER_EMAIL_AUTH_NOT_FOUND);
     }
 

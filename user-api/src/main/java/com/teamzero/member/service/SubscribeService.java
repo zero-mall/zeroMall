@@ -32,7 +32,7 @@ public class SubscribeService {
         //TODO 결제 성공시 진행
         try {
             // 결제 성공시 회원조회하여 등급수정
-            MemberEntity member = memberRepository.findByEmail(email)
+            MemberEntity member = memberRepository.findAllByEmail(email)
                 .orElseThrow(() -> new TeamZeroException(MEMBER_NOT_FOUND));
             member.setMemberGradeEntity(
                 MemberGradeEntity.builder()
@@ -60,7 +60,7 @@ public class SubscribeService {
         //TODO 결제 성공시 진행
         try {
             // 결제 성공시 회원조회하여 등급수정
-            MemberEntity member = memberRepository.findByEmail(email)
+            MemberEntity member = memberRepository.findAllByEmail(email)
                 .orElseThrow(() -> new TeamZeroException(MEMBER_NOT_FOUND));
             MemberGradeEntity memberGrade = memberGradeRepository.findById(
                     subscribeId)
@@ -86,7 +86,7 @@ public class SubscribeService {
     public boolean cancel(String email, Long subscribeId) {
         try {
             // 회원조회하여 구독여부 false로 설정 후 MemberGradeEntity 삭제 처리
-            MemberEntity member = memberRepository.findByEmail(email)
+            MemberEntity member = memberRepository.findAllByEmail(email)
                 .orElseThrow(() -> new TeamZeroException(MEMBER_NOT_FOUND));
             memberGradeRepository.deleteById(subscribeId);
             member.setSubscribeYn(false);
