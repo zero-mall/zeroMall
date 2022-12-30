@@ -63,7 +63,7 @@ class MemberControllerTest {
                 .nickname("홍길동")
                 .email(TEST_EMAIL)
                 .password(BCrypt.hashpw(TEST_PASSWORD, BCrypt.gensalt()))
-                .memberGradeEntity(new MemberGradeEntity(1L, "BASIC", 2))
+//                .memberGradeEntity(new MemberGradeEntity(1L, ,"BASIC", 2))
                 .build();
 
         given(jwtAuthenticationProvider.getUserVo(anyString()))

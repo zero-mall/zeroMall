@@ -11,13 +11,10 @@ import org.springframework.stereotype.Repository;
 public interface MemberRepository extends JpaRepository<MemberEntity, Long> {
 
     Optional<MemberEntity> findByMemberIdAndEmail(Long memberId, String email);
-    long countByEmail(String email);
-    int countByEmailAndEmailAuthKey(String email, String emailAuthKey);
-    Optional<MemberEntity> findByEmail(String email);
+    boolean existsByEmailAndEmailAuthKey(String email, String emailAuthKey);
+    Optional<MemberEntity> findAllByEmail(String email);
 
     Page<MemberEntity> findAll(Pageable pageable);
 
     boolean existsByEmail(String email);
-
-
 }

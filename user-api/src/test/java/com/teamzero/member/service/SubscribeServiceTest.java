@@ -45,11 +45,11 @@ class SubscribeServiceTest {
             .memberStatus(MemberStatus.IN_USE)
             .build();
 
-        given(memberRepository.findByEmail(email))
+        given(memberRepository.findAllByEmail(email))
             .willReturn(Optional.of(member));
 
         // when
-        boolean result = subscribeService.addSubscribe(member.getEmail(),
+        boolean result = subscribeService.add(member.getEmail(),
             grade);
 
         // then
@@ -79,13 +79,13 @@ class SubscribeServiceTest {
             .build();
         String grade = "PREMIUM";
 
-        given(memberRepository.findByEmail(member.getEmail()))
+        given(memberRepository.findAllByEmail(member.getEmail()))
             .willReturn(Optional.of(member));
         given(memberGradeRepository.findById(anyLong()))
             .willReturn(Optional.of(memberGrade));
 
         // when
-        boolean result = subscribeService.modifySubscribe(member.getEmail(), 1L,
+        boolean result = subscribeService.modify(member.getEmail(), 1L,
             grade);
 
         // then
@@ -114,11 +114,11 @@ class SubscribeServiceTest {
             .rewardPointPct(1)
             .build();
 
-        given(memberRepository.findByEmail(member.getEmail()))
+        given(memberRepository.findAllByEmail(member.getEmail()))
             .willReturn(Optional.of(member));
 
         // when
-        boolean result = subscribeService.cancelSubscribe(member.getEmail(),
+        boolean result = subscribeService.cancel(member.getEmail(),
             memberGrade.getId());
 
         // then

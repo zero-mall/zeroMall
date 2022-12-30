@@ -2,6 +2,7 @@ package com.teamzero.member.controller;
 
 import com.teamzero.member.service.SubscribeService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,32 +21,30 @@ public class SubscribeController {
      * 구독
      */
     @GetMapping("/add")
-    public boolean addSubscribe(@RequestParam String email,
+    public ResponseEntity<Boolean> add(@RequestParam String email,
         @RequestParam String grade) {
 
-        return subscribeService.addSubscribe(email, grade);
+        return ResponseEntity.ok(subscribeService.add(email, grade));
     }
 
     /**
      * 구독 변경
      */
     @GetMapping("/modify")
-    public boolean modifySubscribe(@RequestParam String email,
+    public ResponseEntity<Boolean> modify(@RequestParam String email,
         @RequestParam Long subscribeId, @RequestParam String grade) {
-
-        return subscribeService.modifySubscribe(email, subscribeId, grade);
-
+        return ResponseEntity.ok(
+            subscribeService.modify(email, subscribeId, grade));
     }
 
     /**
      * 구독 취소
      */
     @PutMapping("/cancel")
-    public boolean cancelSubscribe(@RequestParam String email,
+    public ResponseEntity<Boolean> cancel(@RequestParam String email,
         @RequestParam Long subscribeId) {
-
-        return subscribeService.cancelSubscribe(email, subscribeId);
-
+        return ResponseEntity.ok(
+            subscribeService.cancel(email, subscribeId));
     }
 
 

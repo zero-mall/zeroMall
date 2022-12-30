@@ -3,8 +3,7 @@ package com.teamzero.member.application;
 import com.teamzero.domain.JwtAuthenticationProvider;
 import com.teamzero.domain.util.Aes256Util;
 import com.teamzero.member.domain.model.MemberEntity;
-import com.teamzero.member.domain.model.MemberGradeEntity;
-import com.teamzero.member.domain.model.dto.SignIn;
+import com.teamzero.member.domain.model.dto.SignInDto;
 import com.teamzero.member.domain.repository.MemberRepository;
 import com.teamzero.member.exception.ErrorCode;
 import com.teamzero.member.exception.TeamZeroException;
@@ -45,12 +44,12 @@ class SignInApplicationTest {
     void memberSignInFail_memberNotFound() {
 
         // given
-        given(memberRepository.findByEmail(anyString()))
+        given(memberRepository.findAllByEmail(anyString()))
                 .willReturn(Optional.empty());
 
         // when
         TeamZeroException exception = assertThrows(TeamZeroException.class,
-                () -> signInApplication.memberSignInToken(new SignIn(TEST_EMAIL, TEST_PASSWORD)));
+                () -> signInApplication.memberSignInToken(new SignInDto(TEST_EMAIL, TEST_PASSWORD)));
 
         // then
         Assertions.assertEquals(ErrorCode.MEMBER_NOT_FOUND, exception.getErrorCode());
@@ -69,12 +68,12 @@ class SignInApplicationTest {
                 .password(BCrypt.hashpw("5678912", BCrypt.gensalt()))
                 .build();
 
-        given(memberRepository.findByEmail(anyString()))
+        given(memberRepository.findAllByEmail(anyString()))
                 .willReturn(Optional.of(member));
 
         // when
         TeamZeroException exception = assertThrows(TeamZeroException.class,
-                () -> signInApplication.memberSignInToken(new SignIn(TEST_EMAIL, TEST_PASSWORD)));
+                () -> signInApplication.memberSignInToken(new SignInDto(TEST_EMAIL, TEST_PASSWORD)));
 
         // then
         Assertions.assertEquals(ErrorCode.MEMBER_SIGNIN_NOT_POSSIBLE, exception.getErrorCode());
@@ -102,14 +101,14 @@ class SignInApplicationTest {
                 .signWith(SignatureAlgorithm.HS256, "TEAMZERO_ZEROMALL")
                 .compact();
 
-        given(memberRepository.findByEmail(anyString()))
+        given(memberRepository.findAllByEmail(anyString()))
                 .willReturn(Optional.of(member));
 
         given(jwtAuthenticationProvider.createToken(anyLong(), anyString(), anyString()))
                 .willReturn(token);
 
         // when
-        String result = signInApplication.memberSignInToken(new SignIn(TEST_EMAIL, TEST_PASSWORD));
+        String result = signInApplication.memberSignInToken(new SignInDto(TEST_EMAIL, TEST_PASSWORD));
 
         // then
         Assertions.assertNotNull(result);

@@ -3,7 +3,7 @@ package com.teamzero.member.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.teamzero.domain.util.Aes256Util;
 import com.teamzero.member.application.SignInApplication;
-import com.teamzero.member.domain.model.dto.SignIn;
+import com.teamzero.member.domain.model.dto.SignInDto;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.junit.jupiter.api.Test;
@@ -54,7 +54,7 @@ class SignInControllerTest {
         mockMvc.perform(post("/signIn/member")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(
-                                new SignIn(TEST_EMAIL, TEST_PASSWORD)
+                                new SignInDto(TEST_EMAIL, TEST_PASSWORD)
                         ))
                 )
                 .andExpect(status().isOk())

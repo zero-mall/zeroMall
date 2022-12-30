@@ -1,7 +1,7 @@
 package com.teamzero.member.controller;
 
 import com.teamzero.member.application.SignInApplication;
-import com.teamzero.member.domain.model.dto.SignIn;
+import com.teamzero.member.domain.model.dto.SignInDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,7 +21,7 @@ public class SignInController {
      * - JWT 토큰 발행
      */
     @PostMapping("/member")
-    public ResponseEntity<String> memberSignIn(@RequestBody SignIn signIn){
+    public ResponseEntity<String> memberSignIn(@RequestBody SignInDto signIn){
 
         return ResponseEntity.ok(signInApplication.memberSignInToken(signIn));
 
@@ -32,7 +32,7 @@ public class SignInController {
      * - JWT 토큰 발행
      */
     @PostMapping("/admin")
-    public ResponseEntity<String> adminSignIn(@RequestBody SignIn signIn){
+    public ResponseEntity<String> adminSignIn(@RequestBody SignInDto signIn){
 
         return ResponseEntity.ok(signInApplication.adminSignInToken(signIn));
 

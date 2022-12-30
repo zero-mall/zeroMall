@@ -1,57 +1,60 @@
 package com.teamzero.member.controller;
 
-import com.teamzero.member.domain.model.dto.SignUp;
-import com.teamzero.member.service.AdminService;
-import com.teamzero.member.service.MemberService;
+import com.teamzero.member.application.SignUpApplication;
+import com.teamzero.member.domain.model.dto.AdminInfoDto;
+import com.teamzero.member.domain.model.dto.SignUpDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/signUp")
 public class SignUpController {
 
-    private final MemberService memberService;
-    private final AdminService adminService;
+    private final SignUpApplication signUpApplication;
 
     /**
      * 일반 회원 가입
      */
     @PostMapping("/member")
-    public ResponseEntity<?> memberRegister(@RequestBody SignUp signUp) {
-        var member = memberService.memberRegister(signUp);
-
-        return ResponseEntity.ok(member);
+    public ResponseEntity<SignUpDto.Response> registerMember(
+        @RequestBody SignUpDto.Request signUp) {
+        return ResponseEntity.ok(signUpApplication.register(signUp));
     }
 
     /**
      * 이메일 중복 체크
      * 에러 정책 확립 후 return값 변경
-     * @param email
      */
     @GetMapping("/checkMail")
-    public ResponseEntity<?> checkEmailDuplicate(@RequestParam String email) {
-        var result = memberService.findByEmail(email);
-        return ResponseEntity.ok(result);
+    public ResponseEntity<Boolean> checkEmailDuplicate(
+        @RequestParam String email) {
+        return ResponseEntity.ok(signUpApplication.exsitsByEmail(email));
     }
 
     /**
      * 회원가입 후 이메일 인증
      */
     @GetMapping("/email-auth")
-    public ResponseEntity<?> memberEmailAuth(@RequestParam String key, @RequestParam String id) {
-        var result = memberService.memberEmailAuthCheck(id, key);
-
-        return ResponseEntity.ok(result);
+    public ResponseEntity<SignUpDto.Response> sendMemberEmailAuth(
+        @RequestParam String key, @RequestParam String id) {
+        return ResponseEntity.ok(
+            signUpApplication.memberEmailAuthCheck(id, key));
     }
 
     /**
      * 관리자 회원 가입
      */
     @PostMapping("/admin")
-    public ResponseEntity<?> adminRegister(@RequestBody SignUp signUp) {
-        return ResponseEntity.ok(adminService.adminRegister(signUp));
+    public ResponseEntity<AdminInfoDto> registerAdmin(
+        @RequestBody SignUpDto.Request signUp) {
+        return ResponseEntity.ok(signUpApplication.registerAdmin(signUp));
     }
 
 }
