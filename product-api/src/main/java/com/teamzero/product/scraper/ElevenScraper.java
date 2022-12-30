@@ -15,12 +15,14 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+@Slf4j
 public class ElevenScraper extends ScrapConfig
     implements ProductScraperInterface {
   static private final String SEARCH_URL =
@@ -99,6 +101,7 @@ public class ElevenScraper extends ScrapConfig
       }
 
     } catch (IOException e) {
+      log.warn(e.getMessage());
       throw new RuntimeException(e);
     }
     return mallProductEntities;

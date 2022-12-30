@@ -95,7 +95,7 @@ class LikeServiceTest {
             .willReturn(123L);
 
         // when
-        Long response = likeService.likeCount(1L);
+        Long response = likeService.countLikes(1L);
 
         // then
         Assertions.assertEquals(123L, response);
