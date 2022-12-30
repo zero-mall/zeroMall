@@ -1,6 +1,7 @@
 package com.teamzero.product.client;
 
-import com.teamzero.product.client.RedisClient;
+import com.teamzero.product.redis.RedisClient;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -12,6 +13,7 @@ class RedisClientTest {
   private RedisClient redisClient;
 
   @Test
+  @DisplayName("커스텀 레디스 클라이언트 테스트")
   void test() {
 
     // given

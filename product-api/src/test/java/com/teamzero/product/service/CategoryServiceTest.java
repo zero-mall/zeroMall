@@ -3,8 +3,8 @@ package com.teamzero.product.service;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 
-import com.teamzero.product.domain.dto.product.ProductDetail;
-import com.teamzero.product.domain.dto.category.CategoryRegister;
+import com.teamzero.product.domain.dto.product.ProductDetailDto;
+import com.teamzero.product.domain.dto.category.CategoryRegisterDto;
 import com.teamzero.product.domain.repository.CategoryRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -26,7 +26,7 @@ public class CategoryServiceTest {
   void registerCategories() {
 
     // given
-    ProductDetail.Request request = ProductDetail.Request.builder()
+    ProductDetailDto.Request request = ProductDetailDto.Request.builder()
         .category1("디지털/가전")
         .category2("PC")
         .category3("조립/베어본PC")
@@ -42,7 +42,7 @@ public class CategoryServiceTest {
 
     // when
     var result = categoryService.categoryRegister(
-        CategoryRegister.builder().catName(request.getCategory1()).catType("atype").build()
+        CategoryRegisterDto.builder().catName(request.getCategory1()).catType("atype").build()
     );
 
     // then

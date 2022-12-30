@@ -6,6 +6,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import java.io.IOException;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import org.jsoup.Jsoup;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -13,7 +14,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest
 class TmonShopProductScraperTest {
 
-  public static final String TMON_URL = "https://search.tmon.co.kr/api/search/v4/deals?_=1670946124923"
+  public static final String TMON_URL
+      = "https://search.tmon.co.kr/api/search/v4/deals?_=1670946124923"
       + "&keyword=%s&page=1&size=10&minPrice=%d&maxPrice=%d";
 
   private static final double TOLERANCE  = 0.05;
@@ -29,7 +31,8 @@ class TmonShopProductScraperTest {
 
     // when
     String jsonStr = Jsoup.connect(String.format(TMON_URL,
-            URLEncoder.encode(keyword, "UTF-8"), minPrice, maxPrice))
+            URLEncoder.encode(keyword, StandardCharsets.UTF_8), minPrice, maxPrice))
+        .timeout(50000)
         .userAgent("Mozilla")
         .ignoreContentType(true)
         .execute().body();

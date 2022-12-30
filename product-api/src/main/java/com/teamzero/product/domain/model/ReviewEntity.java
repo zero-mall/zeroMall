@@ -12,13 +12,13 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.envers.AuditOverride;
 
+@Data
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 @AuditOverride(forClass = BaseEntity.class)
 @Table(name = "REVIEW")
-@Data
 public class ReviewEntity extends BaseEntity {
 
     @Id

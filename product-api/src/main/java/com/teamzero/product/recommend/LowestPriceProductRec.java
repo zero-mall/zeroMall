@@ -23,17 +23,14 @@ public class LowestPriceProductRec implements ProductRecInterface {
 
     /**
      * 한달 이내 최대 낙폭의 상품 상위 5개 반환
-     *
-     * @return
      */
     @Override
     public List<RecommendDto> recommendProducts() {
 
-
         HashMap<Long, Double> productMap = new HashMap<>();
         List<RecommendDto> recommendList = new ArrayList<>();
 
-        // 한달이내에 등록, 수정된 상품만 불러오기
+        // 한달 이내에 등록, 수정된 상품만 불러오기
         LocalDateTime monthAgo = LocalDateTime.now().minusMonths(1);
         List<ProductEntity> productEntities =
             productRepository.findAllByRegisteredAtAfterOrModifiedAtAfter(
@@ -50,9 +47,10 @@ public class LowestPriceProductRec implements ProductRecInterface {
             productMap.put(productId, recommendDtoTmp.getPerc());
 
         }
+
         List<Long> keyList = new ArrayList<>(productMap.keySet());
 
-        //Collections 의 sort 활용하여 퍼센테이지별로 정렬
+        // Collections 의 sort 활용하여 퍼센테이지별로 정렬
         Collections.sort(keyList,
             (v1, v2) -> (productMap.get(v1).compareTo(productMap.get(v2))));
 
@@ -100,7 +98,7 @@ public class LowestPriceProductRec implements ProductRecInterface {
 
         List<Long> keyList = new ArrayList<>(productMap.keySet());
 
-        //Collections 의 sort 활용하여 퍼센테이지별로 정렬
+        // Collections 의 sort 활용하여 퍼센테이지별로 정렬
         Collections.sort(keyList,
             (v1, v2) -> (productMap.get(v1).compareTo(productMap.get(v2))));
 

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface CategoryRepository extends JpaRepository<CategoryEntity, String> {
+
   boolean existsByCatName(String catName);
   int countByCatIdLike(String catId);
   boolean existsByCatId(String catId);

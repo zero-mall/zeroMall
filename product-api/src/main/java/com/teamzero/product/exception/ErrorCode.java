@@ -10,7 +10,7 @@ public enum ErrorCode {
 
     // 카테고리 관련 에러 코드
     CATEGORY_NAME_DUPLICATE("중복된 카테고리명이 존재합니다.", HttpStatus.BAD_REQUEST),
-    CATEGORY_PARAMETER_ERROR("요청값이 유효하지 않습니다.", HttpStatus.BAD_REQUEST),
+    CATEGORY_SEARCH_BAD_REQEUST("요청값이 유효하지 않습니다.", HttpStatus.BAD_REQUEST),
     CATEGORY_ID_FULL_ERROR("카테고리ID를 더이상 추가할 수 없습니다.", HttpStatus.INTERNAL_SERVER_ERROR),
     CATEGORY_SUB_DATA_EXISTS("하위 카테고리가 존재합니다.", HttpStatus.BAD_REQUEST),
     CATEGORY_PARANTID_ERROR("부모 카테고리Id가 없습니다.", HttpStatus.BAD_REQUEST),
@@ -36,6 +36,9 @@ public enum ErrorCode {
     LIKE_MEMBER_NOT_FOUND("해당 회원이 존재하지 않습니다.", HttpStatus.BAD_REQUEST),
     LIKE_ALREADY_LIKED("이미 좋아요를 누른 상품입니다.", HttpStatus.BAD_REQUEST),
     LIKE_ALREADY_UNLIKED("이미 좋아요를 취소한 상품입니다.", HttpStatus.BAD_REQUEST),
+
+    // 조회수 관련 에러 코드
+    VIEW_SEARCH_BAD_REQUEST("조회수 요청값이 유효하지 않습니다.", HttpStatus.BAD_REQUEST),
 
     // 메일 전송 관련 에러 코드
     MAIL_SEND_FAIL("메일 전송에 실패하였습니다.", HttpStatus.INTERNAL_SERVER_ERROR),

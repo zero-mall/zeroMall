@@ -6,7 +6,9 @@ import org.springframework.scheduling.annotation.SchedulingConfigurer;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.springframework.scheduling.config.ScheduledTaskRegistrar;
 
-//Multi Thread처리를 하기 위한 스케쥴러 Config
+/**
+ * Multi Thread처리를 하기 위한 스케쥴러 Config
+ */
 @Configuration
 public class SchedulerConfig implements SchedulingConfigurer {
 

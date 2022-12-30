@@ -1,6 +1,6 @@
 package com.teamzero.product.redis;
 
-import com.teamzero.product.domain.dto.product.MallProductSearch.Response;
+import com.teamzero.product.domain.dto.product.MallProductSearchDto.Response;
 import com.teamzero.product.domain.model.constants.CacheKey;
 import java.util.HashMap;
 import java.util.List;

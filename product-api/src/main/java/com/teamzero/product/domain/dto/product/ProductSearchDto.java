@@ -1,6 +1,6 @@
 package com.teamzero.product.domain.dto.product;
 
-import com.teamzero.product.domain.dto.product.NaverSearch.Response.NaverProduct;
+import com.teamzero.product.domain.dto.product.NaverSearchDto.Response.NaverProduct;
 import java.util.List;
 import javax.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
@@ -9,7 +9,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-public class ProductSearch {
+public class ProductSearchDto {
 
   @Getter
   @Setter
@@ -39,7 +39,7 @@ public class ProductSearch {
     private long total;
     private List<NaverProduct> content;
 
-    public static ProductSearch.Response of(NaverSearch.Response response) {
+    public static ProductSearchDto.Response of(NaverSearchDto.Response response) {
       return Response.builder()
           .pageNumber(response.getPageNumber())
           .pageSize(response.getPageSize())
