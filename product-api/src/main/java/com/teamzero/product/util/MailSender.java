@@ -44,7 +44,7 @@ public class MailSender {
     return result;
   }
 
-  public String getSubcribeHTML(String ageGroupPreferHTMLContent,
+  public String getSubscribeHTML(String ageGroupPreferHTMLContent,
       String lowestPriceProductHTMLContent, String likeAndStarHTMLContent){
 
     String template =

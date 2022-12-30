@@ -5,14 +5,16 @@ import com.teamzero.product.domain.model.MallProductEntity;
 import com.teamzero.product.domain.model.ProductEntity;
 import java.io.IOException;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
-
+@Slf4j
 public class GmarketScraper extends ScrapConfig implements
     ProductScraperInterface {
 
@@ -33,15 +35,15 @@ public class GmarketScraper extends ScrapConfig implements
         try {
             Connection connection = Jsoup.connect(
                 SEARCH_URL + URLEncoder.encode(
-                    product.getProductName(), "UTF-8") + priceAdd
+                    product.getProductName(), StandardCharsets.UTF_8) + priceAdd
             );
-            System.out.println(SEARCH_URL + URLEncoder.encode(
-                product.getProductName(), "UTF-8") + priceAdd);
+
             connection
                 .header("User-Agent",
                     "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36");
             document = connection.get();
         } catch (IOException e) {
+            log.warn(e.getMessage());
             e.printStackTrace();
 
         }

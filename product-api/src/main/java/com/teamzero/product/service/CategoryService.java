@@ -268,6 +268,7 @@ public class CategoryService {
       throw new TeamZeroException(CATEGORY_SEARCH_BAD_REQEUST);
     }
 
+
     boolean isChildYn = false;
 
     //소분류는 하위 카테고리가 없으므로 바로 삭제
@@ -298,8 +299,8 @@ public class CategoryService {
 
     CategoryEntity category =
         categoryRepository.findByCatId(request.getCurrentCatId())
-                .orElseThrow(() ->
-                    new TeamZeroException(CATEGORY_SEARCH_BAD_REQEUST));
+            .orElseThrow(() ->
+                new TeamZeroException(CATEGORY_SEARCH_BAD_REQEUST));
 
     category.setCatName(request.getCatName());
     categoryRepository.save(category);

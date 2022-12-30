@@ -52,7 +52,7 @@ public class SubscribeScheduler {
 
       ageGroupPreferProductRec.setUserAge(subscriber.getAge());
 
-      String text = mailSender.getSubcribeHTML(
+      String text = mailSender.getSubscribeHTML(
          mailSender.getAgeGroupPreferHTMLContent(ageGroupPreferProductRec.recommendProducts()),
          mailSender.getLowestPriceProductHTMLContent(lowestPriceProductRec.recommendProducts()),
          mailSender.getLikeAndStarHTMLContent(likeAndStarProductRec.recommendProducts())

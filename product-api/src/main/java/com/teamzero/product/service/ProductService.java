@@ -45,7 +45,7 @@ public class ProductService {
       ProductSearchDto.Response response;
       
       // 레디스에 검색 결과가 저장되어 있는지 확인
-      var redisNaverSearchOptional
+      Optional<RedisNaverSearch> redisNaverSearchOptional
           = redisClient.getData(request.getKeyword(), RedisNaverSearch.class);
 
       if (redisNaverSearchOptional.isPresent()) {
