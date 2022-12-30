@@ -49,7 +49,7 @@ class SubscribeServiceTest {
             .willReturn(Optional.of(member));
 
         // when
-        boolean result = subscribeService.addSubscribe(member.getEmail(),
+        boolean result = subscribeService.add(member.getEmail(),
             grade);
 
         // then
@@ -85,7 +85,7 @@ class SubscribeServiceTest {
             .willReturn(Optional.of(memberGrade));
 
         // when
-        boolean result = subscribeService.modifySubscribe(member.getEmail(), 1L,
+        boolean result = subscribeService.modify(member.getEmail(), 1L,
             grade);
 
         // then
@@ -118,7 +118,7 @@ class SubscribeServiceTest {
             .willReturn(Optional.of(member));
 
         // when
-        boolean result = subscribeService.cancelSubscribe(member.getEmail(),
+        boolean result = subscribeService.cancel(member.getEmail(),
             memberGrade.getId());
 
         // then

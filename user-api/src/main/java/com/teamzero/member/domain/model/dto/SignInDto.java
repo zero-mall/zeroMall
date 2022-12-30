@@ -1,4 +1,4 @@
-package com.teamzero.product.domain.dto.recommend;
+package com.teamzero.member.domain.model.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,9 +9,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class SubscriberDto {
+public class SignInDto {
 
-  private String email;
-  private int age;
+    private String email;
+    private String password;
 
 }

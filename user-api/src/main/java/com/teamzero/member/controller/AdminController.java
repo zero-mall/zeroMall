@@ -1,12 +1,8 @@
 package com.teamzero.member.controller;
 
-import static com.teamzero.member.exception.ErrorCode.TOKEN_NOT_VALID;
-
-import com.teamzero.domain.JwtAuthenticationProvider;
-import com.teamzero.member.domain.model.dto.AdminInfo;
-import com.teamzero.member.domain.model.dto.MemberInfo;
-import com.teamzero.member.domain.model.dto.Modify;
-import com.teamzero.member.exception.TeamZeroException;
+import com.teamzero.member.domain.model.dto.AdminInfoDto;
+import com.teamzero.member.domain.model.dto.MemberInfoDto;
+import com.teamzero.member.domain.model.dto.ModifyDto;
 import com.teamzero.member.service.AdminService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -27,17 +23,16 @@ public class AdminController {
 
     private final AdminService adminService;
 
-    private final JwtAuthenticationProvider jwtAuthenticationProvider;
 
     /**
      * 일반 회원 목록 조회
      */
     @GetMapping("/member/list")
-    public ResponseEntity<Page<MemberInfo>> getMemberList(
+    public ResponseEntity<Page<MemberInfoDto>> getMemberList(
         @RequestHeader(name = "Authentication") String token,
         @RequestBody PageRequest pageRequest){
 
-        validateToken(token);
+        adminService.validateToken(token);
 
         return ResponseEntity.ok(adminService.getMemberList(pageRequest));
     }
@@ -46,11 +41,11 @@ public class AdminController {
      * 일반 회원 상세 조회
      */
     @GetMapping("/member/detail/{id}")
-    public ResponseEntity<MemberInfo> getMemberDetail(
+    public ResponseEntity<MemberInfoDto> getMemberDetail(
         @RequestHeader(name = "Authentication") String token,
         @PathVariable Long id){
 
-        validateToken(token);
+        adminService.validateToken(token);
 
         return ResponseEntity.ok(adminService.getMemberDetail(id));
     }
@@ -60,11 +55,11 @@ public class AdminController {
      * - 회원 등급 또는 상태 수정, 또는 둘 다 수정
      */
     @PutMapping("/member/detail/modify")
-    public ResponseEntity<MemberInfo> modifyMemberGradeOrStatus(
+    public ResponseEntity<MemberInfoDto> modifyMemberGradeOrStatus(
         @RequestHeader(name = "Authentication") String token,
-        @RequestBody Modify modify){
+        @RequestBody ModifyDto modify){
 
-        validateToken(token);
+        adminService.validateToken(token);
 
         return ResponseEntity.ok(adminService.modifyMemberGradeOrStatus(modify));
     }
@@ -75,26 +70,14 @@ public class AdminController {
      *   ( 차후 서비스가 확장되면 일괄적으로 관리자 회원 계정 삭제 )
      */
     @PutMapping("/admin/detail/modify")
-    public ResponseEntity<AdminInfo> modifyAdminStatus(
+    public ResponseEntity<AdminInfoDto> modifyAdminStatus(
         @RequestHeader(name = "Authentication") String token,
-        @RequestBody Modify modify){
+        @RequestBody ModifyDto modify){
 
-        validateToken(token);
+        adminService.validateToken(token);
 
         return ResponseEntity.ok(adminService.modifyAdminStatus(modify));
     }
 
-    private void validateToken(String token) {
-        // 토큰이 유효한지 확인
-        if (!jwtAuthenticationProvider.validToken(token)) {
-            throw new TeamZeroException(TOKEN_NOT_VALID);
-        }
-
-        // 토큰의 요청자 이메일이 관리자인지 확인
-        if (!adminService.existByEmail(
-            jwtAuthenticationProvider.getUserVo(token).getEmail())) {
-            throw new TeamZeroException(TOKEN_NOT_VALID);
-        }
-    }
 
 }

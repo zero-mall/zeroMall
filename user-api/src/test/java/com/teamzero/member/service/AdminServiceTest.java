@@ -1,17 +1,26 @@
 package com.teamzero.member.service;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.BDDMockito.given;
+
+import com.teamzero.member.application.SignUpApplication;
 import com.teamzero.member.domain.model.AdminEntity;
 import com.teamzero.member.domain.model.MemberEntity;
 import com.teamzero.member.domain.model.MemberGradeEntity;
 import com.teamzero.member.domain.model.constants.AdminStatus;
 import com.teamzero.member.domain.model.constants.MemberStatus;
-import com.teamzero.member.domain.model.dto.AdminInfo;
-import com.teamzero.member.domain.model.dto.MemberInfo;
-import com.teamzero.member.domain.model.dto.Modify;
-import com.teamzero.member.domain.model.dto.SignUp;
+import com.teamzero.member.domain.model.dto.AdminInfoDto;
+import com.teamzero.member.domain.model.dto.MemberInfoDto;
+import com.teamzero.member.domain.model.dto.ModifyDto;
+import com.teamzero.member.domain.model.dto.SignUpDto;
 import com.teamzero.member.domain.repository.AdminRepository;
 import com.teamzero.member.domain.repository.MemberGradeRepository;
 import com.teamzero.member.domain.repository.MemberRepository;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -23,11 +32,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
 class AdminServiceTest {
@@ -43,6 +47,8 @@ class AdminServiceTest {
 
     @InjectMocks
     private AdminService adminService;
+    @InjectMocks
+    private SignUpApplication signUpApplication;
 
     @Test
     @DisplayName("일반 회원 목록 조회")
@@ -50,12 +56,40 @@ class AdminServiceTest {
 
         // given
         Pageable pageable = PageRequest.of(0, 10);
+        MemberEntity member1 = MemberEntity.builder()
+                .memberId(1L)
+                    .email("test1@gmail.com")
+                        .age(1)
+                            .nickname("a")
+                                .password("1234")
+            .memberGradeEntity(new MemberGradeEntity())
+        .build();
+        MemberEntity member2 = MemberEntity.builder()
+            .memberId(2L)
+            .email("test2@gmail.com")
+            .age(1)
+            .nickname("a")
+            .password("1234")
+            .memberGradeEntity(new MemberGradeEntity())
+            .build();
+        MemberEntity member3 = MemberEntity.builder()
+            .memberId(1L)
+            .email("test3@gmail.com")
+            .age(1)
+            .nickname("a")
+            .password("1234")
+            .memberGradeEntity(new MemberGradeEntity())
+            .build();
+
+        memberRepository.save(member1);
+        memberRepository.save(member2);
+        memberRepository.save(member3);
 
         given(memberRepository.findAll((Pageable) any()))
                 .willReturn(getTestMemberPage(pageable));
 
         // when
-        Page<MemberInfo> result = adminService.getMemberList(pageable);
+        Page<MemberInfoDto> result = adminService.getMemberList(pageable);
 
         // then
         Assertions.assertNotNull(result);
@@ -81,7 +115,7 @@ class AdminServiceTest {
                 .willReturn(Optional.of(member));
 
         // when
-        MemberInfo memberInfo = adminService.getMemberDetail(1L);
+        MemberInfoDto memberInfo = adminService.getMemberDetail(1L);
 
         // then
         Assertions.assertEquals(1L, memberInfo.getMemberId());
@@ -95,7 +129,7 @@ class AdminServiceTest {
     void modifyMemberGradeOrStatus() {
 
         // given
-        Modify modify = Modify.builder()
+        ModifyDto modify = ModifyDto.builder()
                 .memberId(1L)
                 .grade("BASIC")
                 .status(String.valueOf(MemberStatus.STOPPED))
@@ -121,7 +155,7 @@ class AdminServiceTest {
                 .willReturn(Optional.of(memberGrade));
 
         // when
-        MemberInfo memberInfo = adminService.modifyMemberGradeOrStatus(modify);
+        MemberInfoDto memberInfo = adminService.modifyMemberGradeOrStatus(modify);
 
         // then
         Assertions.assertEquals(1L, memberInfo.getMemberId());
@@ -136,12 +170,12 @@ class AdminServiceTest {
     void adminRegister() {
 
         // given
-        SignUp signUp = new SignUp();
+        SignUpDto.Request signUp = new SignUpDto.Request();
         signUp.setEmail("test@gmail.com");
         signUp.setPassword("test1");
 
         // when
-        AdminInfo adminInfo = adminService.adminRegister(signUp);
+        AdminInfoDto adminInfo = signUpApplication.registerAdmin(signUp);
 
         // then
         Assertions.assertEquals("test@gmail.com", adminInfo.getEmail());
@@ -154,7 +188,7 @@ class AdminServiceTest {
     void modifyAdminStatus() {
 
         // given
-        Modify modify = Modify.builder()
+        ModifyDto modify = ModifyDto.builder()
             .memberId(1L)
             .status(String.valueOf(AdminStatus.STOPPED))
             .build();
@@ -170,7 +204,7 @@ class AdminServiceTest {
             .willReturn(Optional.of(admin));
 
         // when
-        AdminInfo adminInfo = adminService.modifyAdminStatus(modify);
+        AdminInfoDto adminInfo = adminService.modifyAdminStatus(modify);
 
         // then
         Assertions.assertEquals(1L, adminInfo.getAdminId());
