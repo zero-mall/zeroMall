@@ -5,8 +5,7 @@ import static com.teamzero.product.exception.ErrorCode.STAR_MEMBER_NOT_FOUND;
 import static com.teamzero.product.exception.ErrorCode.STAR_SCORE_RANGE_NOT_VALID;
 
 import com.teamzero.member.domain.repository.MemberRepository;
-import com.teamzero.product.domain.dto.Star;
-import com.teamzero.product.domain.dto.Star.Request;
+import com.teamzero.product.domain.dto.StarDto;
 import com.teamzero.product.domain.model.StarEntity;
 import com.teamzero.product.domain.repository.ProductRepository;
 import com.teamzero.product.domain.repository.StarRepository;
@@ -29,36 +28,59 @@ public class StarService {
 
   /**
    * 별점 등록 및 수정
-   * - 작성자(회원)이 존재하지 않는 경우,
-   *   상품이 존재하지 않는 경우, 별점이 1 ~ 5 사이가 아닌 경우 실패 응답
+   * - 이미 등록된 별점인 경우 기존 별점을 수정
    * - 범위 : 1 ~ 5 (0은 등록되지 않았거나 등록 취소한 상태)
-   * - 관련 정책 : 회원이 상품을 구매한 뒤 별점을 등록을 한다.
-   *             (이때, 회원이 이미 해당 상품에 별점을 등록한 경우라면 별점 정보를 수정한다.)
+   * - 실패 응답 : 작성자(회원)이 존재하지 않는 경우,
+   *             상품이 존재하지 않는 경우, 별점이 1 ~ 5 사이가 아닌 경우 실패 응답
    */
   @Transactional
-  public Star.Response createOrModifyStar(Star.Request request, String email) {
+  public StarDto createOrModifyStar(Long productId, String email, int score) {
 
-    // 1. 요청값 및 토큰의 회원 정보가 유효한지 확인
-    validateCreateOrModifyStarRequest(request, email);
+    // 1. 요청값이 유효한 값인지 확인
+    validateCreateOrModifyStarRequest(productId, email, score);
 
-    // 2. 회원 이메일로 해당 상품에 이미 등록된 별점이 있으면 별점 정보 수정, 없으면 신규 등록
+    // 2. 해당 상품에 회원이 별점을 등록했었는지 조회
     Optional<StarEntity> optionalStar
-        = starRepository.findByProductIdAndMemberEmail(request.getProductId(), email);
+        = starRepository.findByProductIdAndEmail(productId, email);
 
+    // 3. 이미 등록을 했다면 수정하고, 그렇지 않으면 신규 저장
     if (optionalStar.isPresent()) {
-      optionalStar.get().setScore(request.getScore());
+      optionalStar.get().setScore(score);
     } else {
       starRepository.save(
           StarEntity.builder()
-              .memberEmail(email)
-              .productId(request.getProductId())
-              .score(request.getScore())
+              .productId(productId)
+              .email(email)
+              .score(score)
               .build()
       );
     }
 
-    // 3. 상품의 별점 등록수와 누적 평균 정산
-    return getAvgStarAndCountByProductId(request.getProductId());
+    // 4. 상품 별점 평균과 별점 등록 갯수 반환
+    return getAvgStarAndCountByProductId(productId);
+  }
+
+  /**
+   * 별점 등록 및 수정 validation
+   */
+
+  private void validateCreateOrModifyStarRequest(
+      Long productId, String email, int score) {
+
+    // 상품이 존재하지 않는 경우
+    if (!productRepository.existsByProductId(productId)) {
+      throw new TeamZeroException(PRODUCT_NOT_FOUND);
+    }
+
+    // 회원이 존재하지 않는 경우
+    if (!memberRepository.existsByEmail(email)) {
+      throw new TeamZeroException(STAR_MEMBER_NOT_FOUND);
+    }
+
+    // 별점의 범위가 1 ~ 5 사이가 아닌 경우
+    if (!(score >= 1 && score <= 5)) {
+      throw new TeamZeroException(STAR_SCORE_RANGE_NOT_VALID);
+    }
   }
 
   /**
@@ -66,38 +88,20 @@ public class StarService {
    * - 상품 ID를 받으면, 해당 상품의 평균 별점과 등록수 반환
    */
   @Transactional(readOnly = true)
-  public Star.Response getAvgStarAndCountByProductId(Long productId) {
+  public StarDto getAvgStarAndCountByProductId(Long productId) {
 
+    // 총 별점 갯수
     long count = starRepository.countAllByProductId(productId);
+    
+    // 별점 평균
     double avgStar = starRepository.calAvgStarByProductId(productId);
 
-    return Star.Response.builder()
+    return StarDto.builder()
         .productId(productId)
-        .avgStar(avgStar)
-        .count(count)
+        .starAvg(avgStar)
+        .starCount(count)
         .build();
 
-  }
-
-  /**
-   * 별점 등록 및 수정 validation
-   */
-
-  private void validateCreateOrModifyStarRequest(Request request, String email) {
-    // 회원 존재 여부 확인
-    if (!memberRepository.existsByEmail(email)) {
-      throw new TeamZeroException(STAR_MEMBER_NOT_FOUND);
-    }
-
-    // 상품 존재 여부 확인
-    if (!productRepository.existsByProductId(request.getProductId())) {
-      throw new TeamZeroException(PRODUCT_NOT_FOUND);
-    }
-
-    // 별점 범위 확인
-    if (!(request.getScore() >= 1 && request.getScore() <= 5)) {
-      throw new TeamZeroException(STAR_SCORE_RANGE_NOT_VALID);
-    }
   }
 
 }

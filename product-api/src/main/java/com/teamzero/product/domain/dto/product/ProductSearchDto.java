@@ -9,7 +9,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-public class ProductSearch {
+public class ProductSearchDto {
 
   @Getter
   @Setter
@@ -39,7 +39,7 @@ public class ProductSearch {
     private long total;
     private List<NaverProduct> content;
 
-    public static ProductSearch.Response of(NaverSearchDto.Response response) {
+    public static ProductSearchDto.Response of(NaverSearchDto.Response response) {
       return Response.builder()
           .pageNumber(response.getPageNumber())
           .pageSize(response.getPageSize())

@@ -39,7 +39,7 @@ public class NaverSearchDto {
     // 검색 결과 정렬
     private String sort;
 
-    public static Request of(ProductSearch.Request request){
+    public static Request of(ProductSearchDto.Request request){
 
       return Request.builder()
           .query(request.getKeyword())

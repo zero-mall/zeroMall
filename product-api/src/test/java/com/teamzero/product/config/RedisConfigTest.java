@@ -16,7 +16,7 @@ class RedisConfigTest {
   private RedisTemplate redisTemplate;
 
   @Test
-  @DisplayName("Redis Test1 : String")
+  @DisplayName("레디스 템플릿 테스트 : String 저장")
   void test1() {
 
     // given
@@ -34,7 +34,7 @@ class RedisConfigTest {
   }
 
   @Test
-  @DisplayName("Redis Test2 : List")
+  @DisplayName("레디스 템플릿 테스트 : List 저장")
   void test2() {
 
     // given

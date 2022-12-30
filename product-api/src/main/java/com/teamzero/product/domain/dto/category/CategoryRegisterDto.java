@@ -18,7 +18,9 @@ public class CategoryRegisterDto {
 
   private CategoryType catTypeObject;
 
-  //파라미터로 들어온 문자형타입의 카테고리타입을 카테고리타입으로 변경
+  /**
+   * 파라미터로 들어온 문자형타입의 카테고리타입을 카테고리타입으로 변경
+   */
   public void toCatTypeObject(){
     for(var item : CategoryType.values()){
       if(item.getDescription().equals(this.catType)){

@@ -1,5 +1,6 @@
 package com.teamzero.product.domain.model;
 
+import com.teamzero.product.domain.dto.mall.ElevenShopProductDto;
 import java.time.LocalDate;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -44,4 +45,15 @@ public class MallProductEntity extends BaseEntity {
   private String productMallId;
   private int maxPrice;
   private LocalDate priceUpdateDt;
+
+  public static MallProductEntity from(ElevenShopProductDto elevenShopProductDto) {
+    return MallProductEntity.builder()
+        .productId(elevenShopProductDto.getProductId())
+        .name(elevenShopProductDto.getContent_name())
+        .imageUrl(elevenShopProductDto.getImageUrl())
+        .detailUrl(elevenShopProductDto.getLink_url())
+        .price(Integer.parseInt(elevenShopProductDto.getLast_discount_price()))
+        .productMallId(elevenShopProductDto.getProduct_no())
+        .build();
+  }
 }

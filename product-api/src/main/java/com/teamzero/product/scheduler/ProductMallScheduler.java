@@ -1,6 +1,6 @@
 package com.teamzero.product.scheduler;
 
-import com.teamzero.product.client.RedisClient;
+import com.teamzero.product.redis.RedisClient;
 import com.teamzero.product.config.ScrapConfig;
 import com.teamzero.product.domain.dto.product.MallProductSearchDto;
 import com.teamzero.product.domain.dto.product.MallProductSearchDto.Response;

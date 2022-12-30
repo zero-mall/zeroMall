@@ -1,7 +1,7 @@
 package com.teamzero.product.controller;
 
-import com.teamzero.product.domain.dto.product.ProductDetail;
-import com.teamzero.product.domain.dto.product.ProductSearch;
+import com.teamzero.product.domain.dto.product.ProductDetailDto;
+import com.teamzero.product.domain.dto.product.ProductSearchDto;
 import com.teamzero.product.service.ProductService;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -24,13 +24,9 @@ public class ProductController {
    * 응답값   : 네이버 상품 검색 결과
    */
   @GetMapping("/api/search")
-  public ResponseEntity<ProductSearch.Response> searchNaverProducts(@Valid ProductSearch.Request request) {
+  public ResponseEntity<ProductSearchDto.Response> searchNaverProducts(@Valid ProductSearchDto.Request request) {
 
-    // 1. 네이버 쇼핑 API에서 상품 검색
-    var response = productService.searchNaverProducts(request);
-
-    // 2. 네이버 응답 -> 제로콜 응답값으로 변환
-    return ResponseEntity.ok(response);
+    return ResponseEntity.ok(productService.searchNaverProducts(request));
   }
 
   /**
@@ -40,11 +36,9 @@ public class ProductController {
    *             한 번 이상 조회된 상품이면 레디스에서 상품의 간략정보를 전달한다.
    */
   @GetMapping("/short")
-  public ResponseEntity<?> getProductShort(ProductDetail.Request request) {
+  public ResponseEntity<ProductDetailDto.Response> getProductShort(ProductDetailDto.Request request) {
 
-    var response = productService.getProductShort(request);
-
-    return ResponseEntity.ok(response);
+    return ResponseEntity.ok(productService.createOrJustIncreaseViewProduct(request));
 
   }
 

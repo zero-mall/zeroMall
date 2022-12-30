@@ -2,7 +2,7 @@ package com.teamzero.product.service;
 
 import static com.teamzero.product.exception.ErrorCode.CATEGORY_ID_FULL_ERROR;
 import static com.teamzero.product.exception.ErrorCode.CATEGORY_NAME_DUPLICATE;
-import static com.teamzero.product.exception.ErrorCode.CATEGORY_PARAMETER_ERROR;
+import static com.teamzero.product.exception.ErrorCode.CATEGORY_SEARCH_BAD_REQEUST;
 import static com.teamzero.product.exception.ErrorCode.CATEGORY_PARANTID_ERROR;
 import static com.teamzero.product.exception.ErrorCode.CATEGORY_SUB_DATA_EXISTS;
 
@@ -39,7 +39,7 @@ public class CategoryService {
 
     //파라미터 값 확인
     if(!this.isCheckCategoryParam(request)){
-      throw new TeamZeroException(CATEGORY_PARAMETER_ERROR);
+      throw new TeamZeroException(CATEGORY_SEARCH_BAD_REQEUST);
     }
 
     //max카테고리id 가져오기
@@ -190,7 +190,7 @@ public class CategoryService {
     if(Objects.isNull(request.getCatTypeObject())
         && !Objects.isNull(request.getCatType()))
     {
-      throw new TeamZeroException(CATEGORY_PARAMETER_ERROR);
+      throw new TeamZeroException(CATEGORY_SEARCH_BAD_REQEUST);
     }
 
     //1.카테고리 id, 카테고리명 요청한 경우
@@ -261,11 +261,11 @@ public class CategoryService {
     request.toCatTypeObject();
 
     if(Objects.isNull(request.getCatTypeObject())){
-      throw new TeamZeroException(CATEGORY_PARAMETER_ERROR);
+      throw new TeamZeroException(CATEGORY_SEARCH_BAD_REQEUST);
     }
 
     if(!categoryRepository.existsByCatId(request.getCurrentCatId())){
-      throw new TeamZeroException(CATEGORY_PARAMETER_ERROR);
+      throw new TeamZeroException(CATEGORY_SEARCH_BAD_REQEUST);
     }
 
     boolean isChildYn = false;
@@ -299,7 +299,7 @@ public class CategoryService {
     CategoryEntity category =
         categoryRepository.findByCatId(request.getCurrentCatId())
                 .orElseThrow(() ->
-                    new TeamZeroException(CATEGORY_PARAMETER_ERROR));
+                    new TeamZeroException(CATEGORY_SEARCH_BAD_REQEUST));
 
     category.setCatName(request.getCatName());
     categoryRepository.save(category);

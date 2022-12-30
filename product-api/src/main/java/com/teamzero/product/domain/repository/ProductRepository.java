@@ -14,10 +14,7 @@ public interface ProductRepository extends JpaRepository<ProductEntity, Long> {
   boolean existsByProductId(Long productId);
   List<ProductEntity> findAll();
 
-  Optional<ProductEntity> findByCatId(String catId);
-
-  @Query("select avg(p.viewCount) from ProductEntity p")
-  double getTotalAvgViewCount();
+  List<ProductEntity> findAllByCatId(String catId);
 
   List<ProductEntity> findAllByRegisteredAtAfterOrModifiedAtAfter(
         LocalDateTime monthAgo, LocalDateTime monthAgo2);

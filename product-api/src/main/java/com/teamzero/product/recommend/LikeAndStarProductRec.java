@@ -11,12 +11,15 @@ import org.springframework.stereotype.Component;
 public class LikeAndStarProductRec implements ProductRecInterface{
 
   private final LikeAndStarProductMapper likeAndStarProductMapper;
+
   /**
    * 한달간 좋아요(최소 100개이상)와 평점의 평균점수가 가장 높은순
    * 
    */
   @Override
   public List<RecommendDto> recommendProducts() {
+
     return likeAndStarProductMapper.getLikeAndStarProducts();
   }
+
 }

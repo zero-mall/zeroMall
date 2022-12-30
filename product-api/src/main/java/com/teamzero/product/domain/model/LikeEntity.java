@@ -11,13 +11,13 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.envers.AuditOverride;
 
+@Data
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 @AuditOverride(forClass = BaseEntity.class)
 @Table(name = "LIKES")
-@Data
 public class LikeEntity extends BaseEntity {
 
     @Id

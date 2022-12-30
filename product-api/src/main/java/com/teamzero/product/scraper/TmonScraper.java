@@ -9,6 +9,7 @@ import com.teamzero.product.domain.model.MallProductEntity;
 import com.teamzero.product.domain.model.ProductEntity;
 import java.io.IOException;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -39,7 +40,7 @@ public class TmonScraper extends ScrapConfig implements ProductScraperInterface{
     try {
 
       jsonStr = Jsoup.connect(String.format(SEARCH_URL,
-              URLEncoder.encode(keyword, "UTF-8"), minPrice, maxPrice))
+              URLEncoder.encode(keyword, StandardCharsets.UTF_8), minPrice, maxPrice))
           .userAgent("Mozilla")
           .ignoreContentType(true)
           .execute().body();
