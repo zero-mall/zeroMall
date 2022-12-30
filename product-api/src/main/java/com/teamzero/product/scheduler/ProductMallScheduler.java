@@ -1,11 +1,9 @@
 package com.teamzero.product.scheduler;
 
-import static com.teamzero.product.exception.ErrorCode.MALLID_NOT_FOUND;
-
-import com.teamzero.product.client.RedisClient;
+import com.teamzero.product.redis.RedisClient;
 import com.teamzero.product.config.ScrapConfig;
-import com.teamzero.product.domain.dto.product.MallProductSearch;
-import com.teamzero.product.domain.dto.product.MallProductSearch.Response;
+import com.teamzero.product.domain.dto.product.MallProductSearchDto;
+import com.teamzero.product.domain.dto.product.MallProductSearchDto.Response;
 import com.teamzero.product.domain.model.MallEntity;
 import com.teamzero.product.domain.model.MallProductEntity;
 import com.teamzero.product.domain.model.ProductEntity;
@@ -13,7 +11,6 @@ import com.teamzero.product.domain.model.constants.CacheKey;
 import com.teamzero.product.domain.repository.MallProductRepository;
 import com.teamzero.product.domain.repository.MallRepository;
 import com.teamzero.product.domain.repository.ProductRepository;
-import com.teamzero.product.exception.TeamZeroException;
 import com.teamzero.product.scraper.AkmallScraper;
 import com.teamzero.product.scraper.DanawaScraper;
 import com.teamzero.product.scraper.ElevenScraper;
@@ -260,7 +257,7 @@ public class ProductMallScheduler {
 
       for(MallProductEntity mallProductEntity : mallProductList){
 
-        MallProductSearch.Response response = Response.builder()
+        MallProductSearchDto.Response response = Response.builder()
             .name(mallProductEntity.getName())
             .imageUrl(mallProductEntity.getImageUrl())
             .detailUrl(mallProductEntity.getDetailUrl())

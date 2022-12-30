@@ -8,7 +8,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-public class ProductDetail {
+public class ProductDetailDto {
 
   @Data
   @AllArgsConstructor
@@ -49,8 +49,8 @@ public class ProductDetail {
     private long viewCount;
     private long likeCount;
 
-    public static ProductDetail.Response fromEntity(ProductEntity product) {
-      return ProductDetail.Response.builder()
+    public static ProductDetailDto.Response fromEntity(ProductEntity product) {
+      return ProductDetailDto.Response.builder()
           .productId(product.getProductId())
           .catId(product.getCatId())
           .naverId(product.getNaverId())

@@ -1,18 +1,16 @@
 package com.teamzero.product.service;
 
-import static com.teamzero.product.exception.ErrorCode.CATEGORY_PARAMETER_ERROR;
+import static com.teamzero.product.exception.ErrorCode.CATEGORY_SEARCH_BAD_REQEUST;
 import static com.teamzero.product.exception.ErrorCode.PRODUCT_NOT_FOUND;
-
-import com.teamzero.product.domain.dto.View;
-import com.teamzero.product.domain.dto.product.ProductDetail;
+import com.teamzero.product.domain.dto.ViewDto;
+import com.teamzero.product.domain.dto.product.ProductDetailDto;
 import com.teamzero.product.domain.model.CategoryEntity;
 import com.teamzero.product.domain.model.ProductEntity;
 import com.teamzero.product.domain.repository.CategoryRepository;
 import com.teamzero.product.domain.repository.ProductRepository;
 import com.teamzero.product.exception.TeamZeroException;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,61 +25,71 @@ public class ViewService {
   private final CategoryRepository categoryRepository;
 
   /**
-   * 특정 상품의 조회수 +1 증가
+   * 상품의 조회수 +1 증가
    */
   @Transactional
-  public ProductDetail.Response increaseView(Long productId) {
+  public ProductDetailDto.Response increaseView(Long productId) {
 
-    ProductEntity product = productRepository.findById(productId).orElse(null);
+    // 상품 id 로 상품 조회
+    ProductEntity product = productRepository.findById(productId)
+        .orElseThrow(() -> new TeamZeroException(PRODUCT_NOT_FOUND));
 
-    if (Objects.isNull(product)) return null;
-
+    // 상품의 조회수 + 1 증가
     product.setViewCount(product.getViewCount() + 1);
 
-    return ProductDetail.Response.fromEntity(product);
+    // 상품 Dto로 반환
+    return ProductDetailDto.Response.fromEntity(product);
   }
 
   /**
-   * 특정 상품의 조회수 조회
+   * 상품의 조회수 조회
    */
-  public View.Response.ProductView getProductViewResponse(Long productId) {
+  public ViewDto getProductViewCount(Long productId) {
 
     ProductEntity product = productRepository.findById(productId)
         .orElseThrow(() -> new TeamZeroException(PRODUCT_NOT_FOUND));
 
-    return new View.Response.ProductView(productId, product.getProductName(),
-        product.getViewCount());
+    return ViewDto.builder()
+        .productId(productId)
+        .productName(product.getProductName())
+        .productViewCount(product.getViewCount())
+        .build();
   }
 
   /**
-   * 특정 카테고리의 평균 조회수 조회
+   * 카테고리에 속한 상품들의 총 조회수와 평균 조회수 반환
    */
-  public View.Response.CatView getCatViewResponse(String catId){
+  public ViewDto getCatViewCountAndAvgView(String catId) {
 
-    List<CategoryEntity> categories = categoryRepository.findAllByCatIdLike(catId);
+    // 1. 현재 카테고리부터 하위 카테고리들을 모두 조회
+    List<CategoryEntity> categories
+        = categoryRepository.findAllByCatIdLike(catId);
 
     if (CollectionUtils.isEmpty(categories)) {
-      throw new TeamZeroException(CATEGORY_PARAMETER_ERROR);
+      throw new TeamZeroException(CATEGORY_SEARCH_BAD_REQEUST);
     }
 
-    List<ProductEntity> products = categories.stream()
-        .map(c -> productRepository.findByCatId(c.getCatId()).orElse(null))
-        .filter(Objects::nonNull)
-        .collect(Collectors.toList());
+    // 2. 조회된 카테고리들에 속한 상품들을 모두 조회
+    List<ProductEntity> products = new ArrayList();
 
-    double avgCatView = products.stream()
-        .mapToInt(p -> (int) p.getViewCount()).average().orElse(-1.0);
+    for (CategoryEntity cat : categories) {
 
-    return new View.Response.CatView(catId, products.size(), avgCatView);
+      productRepository.findAllByCatId(cat.getCatId()).stream()
+          .filter(p -> !products.contains(p)).forEach(products::add);
 
-  }
+    }
 
-  /**
-   * 전체 상품들의 평균 조회수 조회
-   */
-  public double getTotalAvgProductView() {
+    // 3. 각 상품들의 총 조회수를 합산
+    long catViewCount
+        = products.stream().mapToLong(e -> e.getViewCount()).sum();
 
-    return productRepository.getTotalAvgViewCount();
+    // 4. 카테고리에 속한 상품들의 총 조회수와 평균 조회수 반환
+    return ViewDto.builder()
+        .catId(catId)
+        .catViewCount(catViewCount)
+        .catViewAvg(Math.round((catViewCount * 10) / products.size() / 10.0))
+        .build();
+
   }
 
 }

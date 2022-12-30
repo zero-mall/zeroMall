@@ -6,7 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 
-public class MallProductSearch {
+public class MallProductSearchDto {
   @Data
   @AllArgsConstructor
   @NoArgsConstructor

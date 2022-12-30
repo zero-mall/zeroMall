@@ -1,6 +1,6 @@
 package com.teamzero.product.scheduler;
 
-import com.teamzero.product.client.RedisClient;
+import com.teamzero.product.redis.RedisClient;
 import com.teamzero.product.domain.dto.recommend.SubscriberDto;
 import com.teamzero.product.domain.model.constants.CacheKey;
 import com.teamzero.product.mapper.SubScribersMapper;
@@ -11,7 +11,6 @@ import com.teamzero.product.util.MailSender;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -20,8 +19,7 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class SubscribeScheduler {
 
-  @Autowired
-  private SubScribersMapper subScribersMapper;
+  private final SubScribersMapper subScribersMapper;
 
   private final RedisClient redisClient;
 
@@ -34,13 +32,13 @@ public class SubscribeScheduler {
 
   /**
    * 매일 오전 2시에 구독자에게 메일 전송
-   * - 레디스에서 상품 검색 기록 삭제
+   * - 레디스에서 상품 검색 기록 및 상품 기록 삭제
    * - 구독자에게 메일 전송
    */
-  @Scheduled(cron = "${scheduler.product.cron}", zone = "Asia/Seoul")
+  @Scheduled(cron = "${scheduler.subscribe.cron}", zone = "Asia/Seoul")
   public void sendEmailToSubscriber(){
 
-    // 레디스에서 상품 검색 기록 삭제
+    // 레디스에서 상품 검색 기록 및 상품 기록 삭제
     redisClient.delete(CacheKey.NAVER_SEARCH);
 
     // 각 상품 추천 로직에 따라 상품 정보 가져오기

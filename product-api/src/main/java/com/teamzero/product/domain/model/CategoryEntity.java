@@ -9,13 +9,13 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.envers.AuditOverride;
 
+@Data
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 @AuditOverride(forClass = BaseEntity.class)
 @Table(name = "CAT_INFO")
-@Data
 public class CategoryEntity extends BaseEntity{
 
   @Id

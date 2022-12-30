@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 
 public interface StarRepository extends JpaRepository<StarEntity, Long> {
 
-  Optional<StarEntity> findByProductIdAndMemberEmail(Long productId, String memberEmail);
+  Optional<StarEntity> findByProductIdAndEmail(Long productId, String email);
 
   long countAllByProductId(Long productId);
 

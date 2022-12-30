@@ -1,9 +1,10 @@
 package com.teamzero.product.service;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
-import com.teamzero.product.domain.dto.View;
+
 import com.teamzero.product.domain.model.CategoryEntity;
 import com.teamzero.product.domain.model.ProductEntity;
 import com.teamzero.product.domain.repository.CategoryRepository;
@@ -32,87 +33,78 @@ class ViewServiceTest {
   private ViewService viewService;
 
   @Test
-  @DisplayName("특정 상품의 조회수 조회")
-  void getProductViewResponse() {
+  @DisplayName("상품의 조회수 +1 증가")
+  void increaseView() {
 
     // given
-    var request = new View.Request("", 1L);
-
     given(productRepository.findById(anyLong()))
         .willReturn(Optional.of(ProductEntity.builder()
             .productId(1L)
             .catId("123456789")
-            .naverId("10076181031")
-            .brand("brand")
-            .imageUrl("image")
-            .price(15000)
+            .productName("test")
             .viewCount(123)
             .build()));
 
     // when
-    var result = viewService.getProductViewResponse(request.getProductId());
+    var result = viewService.increaseView(1L);
 
     // then
     Assertions.assertEquals(1L, result.getProductId());
-    Assertions.assertEquals(123, result.getProductView());
+    Assertions.assertEquals(124, result.getViewCount());
 
   }
 
   @Test
-  @DisplayName("특정 카테고리의 평균 조회수 조회")
-  void getCatViewResponse() {
+  @DisplayName("상품의 조회수 조회")
+  void getProductViewCount() {
 
     // given
-    var request = new View.Request("001001000", null);
-
-    List<CategoryEntity> categories = new ArrayList<>();
-    categories.add(new CategoryEntity("001001000", "카테고리1"));
-    categories.add(new CategoryEntity("001001001", "카테고리2"));
-    categories.add(new CategoryEntity("001001002", "카테고리3"));
-
-    given(categoryRepository.findAllByCatIdLike(anyString()))
-        .willReturn(categories);
-
-    given(productRepository.findByCatId("001001000"))
+   given(productRepository.findById(anyLong()))
         .willReturn(Optional.of(ProductEntity.builder()
             .productId(1L)
-            .catId("001001000")
-            .naverId("10076181031")
-            .brand("brand")
-            .imageUrl("image")
-            .price(12000)
-            .viewCount(123)
-            .build()));
-
-    given(productRepository.findByCatId("001001001"))
-        .willReturn(Optional.of(ProductEntity.builder()
-            .productId(2L)
-            .catId("001001001")
-            .naverId("10076181032")
-            .brand("brand")
-            .imageUrl("image")
-            .price(25400)
-            .viewCount(123)
-            .build()));
-
-    given(productRepository.findByCatId("001001002"))
-        .willReturn(Optional.of(ProductEntity.builder()
-            .productId(3L)
-            .catId("001001002")
-            .naverId("10076181033")
-            .brand("brand")
-            .imageUrl("image")
-            .price(1000)
+            .catId("123456789")
+            .productName("test")
             .viewCount(123)
             .build()));
 
     // when
-    var result = viewService.getCatViewResponse(request.getCatId());
+    var result = viewService.getProductViewCount(1L);
 
     // then
-    System.out.printf("catId : %s, size : %d, avg : %f\n",
-        result.getCatId(), result.getTotalCatCnt(), result.getAvgCatView());
+    Assertions.assertEquals(1L, result.getProductId());
+    Assertions.assertEquals("test", result.getProductName());
+    Assertions.assertEquals(123, result.getProductViewCount());
+
+  }
+
+  @Test
+  @DisplayName("카테고리에 속한 상품들의 총 조회수와 평균 조회수 반환")
+  void getCatViewCountAndAvgView() {
+
+    // given
+    List<CategoryEntity> categories = new ArrayList<>();
+    categories.add(new CategoryEntity("001001000", "카테고리"));
+    categories.add(new CategoryEntity("001001001", "하위 카테고리1"));
+    categories.add(new CategoryEntity("001001002", "하위 카테고리2"));
+
+    given(categoryRepository.findAllByCatIdLike(anyString()))
+        .willReturn(categories);
+
+    List<ProductEntity> products = new ArrayList<>();
+    products.add(ProductEntity.builder().productId(1L).viewCount(10).build());
+    products.add(ProductEntity.builder().productId(2L).viewCount(20).build());
+    products.add(ProductEntity.builder().productId(3L).viewCount(30).build());
+
+    given(productRepository.findAllByCatId(anyString()))
+        .willReturn(products);
+
+    // when
+    var result = viewService.getCatViewCountAndAvgView("001001000");
+
+    // then
     Assertions.assertEquals("001001000", result.getCatId());
+    Assertions.assertEquals(60, result.getCatViewCount());
+    Assertions.assertEquals(20, result.getCatViewAvg());
 
   }
 

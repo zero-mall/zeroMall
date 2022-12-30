@@ -1,15 +1,11 @@
 package com.teamzero.product.domain.model;
 
-import com.teamzero.product.domain.dto.product.ProductDetail;
+import com.teamzero.product.domain.dto.product.ProductDetailDto;
 import java.time.LocalDate;
-import java.util.List;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -17,13 +13,13 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.envers.AuditOverride;
 
+@Data
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 @AuditOverride(forClass = BaseEntity.class)
 @Table(name = "PRODUCT")
-@Data
 public class ProductEntity extends BaseEntity{
 
     // 제로몰 상품 구분 인덱스
@@ -53,7 +49,7 @@ public class ProductEntity extends BaseEntity{
      * 네이버 상품
      * 연결된 쇼핑몰 상품들을 제외한 정보만 저장
      */
-    public static ProductEntity from(ProductDetail.Request request, String catId) {
+    public static ProductEntity from(ProductDetailDto.Request request, String catId) {
         return ProductEntity.builder()
             .catId(catId)
             .naverId(request.getNaverId())
@@ -64,9 +60,5 @@ public class ProductEntity extends BaseEntity{
             .viewCount(0)
             .likeCount(0)
             .build();
-    }
-
-    public void increaseView() {
-        this.setViewCount(this.getViewCount() + 1);
     }
 }

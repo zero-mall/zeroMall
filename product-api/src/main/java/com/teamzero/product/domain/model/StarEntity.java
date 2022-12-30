@@ -5,20 +5,19 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.envers.AuditOverride;
 
+@Data
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 @AuditOverride(forClass = BaseEntity.class)
 @Table(name = "STAR")
-@Data
 public class StarEntity extends BaseEntity{
 
   @Id
@@ -29,7 +28,7 @@ public class StarEntity extends BaseEntity{
   private Long productId;
 
   // 작성자 정보
-  private String memberEmail;
+  private String email;
   
   // 별점
   private int score;

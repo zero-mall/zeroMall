@@ -1,6 +1,5 @@
 package com.teamzero.product.domain.model;
 
-import com.teamzero.product.domain.model.constants.MallStatus;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -8,15 +7,14 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.envers.AuditOverride;
-import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
+@Data
 @Entity
-@Getter
-@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder

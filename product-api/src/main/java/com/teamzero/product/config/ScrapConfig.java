@@ -2,6 +2,9 @@ package com.teamzero.product.config;
 
 import org.springframework.context.annotation.Configuration;
 
+/**
+ * 쇼핑몰 상품 스크래퍼 관련 설정
+ */
 @Configuration
 public class ScrapConfig {
 

@@ -90,7 +90,7 @@ public class ElevenScraper extends ScrapConfig
           elevenShopProductDto.setImageUrl(imgUrl);
           //elevenShopProductDto.setMallName(getMallName());
           MallProductEntity mallProductEntity
-              = elevenShopProductDto.toProductOfMallEntity();
+              = MallProductEntity.from(elevenShopProductDto);
           mallProductEntities.add(mallProductEntity);
           if(mallProductEntities.size() == 10){
             break;
