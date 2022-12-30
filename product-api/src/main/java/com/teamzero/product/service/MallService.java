@@ -50,7 +50,7 @@ public class MallService {
         .orElseThrow(() -> new TeamZeroException(PRODUCT_NOT_FOUND));
 
     // 2. 사용하려는 스크래퍼 구현체로부터
-    for (var scraper : scrapers) {
+    for (ProductScraperInterface scraper : scrapers) {
       // 유사 상품을 스크래핑 후 mall_product DB에 저장
       saveSimilarProductsFromMallsByScraping(product, scraper);
     }

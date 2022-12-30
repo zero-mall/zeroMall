@@ -19,7 +19,6 @@ public class ReviewService {
     /**
      * 리뷰 등록
      */
-    @Transactional
     public ReviewDto.CreateReview createReview(ReviewDto.CreateReview create,
         Long memberId) {
 
@@ -71,7 +70,6 @@ public class ReviewService {
     /**
      * 리뷰 읽기
      */
-    @Transactional
     public ReadReview getReview(Long reviewId) {
         // 해당 '리뷰'가 존재하는지 확인 후 존재하지 않으면 에러발생
         if (!reviewRepository.existsByReviewId(reviewId)) {
@@ -95,7 +93,6 @@ public class ReviewService {
     /**
      * 리뷰 삭제
      */
-    @Transactional
     public boolean deleteReview(Long orderId, Long reviewId, Long memberId) {
         // 해당 '주문'에 대한 '사용자'의 '리뷰'가 존재하는지 확인 후 존재하지 않으면 에러발생
         if (!reviewRepository.existsByOrderIdAndMemberIdAndProductId(orderId,

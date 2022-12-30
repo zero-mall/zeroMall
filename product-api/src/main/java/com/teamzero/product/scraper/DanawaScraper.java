@@ -9,13 +9,14 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-
+@Slf4j
 public class DanawaScraper
     extends ScrapConfig implements ProductScraperInterface{
 
@@ -94,6 +95,7 @@ public class DanawaScraper
       }
 
     } catch (IOException e) {
+      log.warn(e.getMessage());
       throw new RuntimeException(e);
     }
     if(mallProductEntities.size() > 10){

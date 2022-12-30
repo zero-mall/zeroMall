@@ -35,7 +35,7 @@ public class LikeController {
     public Long getLikes(
         @RequestParam Long productId) {
 
-        return likeService.likeCount(productId);
+        return likeService.countLikes(productId);
 
     }
 
