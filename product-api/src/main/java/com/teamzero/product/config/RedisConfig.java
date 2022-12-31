@@ -10,6 +10,9 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
+/**
+ * 네이버 상품 검색 및 쇼핑몰 상품 저장을 위한 레디스 설정
+ */
 @Configuration
 @EnableCaching
 public class RedisConfig {

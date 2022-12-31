@@ -3,8 +3,7 @@ package com.teamzero.member.application;
 import com.teamzero.domain.JwtAuthenticationProvider;
 import com.teamzero.domain.util.Aes256Util;
 import com.teamzero.member.domain.model.MemberEntity;
-import com.teamzero.member.domain.model.MemberGradeEntity;
-import com.teamzero.member.domain.model.dto.SignIn;
+import com.teamzero.member.domain.model.dto.SignInDto;
 import com.teamzero.member.domain.repository.MemberRepository;
 import com.teamzero.member.exception.ErrorCode;
 import com.teamzero.member.exception.TeamZeroException;
@@ -41,16 +40,16 @@ class SignInApplicationTest {
     private final String TEST_PASSWORD = "123456";
 
     @Test
-    @DisplayName("memberSingInFail : 해당 이메일이 없습니다.")
+    @DisplayName("memberSingInFail : 아이디가 없는 경우")
     void memberSignInFail_memberNotFound() {
 
         // given
-        given(memberRepository.findByEmail(anyString()))
+        given(memberRepository.findAllByEmail(anyString()))
                 .willReturn(Optional.empty());
 
         // when
         TeamZeroException exception = assertThrows(TeamZeroException.class,
-                () -> signInApplication.memberSignInToken(new SignIn(TEST_EMAIL, TEST_PASSWORD)));
+                () -> signInApplication.memberSignInToken(new SignInDto(TEST_EMAIL, TEST_PASSWORD)));
 
         // then
         Assertions.assertEquals(ErrorCode.MEMBER_NOT_FOUND, exception.getErrorCode());
@@ -58,7 +57,7 @@ class SignInApplicationTest {
     }
 
     @Test
-    @DisplayName("memberSingInFail : 비밀번호가 일치하지 않습니다.")
+    @DisplayName("memberSingInFail : 비밀번호가 일치하지 않는 경우")
     void memberSignInFail_memberPasswordUnMatch() {
 
         // given
@@ -69,15 +68,15 @@ class SignInApplicationTest {
                 .password(BCrypt.hashpw("5678912", BCrypt.gensalt()))
                 .build();
 
-        given(memberRepository.findByEmail(anyString()))
+        given(memberRepository.findAllByEmail(anyString()))
                 .willReturn(Optional.of(member));
 
         // when
         TeamZeroException exception = assertThrows(TeamZeroException.class,
-                () -> signInApplication.memberSignInToken(new SignIn(TEST_EMAIL, TEST_PASSWORD)));
+                () -> signInApplication.memberSignInToken(new SignInDto(TEST_EMAIL, TEST_PASSWORD)));
 
         // then
-        Assertions.assertEquals(ErrorCode.MEMBER_PASSWORD_UNMATCH, exception.getErrorCode());
+        Assertions.assertEquals(ErrorCode.MEMBER_SIGNIN_NOT_POSSIBLE, exception.getErrorCode());
 
     }
 
@@ -91,7 +90,6 @@ class SignInApplicationTest {
                 .nickname("홍길동")
                 .email(TEST_EMAIL)
                 .password(BCrypt.hashpw(TEST_PASSWORD, BCrypt.gensalt()))
-                .memberGradeEntity(new MemberGradeEntity(1L, "BASIC", 2))
                 .build();
 
         String token = Jwts.builder()
@@ -103,14 +101,14 @@ class SignInApplicationTest {
                 .signWith(SignatureAlgorithm.HS256, "TEAMZERO_ZEROMALL")
                 .compact();
 
-        given(memberRepository.findByEmail(anyString()))
+        given(memberRepository.findAllByEmail(anyString()))
                 .willReturn(Optional.of(member));
 
         given(jwtAuthenticationProvider.createToken(anyLong(), anyString(), anyString()))
                 .willReturn(token);
 
         // when
-        String result = signInApplication.memberSignInToken(new SignIn(TEST_EMAIL, TEST_PASSWORD));
+        String result = signInApplication.memberSignInToken(new SignInDto(TEST_EMAIL, TEST_PASSWORD));
 
         // then
         Assertions.assertNotNull(result);

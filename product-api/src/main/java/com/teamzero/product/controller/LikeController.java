@@ -1,0 +1,53 @@
+package com.teamzero.product.controller;
+
+import com.teamzero.product.service.LikeService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+@RequiredArgsConstructor
+@RequestMapping("/member/likes")
+public class LikeController {
+
+    private final LikeService likeService;
+
+
+    /**
+     * 좋아요 등록
+     */
+    @PostMapping("/add")
+    public boolean addLike(@RequestParam String email,
+        @RequestParam Long productId) {
+
+        return likeService.addLike(email, productId);
+
+    }
+
+    /**
+     * 좋아요 조회
+     */
+    @PostMapping("/view")
+    public Long getLikes(
+        @RequestParam Long productId) {
+
+        return likeService.countLikes(productId);
+
+    }
+
+    /**
+     * 좋아요 취소
+     */
+    @PostMapping("/cancel")
+    public boolean cancelLike(@RequestParam String email,
+        @RequestParam Long productId) {
+        return likeService.cancelLike(email, productId);
+
+    }
+
+
+}

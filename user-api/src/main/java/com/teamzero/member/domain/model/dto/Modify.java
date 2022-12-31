@@ -12,6 +12,7 @@ public class Modify {
 
     private Long memberId;
     private String nickname;
+    private int age;
     private String password;
 
     private String grade;

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.teamzero.product.mapper.LikeAndStarProductMapper">
+  <select id="getLikeAndStarProducts" resultType="com.teamzero.product.domain.dto.recommend.RecommendDto">
+    select a.product_id product_id, max(product_name) product_name,
+    max(image_url) image_url, max(price) price
+    from product a, star b,
+    (select product_id
+    from likes
+    where registered_at >= date_add(now(), interval -1 month)
+    group by product_id
+    having count(1) >= 100) c
+    where a.product_id = b.product_id
+    and a.product_id = c.product_id
+    group by a.product_id
+    order by (sum(score)/count(1)) desc
+    limit 0, 5
+  </select>
+</mapper>

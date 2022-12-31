@@ -4,23 +4,26 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
-
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import com.mysql.cj.util.StringUtils;
 import com.teamzero.product.client.NaverSearchClient;
-import com.teamzero.product.domain.dto.NaverSearch;
-import com.teamzero.product.domain.dto.ProductSearch;
-import com.teamzero.product.domain.dto.RedisProductSet;
+import com.teamzero.product.domain.dto.product.ProductDetailDto;
+import com.teamzero.product.domain.dto.product.ProductSearchDto;
+import com.teamzero.product.domain.model.CategoryEntity;
 import com.teamzero.product.domain.model.ProductEntity;
-import com.teamzero.product.domain.model.constants.CacheKey;
 import com.teamzero.product.domain.repository.ProductRepository;
-import com.teamzero.product.util.RedisCrud;
+import com.teamzero.product.redis.RedisClient;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -33,15 +36,21 @@ class ProductServiceTest {
   private NaverSearchClient naverSearchClient;
 
   @Mock
+  private CategoryService categoryService;
+
+  @Mock
   private ProductRepository productRepository;
 
   @Mock
-  private RedisCrud redisCrud;
+  private RedisClient redisClient;
+
+  @Mock
+  private ViewService viewService;
 
   @InjectMocks
   private ProductService productService;
 
-  private static String JSON_SAMPLE =
+  private static final String JSON_SAMPLE =
       "{\n"
       + "    \"lastBuildDate\": \"Mon, 12 Dec 2022 21:36:18 +0900\",\n"
       + "    \"total\": 29669087,\n"
@@ -72,11 +81,14 @@ class ProductServiceTest {
   void searchNaverProducts() {
 
     // given
+    given(redisClient.getData(anyString(), any()))
+        .willReturn(Optional.empty());
+
     given(naverSearchClient.searchProducts(any()))
         .willReturn(ResponseEntity.ok(JSON_SAMPLE));
 
     // when
-    NaverSearch.Response response = productService.searchNaverProducts(new ProductSearch.Request("컴퓨터", 1, 10));
+    ProductSearchDto.Response response = productService.searchNaverProducts(new ProductSearchDto.Request("컴퓨터", 1, 10));
 
     // then
     String title = "게이밍 조립컴퓨터 롤 서든어택 오버워치 배틀그라운드 배그 조립PC 컴퓨터본체";
@@ -88,59 +100,118 @@ class ProductServiceTest {
   }
 
   @Test
-  @DisplayName("캐시(Redis)에서 네이버 상품 조회")
-  void getProductFromRedis() {
+  @DisplayName("상품 간략 정보 저장 - DB에 상품이 이미 저장된 경우")
+  void getProductShort_alreadySavedInDB() {
 
     // given
-    Long naverId = 10076181031L;
+    given(productRepository.findByNaverId(anyString()))
+        .willReturn(Optional.of(ProductEntity.builder()
+            .productId(1L)
+            .catId("123456789")
+            .naverId("10076181031")
+            .brand("brand")
+            .productName("test")
+            .imageUrl("image")
+            .price(15000)
+            .viewCount(123)
+            .build()));
 
-    ProductEntity product = ProductEntity.builder()
-        .productId(1L)
-        .catId("111111111")
-        .naverId(naverId)
-        .name("test")
-        .brand("test")
-        .imageUrl("url")
-        .price(10000)
-        .build();
-
-    RedisProductSet set = new RedisProductSet();
-    set.addProduct(product);
-
-    given(redisCrud.getData(anyString(), any()))
-        .willReturn(Optional.of(set));
+    given(viewService.increaseView(anyLong()))
+        .willReturn(ProductDetailDto.Response.builder()
+            .productId(1L)
+            .catId("123456789")
+            .naverId("10076181031")
+            .brand("brand")
+            .name("test")
+            .imageUrl("image")
+            .price(15000)
+            .viewCount(124)
+            .build());
 
     // when
-    ProductEntity result = productService.getProductFromRedis(naverId);
+    ProductDetailDto.Response result = productService.createOrJustIncreaseViewProduct(
+        ProductDetailDto.Request.builder()
+        .category1("디지털/가전")
+        .category2("PC")
+        .category3("조립/베어본PC")
+        .naverId("10076181031")
+        .title("test")
+        .brand("brand")
+        .imageUrl("image")
+        .lPrice(15000)
+        .build());
 
     // then
-    Assertions.assertEquals(product, result);
+    Assertions.assertEquals(1, result.getProductId());
+    Assertions.assertEquals("10076181031", result.getNaverId());
+    Assertions.assertEquals("test", result.getName());
+    Assertions.assertEquals(124, result.getViewCount());
 
   }
 
   @Test
-  @DisplayName("DB에서 네이버 상품 조회 또는 저장")
-  void getOrCreateProduct() {
+  @DisplayName("상품 간략 정보 저장 - DB에 상품이 없는 경우")
+  void getProductShort_noDataInDB() {
 
     // given
-    ProductEntity product = ProductEntity.builder()
-        .productId(1L)
-        .catId("111111111")
-        .naverId(10076181031L)
-        .name("test")
-        .brand("test")
-        .imageUrl("url")
-        .price(10000)
-        .build();
+    given(productRepository.findByNaverId(anyString()))
+        .willReturn(Optional.empty());
 
-    given(productRepository.findByProductId(anyLong()))
-        .willReturn(Optional.of(product));
+    List<CategoryEntity> categories = new ArrayList<>();
+    categories.add(new CategoryEntity("123456788", "카테고리1"));
+
+    given(categoryService.categoryFind(any()))
+        .willReturn(categories);
+
+    given(categoryService.categoryRegister(any()))
+        .willReturn(new CategoryEntity("123456789", "조립/베어본PC"));
+
+    given(productRepository.save(any()))
+        .willReturn(ProductEntity.builder()
+            .productId(1L)
+            .catId("123456789")
+            .naverId("10076181031")
+            .brand("brand")
+            .productName("test")
+            .imageUrl("image")
+            .price(15000)
+            .viewCount(0)
+            .build());
+
+    given(viewService.increaseView(anyLong()))
+        .willReturn(ProductDetailDto.Response.builder()
+            .productId(1L)
+            .catId("123456789")
+            .naverId("10076181031")
+            .brand("brand")
+            .name("test")
+            .imageUrl("image")
+            .price(15000)
+            .viewCount(1)
+            .build());
 
     // when
-    ProductEntity result = productService.getOrCreateProduct(product);
+    var result = productService.createOrJustIncreaseViewProduct(
+        ProductDetailDto.Request.builder()
+            .category1("디지털/가전")
+            .category2("PC")
+            .category3("조립/베어본PC")
+            .naverId("10076181031")
+            .title("test")
+            .brand("brand")
+            .imageUrl("image")
+            .lPrice(15000)
+            .build());
+
+    ArgumentCaptor<ProductEntity> captor
+        = ArgumentCaptor.forClass(ProductEntity.class);
 
     // then
-    Assertions.assertEquals(product, result);
+    verify(productRepository, times(1)).save(captor.capture());
+    Assertions.assertEquals(0, captor.getValue().getViewCount());
+    Assertions.assertEquals(1, result.getViewCount());
+    Assertions.assertEquals("10076181031", captor.getValue().getNaverId());
+    Assertions.assertEquals("test", captor.getValue().getProductName());
 
   }
 
@@ -169,34 +240,4 @@ class ProductServiceTest {
     System.out.println(sb);
   }
 
-  @Test
-  @DisplayName("캐시(Redis)에 상품 저장")
-  void addToRedis() {
-
-    // given
-    ProductEntity product = ProductEntity.builder()
-        .productId(1L)
-        .catId("111111111")
-        .naverId(123452312L)
-        .name("test")
-        .brand("test")
-        .imageUrl("url")
-        .price(10000)
-        .build();
-
-    given(redisCrud.getData(anyString(), any()))
-        .willReturn(Optional.of(new RedisProductSet()));
-
-    given(redisCrud.saveData(anyString(), any()))
-        .willReturn(true);
-
-    // when
-    boolean result = productService.addProductToRedisSet(product);
-
-    // then
-    Set<ProductEntity> set = redisCrud.getData(CacheKey.NAVER_PRODUCT, RedisProductSet.class).get().getProducts();
-    Assertions.assertEquals(true, result);
-    Assertions.assertTrue(set.contains(product));
-
-  }
 }

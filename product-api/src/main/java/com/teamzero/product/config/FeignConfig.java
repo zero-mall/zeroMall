@@ -7,6 +7,9 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+/**
+ * 네이버 상품 검색 api 사용 위한 FeignConfig
+ */
 @Configuration
 @EnableFeignClients
 public class FeignConfig {

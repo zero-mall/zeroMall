@@ -104,3 +104,82 @@ dependencies {
 - Jsoup으로 숨겨진 HTML 추출 https://kr.coderbridge.com/questions/7c3d2665ee66421ebe728c1f9af409fa      
 - Jsoup으로 페이징 로딩, ajax 통신 데이터 스프래핑 https://private-yeri.tistory.com/10       
 - Solenum 사용하기 https://heodolf.tistory.com/104
+
+<br>
+
+### 5. Redis에 ResponseEntity 타입은 저장되지 않는 이슈
+(1) 오류 코드
+java.lang.IllegalArgumentException: DefaultSerializer requires a Serializable payload but received an object of type [org.springframework.http.ResponseEntity]
+
+(2) 원인
+- ResponseEntity는 Serializable을 구현하고 있지 않아, Redis에 serialize되어 저장되지 않는다.
+```java
+@GetMapping("/search")
+  @Cacheable(key = "#request.keyword", value = CacheKey.NAVER_SEARCH)
+  public ResponseEntity<ProductSearch.Response> searchNaverProducts(ProductSearch.Request request) {
+
+    // 1. 네이버 쇼핑 API에서 상품 검색
+    var naverResponse = productService.searchNaverProducts(request);
+
+    // 2. 네이버 응답 -> 제로콜 응답값으로 변환
+    return ResponseEntity.ok(ProductSearch.Response.of(naverResponse));
+  }
+```
+
+(3) 해결
+- 아래와 같은 방식으로 커스텀 ResponseEntity를 쓸 수도 있다. (출처 : 스택오버플로우)
+```java
+public CustomeResponseEntity extends ResponseEntity implements Serializable {
+
+    private static final long serialVersionUID = 7156526077883281625L;
+
+    public CustomResponseEntity(HttpStatus status) {
+        super(status);
+    }
+
+    public CustomResponseEntity(Object body, HttpStatus status) {
+        super(body, status);
+    }
+
+    public CustomResponseEntity(MultiValueMap headers, HttpStatus status) {
+        super(headers, status);
+    }
+
+    public CustomResponseEntity(Object body, MultiValueMap headers, HttpStatus status) {
+        super(body, headers, status);
+    }
+}
+```
+- 하지만 나의 경우, 팀원들 모두가 ResponseEntity를 사용하고 있기 때문에, Controller에서 사용한 @Cacheable을 없애고,
+  RedisTemplate을 써서 데이터를 저장하고 조회하기로 했다.
+
+<br>
+
+### 7. MSA에서 다른 api의 서비스 클래스를 읽어오지 못함 
+```bash
+Parameter 0 of constructor in com.teamzero.product.service.StarService required a bean of type 'com.teamzero.member.service.MemberService' that could not be found.
+```
+(1) 원인 : user-api의 MemberService 클래스 bean이 없어서 나타나는 오류 
+(2) 해결 방법 : @ComponentScan을 통해서 member 패키지를 포함시키면 member에 설정한 bean을 가져올 수 있는데, 그렇게 하니 product-api에서 사용중인 다른 bean들과 충돌이 일어났다.
+(3) 대안 : @EnableJpaRepositories와 @EntityScan의 패키지 설정을 통해 MemberService를 가져오지 않고, MemberRepository를 가져왔다.
+```java
+@SpringBootApplication
+@EnableFeignClients
+@EnableJpaRepositories(basePackages = {"com.teamzero.product.domain.repository", "com.teamzero.member.domain.repository"})
+@EntityScan(basePackages = {"com.teamzero.product.domain.model", "com.teamzero.member.domain.model"})
+public class ProductApplication {
+    public static void main(String[] args) {
+        SpringApplication.run(ProductApplication.class, args);
+    }
+}
+```
+
+<br>
+
+### 8. java.net.MalformedURLException: Illegal character in URL
+(1) 원인 : URL문자열을 복사해 오면서 아래와 같이 개행문자가 들어가서 난 오류였다.
+```java
+private static final String SEARCH_URL = "https://search.wemakeprice.com/api/wmpsearch/api/v3.0/wmp-search/search.json\"\n"
+      + "      + \"?searchType=DEFAULT&search_cate=top&keyword=%s&isRec=1&_service=5&_type=3&price=%d~%d";
+```
+(2) 해결 : "\n" 와 같은 문자를 제거해주었다.
