@@ -10,6 +10,8 @@ import com.teamzero.product.domain.dto.ReviewDto.CreateReview;
 import com.teamzero.product.domain.dto.ReviewDto.ModifyReview;
 import com.teamzero.product.domain.dto.ReviewDto.ReadReview;
 import com.teamzero.product.service.ReviewService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,6 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/review")
+@Api(tags = {"ReviewController"}, description = "리뷰 API")
 public class ReviewController {
 
     private final ReviewService reviewService;
@@ -34,6 +37,7 @@ public class ReviewController {
      * 리뷰 등록
      */
     @PutMapping("/create")
+    @ApiOperation(value = "리뷰 등록")
     public ResponseEntity<CreateReview> createReview(
         @RequestHeader(name = "Authentication") String token,
         @RequestBody ReviewDto.CreateReview create) {
@@ -53,6 +57,7 @@ public class ReviewController {
      * 리뷰 수정
      */
     @PutMapping("/modify")
+    @ApiOperation(value = "리뷰 수정")
     public ResponseEntity<ModifyReview> modifyReview(
         @RequestHeader(name = "Authentication") String token,
         @RequestBody ReviewDto.ModifyReview modify) {
@@ -73,6 +78,7 @@ public class ReviewController {
      * - 매개변수 : 리뷰번호
      */
     @GetMapping("/get-review")
+    @ApiOperation(value = "리뷰 조회")
     public ResponseEntity<ReadReview> getReview(@RequestParam Long reviewId) {
 
         return ResponseEntity.ok(reviewService.getReview(reviewId));
@@ -83,6 +89,7 @@ public class ReviewController {
      * - 매개변수 : 주문번호, 리뷰번호, 회원번호
      */
     @PostMapping("/delete")
+    @ApiOperation(value = "리뷰 삭제")
     public ResponseEntity<Boolean> deleteReview(
         @RequestHeader(name = "Authentication") String token,
         @RequestParam Long orderId,

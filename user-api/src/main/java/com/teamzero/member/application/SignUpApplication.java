@@ -15,6 +15,7 @@ import com.teamzero.member.domain.model.dto.SignUpDto;
 import com.teamzero.member.domain.repository.AdminRepository;
 import com.teamzero.member.domain.repository.MemberRepository;
 import com.teamzero.member.exception.TeamZeroException;
+import io.swagger.annotations.ApiOperation;
 import java.util.UUID;
 import javax.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
@@ -31,6 +32,7 @@ public class SignUpApplication {
   private final MemberRepository memberRepository;
   private final AdminRepository adminRepository;
   private final JavaMailSender javaMailSender;
+
   /**
    * 회원가입
    * 회원가입 요청 할 때 필수값 체크와 비밀번호확인은 프론트에서 한다고 판단.

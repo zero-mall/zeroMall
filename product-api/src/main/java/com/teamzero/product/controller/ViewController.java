@@ -4,8 +4,9 @@ import com.mysql.cj.util.StringUtils;
 import com.teamzero.product.domain.dto.ViewDto;
 import com.teamzero.product.exception.ErrorCode;
 import com.teamzero.product.exception.TeamZeroException;
-import com.teamzero.product.service.ProductService;
 import com.teamzero.product.service.ViewService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -17,11 +18,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/view")
+@Api(tags = {"ViewController"}, description = "조회수 API")
 public class ViewController {
 
   private final ViewService viewService;
-
-  private final ProductService productService;
 
   /**
    * 전체 조회수 조회
@@ -29,6 +29,7 @@ public class ViewController {
    *   특정 상품의 전체 조회수를 조회하는 방식
    */
   @GetMapping
+  @ApiOperation(value = "전체 조회수 조회")
   public ResponseEntity<ViewDto> getAvgProductViewByCategory(
       @RequestParam String catId, @RequestParam Long productId) {
 

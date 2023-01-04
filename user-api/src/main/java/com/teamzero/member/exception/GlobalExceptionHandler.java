@@ -1,6 +1,7 @@
 package com.teamzero.member.exception;
 
 import static com.teamzero.member.exception.ErrorCode.INTERNAL_SERVER_EXCEPTION;
+
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import lombok.extern.slf4j.Slf4j;
