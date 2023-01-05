@@ -7,7 +7,9 @@
 - 기간 : 2022.11.21 - 2022.12.30
 - 소개 : 각 쇼핑몰 사이트를 스크래핑하여 최저가 상품을 비교하고, 구독자에게 상품을 추천하는 서비스
 - 노션 :  [📒 TEAM ZERO](https://www.notion.so/TEAM-ZERO-eac18135b69945f3b6d4181e88ea79de)
-- 깃허브 : [🐶 ZeroMall](https://github.com/zero-mall/zeroMall)
+- 깃허브 : [🐶 ZeroMall](https://github.com/zero-mall/zeroMall)          
+
+<br>
 
 ## 프로젝트 소개
 ```bash
@@ -29,6 +31,8 @@
      (이번 달 가장 많이 할인된 상품 5선, 이번 달 30대's choice 상품 5선, 이번 달 우수 상품 5선)
 ```
 
+<br>
+   
 ## 팀원 소개
 <details>
 <summary>팀원 간 소통 방식</summary>
@@ -54,30 +58,35 @@
 |최고은| - 회원 <br> &nbsp; - 일반회원 : 로그인 인증(JWT) <br>&nbsp;  - 관리자 : 회원 목록/상세 조회, 회원 상태 변경 <br>- 상품  <br>&nbsp; - 네이버 쇼핑 api 검색 <br>&nbsp;  - 티몬, 위메프 스크래핑 & 최저가 상품 비교  <br>&nbsp;   - 레디스를 통해 네이버 상품 검색 결과 & 스크래핑 결과 캐싱 <br>&nbsp;   - 별점, 조회수 기능 <br>&nbsp;   - 이번 달 30대’s choice 상품 추천  <br>&nbsp;   - 구독자 메일 전송 스케줄러 |
 | 강지수 | - 회원 <br>&nbsp;   - 일반회원 회원가입<br>- 상품 <br>   &nbsp;- 카테고리 CRUD <br>   &nbsp;- 11번가, 다나와 스크래핑 & 최저가 상품비교<br>   &nbsp;- 상품정보 갱신 스케쥴러<br>   &nbsp;- 이번 달 우수 상품 추천 |
 | 김찬혁 | - 회원 <br>   &nbsp;- 일반회원 : 비밀번호 초기화, 수정, 탈퇴<br>   &nbsp;- 관리자 : 관리자 회원가입, 상태 수정<br>- 상품 <br>   &nbsp;- 지마켓, AK몰 스크래핑 & 최저가 상품 비교<br>   &nbsp;- 리뷰 CRUD<br>   &nbsp;- 좋아요 기능<br>   &nbsp;- 구독 기능<br>   &nbsp;- 이번 달 가장 많이 할인된 상품 추천 |
+   
+<br>
 
-
-## 기술 스택
-
+## 기술 스택                  
+                  
 ### Backend  
 <img src="https://img.shields.io/badge/Spring Boot-6DB33F"/> <img src="https://img.shields.io/badge/Gradle-02303A"/> <img src="https://img.shields.io/badge/Jsoup-important"/> <img src="https://img.shields.io/badge/JWT-yellow"/> <img src="https://img.shields.io/badge/Gson-blueviolet"/> <img src="https://img.shields.io/badge/Spring_JPA-6DB33F%22/%3E"/> <img src="https://img.shields.io/badge/MyBatis-red"/> <img src="https://img.shields.io/badge/Feign-6DB33F"/> <img src="https://img.shields.io/badge/Java mail sender-999999"/>
-
+                  
 ### Database
 <img src="https://img.shields.io/badge/MySQL-4479A1"/> <img src="https://img.shields.io/badge/Redis-critical"/> <img src="https://img.shields.io/badge/H2-blue"/>
-
+                  
 ### Cloud
 <img src="https://img.shields.io/badge/AWS EC2-FF9900"> <img src="https://img.shields.io/badge/AWS RDS-527FFF">
-
+                  
 ### API  
 <img src="https://img.shields.io/badge/Naver%20Shopping%20API-9cf">
 
+<br>
+
 ## 아키텍처
 <img src=".github/images/architecture3.png" width = "800">
+
+<br>
 
 ## FLOW CHART
 <details>
 <summary>이미지로 보기</summary>
 <div markdown="1">
-
+                  
 ![flow-chart](.github/images/flowchart.png)
 
 </div>
@@ -85,9 +94,13 @@
 
 [▶ PDF로 보기](https://github.com/zero-mall/zeroMall/blob/main/zeromall-flowchart.pdf)
 
-## ERD
-![erd](.github/images/erd.png)
+<br>
 
+## ERD                  
+![erd](.github/images/erd.png)
+  
+<br>
+  
 ## 프로젝트 주요 기능
 ```bash
 포커스
@@ -100,7 +113,7 @@
 <details>
 <summary>기능 상세</summary>
 <div markdown="2">
-
+                  
 ### 1. **회원**
 
 #### (1) 일반회원
@@ -126,7 +139,7 @@
 | 회원 등급,상태 수정 | 회원 등급과 상태를 수정(탈퇴 시 플래그처리) |
 
 ### 1. **상품**
-
+                  
 ####  (1) 카테고리 : 카테고리(대분류/중분류/소분류) 관리
 
 | 카테고리 등록 | 해당 분류에 동일한 카테고리가 없는 경우 카테고리 생성 |
@@ -135,7 +148,7 @@
 | 카테고리 전체 조회 | 등록된 전체 카테고리 조회 |
 | 카테고리 수정 | 카테고리 id를 통해 카테고리명 수정 |
 | 카테고리 삭제 | 연결된 하위 카테고리가 없을 경우 삭제 |
-
+                  
 ####  (2) 최저가 상품 비교 : 스크래퍼를 통해 각 쇼핑몰의 동일 상품 가져오기 & 최저가 비교
 
 | 네이버 상품 검색 | 네이버 쇼핑 검색 api를 통해 검색 결과 목록을 반환 |
@@ -143,22 +156,22 @@
 | 네이버 상품 간략 정보 저장 | 사용자가 네이버 상세페이지를 요청할 때 전달한 상품 간략 정보를 저장 |
 | 쇼핑몰 상품 스크래핑  | 각 쇼핑몰에서 동일 상품 정보 스크래핑 후 저장 |
 | 쇼핑몰 최저가 비교 | 각 쇼핑몰에서 스크래핑한 동일 상품들을 최저가순으로 반환 |
-
+                  
 ####  (3) 쇼핑몰 상품 갱신 : 스케줄러를 통해 각 쇼핑몰의 상품 정보 최신화
-
+                  
 ####  (4) look-aside 캐시   : 레디스를 통해 검색 결과 및 스크래핑 결과 캐싱
 
 | 네이버 상품 검색 | 네이버 쇼핑 검색 api를 통해 반환 받은 검색 결과 목록을 캐싱 |
        | --- | --- |
 | 쇼핑몰 상품 스크래핑 | 각 쇼핑몰에서 스크래핑 후 상품 정보를 캐싱  |
-
+                  
 ####  (5) 구독자 상품 추천 : 스케줄러와 Java-mail를 통해 구독자에게 상품 추천
 
 | 이번 달 가장 많이 할인된 상품 | 한달간 가장 가격인하가 많이 된 상품 5개 추천 |
        | --- | --- |
 | 이번 달 N0대's choice 상품 | 한달간 해당 회원의 연령대에서 가장 인기가 많았던 상품 5개 추천  |
 | 이번 달 우수 상품 | 한달간 별점, 좋아요가 제일 많은 상품 5개 추천 |
-
+                  
 ####  (6) 별점, 리뷰, 좋아요, 조회수 기능
 
 | 별점, 리뷰, 좋아요, 조회수 추가 | 상품id 통해서 추가 |
@@ -169,14 +182,16 @@
 </div>
 </details>
 
-
+<br>
+                  
 ## API 명세서
 
 |회원 API|상품 API|
 |---|---|
 |[user-api-document](https://github.com/zero-mall/zeroMall/blob/main/user-api.pdf)|[product-api-document](https://github.com/zero-mall/zeroMall/blob/main/product-api.pdf)|
 
-
+<br>
+                  
 ## 기술 특장점
 ### **통일성에 대한 지속적인 고민**
 ```bash
@@ -209,6 +224,8 @@
 - 여러가지 협업툴을 활용하는 방안을 구상해 봤지만 유료가 많아 도입하기 쉽지 않았어요
 - AWS-RDS, AWS EC2를 이용해서 동일한 환경에서 작업하여 작업효율을 극대화 했어요
 ```
+
+<br>
 
 ## Trouble Shooting
 
