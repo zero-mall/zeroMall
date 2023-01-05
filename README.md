@@ -59,24 +59,13 @@
 ## 기술 스택
 
 ### Backend  
-<img src="https://img.shields.io/badge/Spring Boot-6DB33F"/> 
-<img src="https://img.shields.io/badge/Gradle-02303A"/> 
-<img src="https://img.shields.io/badge/Jsoup-important"/> 
-<img src="https://img.shields.io/badge/JWT-yellow"/> 
-<img src="https://img.shields.io/badge/Gson-blueviolet"/> 
-<img src="https://img.shields.io/badge/Spring_JPA-6DB33F%22/%3E"/> 
-<img src="https://img.shields.io/badge/MyBatis-red"/> 
-<img src="https://img.shields.io/badge/Feign-6DB33F"/> 
-<img src="https://img.shields.io/badge/Java mail sender-999999"/>
+<img src="https://img.shields.io/badge/Spring Boot-6DB33F"/> <img src="https://img.shields.io/badge/Gradle-02303A"/> <img src="https://img.shields.io/badge/Jsoup-important"/> <img src="https://img.shields.io/badge/JWT-yellow"/> <img src="https://img.shields.io/badge/Gson-blueviolet"/> <img src="https://img.shields.io/badge/Spring_JPA-6DB33F%22/%3E"/> <img src="https://img.shields.io/badge/MyBatis-red"/> <img src="https://img.shields.io/badge/Feign-6DB33F"/> <img src="https://img.shields.io/badge/Java mail sender-999999"/>
 
 ### Database
-<img src="https://img.shields.io/badge/MySQL-4479A1"/>
-<img src="https://img.shields.io/badge/Redis-critical"/>
-<img src="https://img.shields.io/badge/H2-blue"/>
+<img src="https://img.shields.io/badge/MySQL-4479A1"/> <img src="https://img.shields.io/badge/Redis-critical"/> <img src="https://img.shields.io/badge/H2-blue"/>
 
 ### Cloud
-<img src="https://img.shields.io/badge/AWS EC2-FF9900"> 
-<img src="https://img.shields.io/badge/AWS RDS-527FFF">
+<img src="https://img.shields.io/badge/AWS EC2-FF9900"> <img src="https://img.shields.io/badge/AWS RDS-527FFF">
 
 ### API  
 <img src="https://img.shields.io/badge/Naver%20Shopping%20API-9cf">
