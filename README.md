@@ -1,19 +1,12 @@
 # zeroMall
 
 ## Overview
-<img src=".github/images/ZeroMall-logos.jpeg" width = "200px">
-
-- 프로젝트명 : ZeroMall
-- 기간 : 2022.11.21 - 2022.12.30
-- 소개 : 각 쇼핑몰 사이트를 스크래핑하여 최저가 상품을 비교하고, 구독자에게 상품을 추천하는 서비스
-- 노션 :  [📒 TEAM ZERO](https://www.notion.so/TEAM-ZERO-eac18135b69945f3b6d4181e88ea79de)
-- 깃허브 : [🐶 ZeroMall](https://github.com/zero-mall/zeroMall)          
+<img src=".github/images/ZeroMall-logos.jpeg" width = "200px">        
 
 <br>
 
 ## 프로젝트 소개
 ```bash
-- 유형 : 팀 프로젝트
 - 기간 : 2022.11.21 - 2022.12.30
 - 소개 : 각 쇼핑몰 사이트를 스크래핑하여 최저가 상품을 비교하고, 구독자에게 상품을 추천하는 서비스
 - API : 
